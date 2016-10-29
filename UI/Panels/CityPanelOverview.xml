@@ -127,7 +127,7 @@
                   <Stack StackGrowth="Down" Anchor="C,C">
                     <Stack StackGrowth="Right" Padding="16">
                       <Image ID="AmenetiesStatusIconContainerLuxuries" Anchor="C,C" Size="50,50" Texture="CityPanel_StatusIcon">
-                        <Image ID="AmenetiesStatusIconLuxuries" Anchor="C,C" Offset="-2,-3" Size="35,35" Texture="Stats45" Icon="ICON_IMPROVEMENT_PLANTATION" />
+                        <Image ID="AmenetiesStatusIconLuxuries" Anchor="C,C" Offset="-2,-3" Size="35,35" Texture="Stats45" Icon="ICON_IMPROVEMENT_BEACH_RESORT" />
                         <Label ID="AmenetiesStatusYieldLuxuries" Anchor="C,C" Offset="-2,0" Style="CityPanelSubPanelTitle" String="1" />
                         <Label ID="AmenetiesStatusLabelLuxuries" Anchor="C,C" Offset="0,30" Style="UnitPanelStatLabel" Align="Center" String="Luxury[NEWLINE]Resources" />
                       </Image>
