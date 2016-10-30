@@ -736,6 +736,7 @@ function NavigateTo(SectionId, PageId)
 		for i, page in ipairs(pages) do
 			local id = page.PageId;
 			if(id == PageId) then
+				-- Save the currently opened page in order to restore it later
 				SaveCurrentPage();
 				RefreshPageContent(page);
 			end
