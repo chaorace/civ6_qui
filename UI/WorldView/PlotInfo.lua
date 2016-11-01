@@ -273,8 +273,8 @@ function ShowCitizens()
 				table.insert( m_uiCitizens, pInstance );
 				pInstance.CitizenButton:SetVoid1( index );
 				pInstance.CitizenButton:RegisterCallback(Mouse.eLClick, OnClickCitizen );
-				pInstance.CitizenButton:SetHide(false);
-				pInstance.CitizenButton:SetDisabled( false );
+				--pInstance.CitizenButton:SetHide(false);
+				--pInstance.CitizenButton:SetDisabled( false );
 				--pInstance.CitizenButton:SetSizeVal(48, 48);
 				pInstance.CitizenButton:SetHide(isCityCenterPlot);			
 				pInstance.CitizenButton:SetDisabled(isCityCenterPlot);
