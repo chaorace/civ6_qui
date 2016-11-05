@@ -89,220 +89,41 @@ function ViewCurrent( data:table )
 	m_greatPersonPanelIM:ResetInstances();	
 	Controls.PeopleScroller:SetHide(false);
 	Controls.RecruitedArea:SetHide(true);	
-
+	
+	local prophetToAdd;
 	local firstAvailableIndex :number = 0;
-	for i, kPerson:table in ipairs(data.Timeline) do	
-		
-		local instance		:table = m_greatPersonPanelIM:GetInstance();
-		local classData		:table = GameInfo.GreatPersonClasses[kPerson.ClassID];
-		local individualData:table = GameInfo.GreatPersonIndividuals[kPerson.IndividualID];
-		local classText		:string = "";
-
-		if (kPerson.ClassID ~= nil) then
-			classText = Locale.Lookup(classData.Name);
-			instance.ClassName:SetText(classText);
-		end
-		
-		if kPerson.IndividualID ~= nil then
-			local individualName:string = Locale.ToUpper(kPerson.Name);
-			instance.IndividualName:SetText( individualName );
-			--TruncateStringWithTooltip(instance.IndividualName, MAX_BEFORE_TRUNC_IND_NAME, individualName);
-		end
-
-		if kPerson.EraID ~= nil then
-			local eraName:string = Locale.ToUpper(Locale.Lookup(GameInfo.Eras[kPerson.EraID].Name));
-			instance.EraName:SetText( eraName );
-		end
-
-		-- Grab icon representing type of class
-		if (kPerson.ClassID ~= nil) then
-			local icon:string = "ICON_" .. classData.GreatPersonClassType;
-			local textureOffsetX:number, textureOffsetY:number, textureSheet:string = IconManager:FindIconAtlas(icon, 90);
-			if textureSheet == nil then		-- Use default if none found
-				print("WARNING: Could not find icon atlas entry for the class of Great Person '"..icon.."', using default instead.");
-				textureOffsetX = 0;
-				textureOffsetY = 0;
-				textureSheet = "GreatPeopleClass90";
-			end
-			instance.ClassImage:SetTexture( textureOffsetX, textureOffsetY, textureSheet );
-		end
-
-		-- Grab icon of the great person themselves; first try a specific image, if it doesn't exist
-		-- then grab a generic representation based on the class.
-		if (kPerson.ClassID ~= nil) and (kPerson.IndividualID ~= nil) then
-			local portrait:string = "ICON_" .. individualData.GreatPersonIndividualType;
-			textureOffsetX, textureOffsetY, textureSheet = IconManager:FindIconAtlas(portrait, 160);
-			if textureSheet == nil then		-- Use a default if none found
-				print("WARNING: Could not find icon atlas entry for the individual Great Person '"..portrait.."', using default instead.");
-				portrait = "ICON_GENERIC_" .. classData.GreatPersonClassType .. "_" .. individualData.Gender;
-				portrait = portrait:gsub("_CLASS","_INDIVIDUAL");
-			end
-			local isValid = instance.Portrait:SetIcon(portrait);
-			if (not isValid) then
-				UI.DataError("Could not find icon for "..portrait);
-			end
-		end
-		
-		if instance["m_EffectsIM"] ~= nil then
-			instance["m_EffectsIM"]:ResetInstances();
+	
+	for i, kPerson:table in ipairs(data.Timeline) do
+		local classData:table = GameInfo.GreatPersonClasses[kPerson.ClassID];
+		-- Check if current GP is a prophet
+		local isGreatProphet  = classData ~= nil and classData.GreatPersonClassType == "GREAT_PERSON_CLASS_PROPHET"; 
+	
+		if (isGreatProphet == false or classData == nil) then
+			-- Not a prophet, add to stack
+			SetGreatPersonData(data, kPerson);
 		else
-			instance["m_EffectsIM"] = InstanceManager:new("EffectInstance",	"Top",	instance.EffectStack);
-		end
-
-		if kPerson.PassiveNameText ~= nil and kPerson.PassiveNameText ~= "" then
-			local effectInst:table	= instance["m_EffectsIM"]:GetInstance();	
-			local effectText:string = kPerson.PassiveEffectText;
-			local fullText:string	= kPerson.PassiveNameText .. "[NEWLINE][NEWLINE]" .. effectText;
-			effectInst.Text:SetText( effectText );
-			effectInst.EffectTypeIcon:SetToolTipString( fullText );
-			effectInst.PassiveAbilityIcon:SetHide(false);
-			effectInst.ActiveAbilityIcon:SetHide(true);
-		end
-
-		if (kPerson.ActionNameText ~= nil and kPerson.ActionNameText ~= "") then
-			local effectInst:table	= instance["m_EffectsIM"]:GetInstance();			
-			local effectText:string	= kPerson.ActionEffectText;
-			local fullText:string	= kPerson.ActionNameText;			
-			if (kPerson.ActionCharges > 0) then
-				fullText = fullText .. " (" .. Locale.Lookup("LOC_GREATPERSON_ACTION_CHARGES", kPerson.ActionCharges) .. ")";
-			end
-			fullText = fullText .. "[NEWLINE]" .. kPerson.ActionUsageText;
-			fullText = fullText .. "[NEWLINE][NEWLINE]" .. effectText;
-			effectInst.Text:SetText( effectText );
-			effectInst.EffectTypeIcon:SetToolTipString( fullText );
-
-			local actionIcon:string = classData.ActionIcon;
-			if actionIcon ~= nil and actionIcon ~= "" then
-				local textureOffsetX:number, textureOffsetY:number, textureSheet:string = IconManager:FindIconAtlas(actionIcon, SIZE_ACTION_ICON);
-				if(textureSheet == nil or textureSheet == "") then
-					UI.DataError("Could not find icon in ViewCurrent: icon=\""..actionIcon.."\", iconSize="..tostring(SIZE_ACTION_ICON) );
-				else
-					effectInst.ActiveAbilityIcon:SetTexture(textureOffsetX, textureOffsetY, textureSheet);
-					effectInst.ActiveAbilityIcon:SetHide(false);
-					effectInst.PassiveAbilityIcon:SetHide(true);
-				end
-			else
-				effectInst.ActiveAbilityIcon:SetHide(true);
-			end
-		end
-
-		if instance["m_RecruitIM"] ~= nil then
-			instance["m_RecruitIM"]:ResetInstances();
-		else
-			instance["m_RecruitIM"] = InstanceManager:new("RecruitInstance", "Top", instance.RecruitStack);
-		end
-
-		if kPerson.IndividualID ~= nil and kPerson.ClassID ~= nil then
-
-			-- Buy via gold
-			if (not kPerson.CanRecruit and not kPerson.CanReject and kPerson.PatronizeWithGoldCost ~= nil and kPerson.PatronizeWithGoldCost < 1000000) then
-				local patronizeButtonText :string = kPerson.PatronizeWithGoldCost.."[ICON_Gold]";
-				local patronizeDetailsText:string = Locale.Lookup("LOC_GREAT_PEOPLE_PATRONAGE_GOLD_DETAILS", kPerson.PatronizeWithGoldCost); 
-				instance.GoldButton:SetText(patronizeButtonText);
-				instance.GoldButton:SetToolTipString(patronizeDetailsText);
-				instance.GoldButton:SetVoid1(kPerson.IndividualID);
-				instance.GoldButton:RegisterCallback(Mouse.eLClick, OnGoldButtonClick);
-				instance.GoldButton:SetDisabled(not kPerson.CanPatronizeWithGold);
-				instance.GoldButton:SetHide(false);
-			else
-				instance.GoldButton:SetHide(true);
-			end
-
-			-- Buy via Faith
-			if (not kPerson.CanRecruit and not kPerson.CanReject and kPerson.PatronizeWithFaithCost ~= nil and kPerson.PatronizeWithFaithCost < 1000000) then
-				local patronizeButtonText	:string = kPerson.PatronizeWithFaithCost.."[ICON_Faith]";
-				local patronizeDetailsText	:string = Locale.Lookup("LOC_GREAT_PEOPLE_PATRONAGE_FAITH_DETAILS", kPerson.PatronizeWithFaithCost); 
-				instance.FaithButton:SetText(patronizeButtonText);
-				instance.FaithButton:SetToolTipString(patronizeDetailsText);
-				instance.FaithButton:SetVoid1(kPerson.IndividualID);
-				instance.FaithButton:RegisterCallback(Mouse.eLClick, OnFaithButtonClick);
-				instance.FaithButton:SetDisabled(not kPerson.CanPatronizeWithFaith);
-				instance.FaithButton:SetHide(false);
-			else
-				instance.FaithButton:SetHide(true);
-			end
-
-			-- Recruiting 
-			if (kPerson.CanRecruit and kPerson.RecruitCost ~= nil) then
-				instance.RecruitButton:SetToolTipString( Locale.Lookup("LOC_GREAT_PEOPLE_RECRUIT_DETAILS", kPerson.RecruitCost) );
-				instance.RecruitButton:SetVoid1(kPerson.IndividualID);
-				instance.RecruitButton:RegisterCallback(Mouse.eLClick, OnRecruitButtonClick);
-				instance.RecruitButton:SetHide(false);
-			else
-				instance.RecruitButton:SetHide(true);
-			end
-
-			-- Rejecting
-			if (kPerson.CanReject and kPerson.RejectCost ~= nil) then
-				instance.RejectButton:SetToolTipString( Locale.Lookup("LOC_GREAT_PEOPLE_PASS_DETAILS", kPerson.RejectCost ) );
-				instance.RejectButton:SetVoid1(kPerson.IndividualID);
-				instance.RejectButton:RegisterCallback(Mouse.eLClick, OnRejectButtonClick);
-				instance.RejectButton:SetHide(false);
-			else
-				instance.RejectButton:SetHide(true);
-			end
+			local canEarnAnotherOfThisClass:boolean = true;
 			
-			-- Recruiting standings
-			for i, kPlayerPoints in ipairs(data.PointsByClass[kPerson.ClassID]) do
-				local canEarnAnotherOfThisClass:boolean = true;
-				if (kPlayerPoints.MaxPlayerInstances ~= nil and kPlayerPoints.NumInstancesEarned ~= nil) then
+			-- GP is a prophet, additional checks
+			for i, kPlayerPoints in ipairs(data.PointsByClass[kPerson.ClassID]) do				
+				-- Check if progress is for the player and if the maximum amount of prophets (1) have already been bought
+				if (kPlayerPoints.IsPlayer and kPlayerPoints.MaxPlayerInstances ~= nil and kPlayerPoints.NumInstancesEarned ~= nil) then
+					print("max " .. kPlayerPoints.MaxPlayerInstances .. " curr = " .. kPlayerPoints.NumInstancesEarned);
 					canEarnAnotherOfThisClass = kPlayerPoints.MaxPlayerInstances > kPlayerPoints.NumInstancesEarned;
 				end
-				if (canEarnAnotherOfThisClass) then
-					local recruitInst:table = instance["m_RecruitIM"]:GetInstance();			
-					recruitInst.Country:SetText( kPlayerPoints.PlayerName );
-					recruitInst.Amount:SetText( tostring(Round(kPlayerPoints.PointsTotal,1)) .. "/" .. tostring(kPerson.RecruitCost) );
-					local progressPercent :number = Clamp( kPlayerPoints.PointsTotal / kPerson.RecruitCost, 0, 1 );
-					recruitInst.ProgressBar:SetPercent( progressPercent );
-
-					local recruitColorName:string = "GreatPeopleCS";
-					if kPlayerPoints.IsPlayer then
-						recruitColorName = "GreatPeopleActiveCS";			
-					end
-					recruitInst.Amount:SetColorByName( recruitColorName );
-					recruitInst.Country:SetColorByName( recruitColorName );
-					recruitInst.Country:SetColorByName( recruitColorName );
-					recruitInst.ProgressBar:SetColorByName( recruitColorName );
-
-					local recruitDetails:string = Locale.Lookup("LOC_GREAT_PEOPLE_POINT_DETAILS", Round(kPlayerPoints.PointsPerTurn, 1), classData.IconString, classData.Name);
-					recruitInst.Top:SetToolTipString(recruitDetails);
-				end
 			end
-
-			local sRecruitText:string = Locale.Lookup("LOC_GREAT_PEOPLE_OR_RECRUIT_WITH_PATRONAGE");
-			local sRecruitTooltip:string = "";
-			if (kPerson.EarnConditions ~= nil and kPerson.EarnConditions ~= "") then
-				sRecruitText = "[COLOR_Civ6Red]" .. Locale.Lookup("LOC_GREAT_PEOPLE_CANNOT_EARN_PERSON") .. "[ENDCOLOR]"
-				sRecruitTooltip = "[COLOR_Civ6Red]" .. kPerson.EarnConditions .. "[ENDCOLOR]";
+			
+			if (canEarnAnotherOfThisClass) then
+				prophetToAdd = kPerson;  
 			end
-			instance.RecruitInfo:SetText(sRecruitText);
-			instance.RecruitInfo:SetToolTipString(sRecruitTooltip);
-
-			instance.RecruitScroll:CalculateSize();
 		end
-
-		-- Set the biography button.
-		if kPerson.IndividualID ~= nil then		
-			instance.BiographyBackButton:SetText( Locale.Lookup("LOC_GREAT_PEOPLE_BIOGRAPHY") );
-			instance.BiographyBackButton:SetVoid1( kPerson.IndividualID );
-			instance.BiographyBackButton:RegisterCallback( Mouse.eLClick, OnBiographyBackClick );
-			m_uiGreatPeople[kPerson.IndividualID] = instance;		-- Store instance for later look up
-		end
-
-		local noneAvailable		:boolean = (kPerson.ClassID == nil);
-		instance.ClassName:SetHide( noneAvailable );
-		instance.TitleLine:SetHide( noneAvailable );
-		instance.IndividualName:SetHide( noneAvailable );
-		instance.EraName:SetHide( noneAvailable );
-		instance.MainInfo:SetHide( noneAvailable );
-		instance.BiographyBackButton:SetHide( noneAvailable );
-		instance.ClaimedLabel:SetHide( not noneAvailable );
-		instance.BiographyArea:SetHide( true );
-		
-		instance.EffectStack:CalculateSize();
-		instance.EffectStackScroller:CalculateSize();
 	end
-
+	
+	if (prophetToAdd ~= nil) then 
+		-- Prophet can be added to the end of the stack
+		SetGreatPersonData(data, prophetToAdd);
+	end
+	
 	Controls.PeopleStack:CalculateSize();
 	Controls.PeopleScroller:CalculateSize();
 	
@@ -320,6 +141,216 @@ function ViewCurrent( data:table )
 	Controls.ModalFrame:SetSizeX( popupContainerX );	
 end
 
+function SetGreatPersonData(data:table, kPerson:table)
+	local instance		:table = m_greatPersonPanelIM:GetInstance();
+	local classData		:table = GameInfo.GreatPersonClasses[kPerson.ClassID];
+	local individualData:table = GameInfo.GreatPersonIndividuals[kPerson.IndividualID];
+	local classText		:string = ""; 
+
+	if (kPerson.ClassID ~= nil) then
+		classText = Locale.Lookup(classData.Name);
+		instance.ClassName:SetText(classText);
+	end
+	
+	if kPerson.IndividualID ~= nil then
+		local individualName:string = Locale.ToUpper(kPerson.Name);
+		instance.IndividualName:SetText( individualName );
+		--TruncateStringWithTooltip(instance.IndividualName, MAX_BEFORE_TRUNC_IND_NAME, individualName);
+	end
+
+	if kPerson.EraID ~= nil then
+		local eraName:string = Locale.ToUpper(Locale.Lookup(GameInfo.Eras[kPerson.EraID].Name));
+		instance.EraName:SetText( eraName );
+	end
+
+	-- Grab icon representing type of class
+	if (kPerson.ClassID ~= nil) then
+		local icon:string = "ICON_" .. classData.GreatPersonClassType;
+		local textureOffsetX:number, textureOffsetY:number, textureSheet:string = IconManager:FindIconAtlas(icon, 90);
+		if textureSheet == nil then		-- Use default if none found
+			print("WARNING: Could not find icon atlas entry for the class of Great Person '"..icon.."', using default instead.");
+			textureOffsetX = 0;
+			textureOffsetY = 0;
+			textureSheet = "GreatPeopleClass90";
+		end
+		instance.ClassImage:SetTexture( textureOffsetX, textureOffsetY, textureSheet );
+	end
+
+	-- Grab icon of the great person themselves; first try a specific image, if it doesn't exist
+	-- then grab a generic representation based on the class.
+	if (kPerson.ClassID ~= nil) and (kPerson.IndividualID ~= nil) then
+		local portrait:string = "ICON_" .. individualData.GreatPersonIndividualType;
+		textureOffsetX, textureOffsetY, textureSheet = IconManager:FindIconAtlas(portrait, 160);
+		if textureSheet == nil then		-- Use a default if none found
+			print("WARNING: Could not find icon atlas entry for the individual Great Person '"..portrait.."', using default instead.");
+			portrait = "ICON_GENERIC_" .. classData.GreatPersonClassType .. "_" .. individualData.Gender;
+			portrait = portrait:gsub("_CLASS","_INDIVIDUAL");
+		end
+		local isValid = instance.Portrait:SetIcon(portrait);
+		if (not isValid) then
+			UI.DataError("Could not find icon for "..portrait);
+		end
+	end
+	
+	if instance["m_EffectsIM"] ~= nil then
+		instance["m_EffectsIM"]:ResetInstances();
+	else
+		instance["m_EffectsIM"] = InstanceManager:new("EffectInstance",	"Top",	instance.EffectStack);
+	end
+
+	if kPerson.PassiveNameText ~= nil and kPerson.PassiveNameText ~= "" then
+		local effectInst:table	= instance["m_EffectsIM"]:GetInstance();	
+		local effectText:string = kPerson.PassiveEffectText;
+		local fullText:string	= kPerson.PassiveNameText .. "[NEWLINE][NEWLINE]" .. effectText;
+		effectInst.Text:SetText( effectText );
+		effectInst.EffectTypeIcon:SetToolTipString( fullText );
+		effectInst.PassiveAbilityIcon:SetHide(false);
+		effectInst.ActiveAbilityIcon:SetHide(true);
+	end
+
+	if (kPerson.ActionNameText ~= nil and kPerson.ActionNameText ~= "") then
+		local effectInst:table	= instance["m_EffectsIM"]:GetInstance();			
+		local effectText:string	= kPerson.ActionEffectText;
+		local fullText:string	= kPerson.ActionNameText;			
+		if (kPerson.ActionCharges > 0) then
+			fullText = fullText .. " (" .. Locale.Lookup("LOC_GREATPERSON_ACTION_CHARGES", kPerson.ActionCharges) .. ")";
+		end
+		fullText = fullText .. "[NEWLINE]" .. kPerson.ActionUsageText;
+		fullText = fullText .. "[NEWLINE][NEWLINE]" .. effectText;
+		effectInst.Text:SetText( effectText );
+		effectInst.EffectTypeIcon:SetToolTipString( fullText );
+
+		local actionIcon:string = classData.ActionIcon;
+		if actionIcon ~= nil and actionIcon ~= "" then
+			local textureOffsetX:number, textureOffsetY:number, textureSheet:string = IconManager:FindIconAtlas(actionIcon, SIZE_ACTION_ICON);
+			if(textureSheet == nil or textureSheet == "") then
+				UI.DataError("Could not find icon in ViewCurrent: icon=\""..actionIcon.."\", iconSize="..tostring(SIZE_ACTION_ICON) );
+			else
+				effectInst.ActiveAbilityIcon:SetTexture(textureOffsetX, textureOffsetY, textureSheet);
+				effectInst.ActiveAbilityIcon:SetHide(false);
+				effectInst.PassiveAbilityIcon:SetHide(true);
+			end
+		else
+			effectInst.ActiveAbilityIcon:SetHide(true);
+		end
+	end
+
+	if instance["m_RecruitIM"] ~= nil then
+		instance["m_RecruitIM"]:ResetInstances();
+	else
+		instance["m_RecruitIM"] = InstanceManager:new("RecruitInstance", "Top", instance.RecruitStack);
+	end
+
+	if kPerson.IndividualID ~= nil and kPerson.ClassID ~= nil then
+
+		-- Buy via gold
+		if (not kPerson.CanRecruit and not kPerson.CanReject and kPerson.PatronizeWithGoldCost ~= nil and kPerson.PatronizeWithGoldCost < 1000000) then
+			local patronizeButtonText :string = kPerson.PatronizeWithGoldCost.."[ICON_Gold]";
+			local patronizeDetailsText:string = Locale.Lookup("LOC_GREAT_PEOPLE_PATRONAGE_GOLD_DETAILS", kPerson.PatronizeWithGoldCost); 
+			instance.GoldButton:SetText(patronizeButtonText);
+			instance.GoldButton:SetToolTipString(patronizeDetailsText);
+			instance.GoldButton:SetVoid1(kPerson.IndividualID);
+			instance.GoldButton:RegisterCallback(Mouse.eLClick, OnGoldButtonClick);
+			instance.GoldButton:SetDisabled(not kPerson.CanPatronizeWithGold);
+			instance.GoldButton:SetHide(false);
+		else
+			instance.GoldButton:SetHide(true);
+		end
+
+		-- Buy via Faith
+		if (not kPerson.CanRecruit and not kPerson.CanReject and kPerson.PatronizeWithFaithCost ~= nil and kPerson.PatronizeWithFaithCost < 1000000) then
+			local patronizeButtonText	:string = kPerson.PatronizeWithFaithCost.."[ICON_Faith]";
+			local patronizeDetailsText	:string = Locale.Lookup("LOC_GREAT_PEOPLE_PATRONAGE_FAITH_DETAILS", kPerson.PatronizeWithFaithCost); 
+			instance.FaithButton:SetText(patronizeButtonText);
+			instance.FaithButton:SetToolTipString(patronizeDetailsText);
+			instance.FaithButton:SetVoid1(kPerson.IndividualID);
+			instance.FaithButton:RegisterCallback(Mouse.eLClick, OnFaithButtonClick);
+			instance.FaithButton:SetDisabled(not kPerson.CanPatronizeWithFaith);
+			instance.FaithButton:SetHide(false);
+		else
+			instance.FaithButton:SetHide(true);
+		end
+
+		-- Recruiting 
+		if (kPerson.CanRecruit and kPerson.RecruitCost ~= nil) then
+			instance.RecruitButton:SetToolTipString( Locale.Lookup("LOC_GREAT_PEOPLE_RECRUIT_DETAILS", kPerson.RecruitCost) );
+			instance.RecruitButton:SetVoid1(kPerson.IndividualID);
+			instance.RecruitButton:RegisterCallback(Mouse.eLClick, OnRecruitButtonClick);
+			instance.RecruitButton:SetHide(false);
+		else
+			instance.RecruitButton:SetHide(true);
+		end
+
+		-- Rejecting
+		if (kPerson.CanReject and kPerson.RejectCost ~= nil) then
+			instance.RejectButton:SetToolTipString( Locale.Lookup("LOC_GREAT_PEOPLE_PASS_DETAILS", kPerson.RejectCost ) );
+			instance.RejectButton:SetVoid1(kPerson.IndividualID);
+			instance.RejectButton:RegisterCallback(Mouse.eLClick, OnRejectButtonClick);
+			instance.RejectButton:SetHide(false);
+		else
+			instance.RejectButton:SetHide(true);
+		end
+		
+		-- Recruiting standings
+		for i, kPlayerPoints in ipairs(data.PointsByClass[kPerson.ClassID]) do
+			local canEarnAnotherOfThisClass:boolean = true;
+			if (kPlayerPoints.MaxPlayerInstances ~= nil and kPlayerPoints.NumInstancesEarned ~= nil) then
+				canEarnAnotherOfThisClass = kPlayerPoints.MaxPlayerInstances > kPlayerPoints.NumInstancesEarned;
+			end
+			if (canEarnAnotherOfThisClass) then
+				local recruitInst:table = instance["m_RecruitIM"]:GetInstance();			
+				recruitInst.Country:SetText( kPlayerPoints.PlayerName );
+				recruitInst.Amount:SetText( tostring(Round(kPlayerPoints.PointsTotal,1)) .. "/" .. tostring(kPerson.RecruitCost) );
+				local progressPercent :number = Clamp( kPlayerPoints.PointsTotal / kPerson.RecruitCost, 0, 1 );
+				recruitInst.ProgressBar:SetPercent( progressPercent );
+
+				local recruitColorName:string = "GreatPeopleCS";
+				if kPlayerPoints.IsPlayer then
+					recruitColorName = "GreatPeopleActiveCS";			
+				end
+				recruitInst.Amount:SetColorByName( recruitColorName );
+				recruitInst.Country:SetColorByName( recruitColorName );
+				recruitInst.Country:SetColorByName( recruitColorName );
+				recruitInst.ProgressBar:SetColorByName( recruitColorName );
+
+				local recruitDetails:string = Locale.Lookup("LOC_GREAT_PEOPLE_POINT_DETAILS", Round(kPlayerPoints.PointsPerTurn, 1), classData.IconString, classData.Name);
+				recruitInst.Top:SetToolTipString(recruitDetails);
+			end
+		end
+
+		local sRecruitText:string = Locale.Lookup("LOC_GREAT_PEOPLE_OR_RECRUIT_WITH_PATRONAGE");
+		local sRecruitTooltip:string = "";
+		if (kPerson.EarnConditions ~= nil and kPerson.EarnConditions ~= "") then
+			sRecruitText = "[COLOR_Civ6Red]" .. Locale.Lookup("LOC_GREAT_PEOPLE_CANNOT_EARN_PERSON") .. "[ENDCOLOR]"
+			sRecruitTooltip = "[COLOR_Civ6Red]" .. kPerson.EarnConditions .. "[ENDCOLOR]";
+		end
+		instance.RecruitInfo:SetText(sRecruitText);
+		instance.RecruitInfo:SetToolTipString(sRecruitTooltip);
+
+		instance.RecruitScroll:CalculateSize();
+	end
+
+	-- Set the biography button.
+	if kPerson.IndividualID ~= nil then		
+		instance.BiographyBackButton:SetText( Locale.Lookup("LOC_GREAT_PEOPLE_BIOGRAPHY") );
+		instance.BiographyBackButton:SetVoid1( kPerson.IndividualID );
+		instance.BiographyBackButton:RegisterCallback( Mouse.eLClick, OnBiographyBackClick );
+		m_uiGreatPeople[kPerson.IndividualID] = instance;		-- Store instance for later look up
+	end
+
+	local noneAvailable		:boolean = (kPerson.ClassID == nil);
+	instance.ClassName:SetHide( noneAvailable );
+	instance.TitleLine:SetHide( noneAvailable );
+	instance.IndividualName:SetHide( noneAvailable );
+	instance.EraName:SetHide( noneAvailable );
+	instance.MainInfo:SetHide( noneAvailable );
+	instance.BiographyBackButton:SetHide( noneAvailable );
+	instance.ClaimedLabel:SetHide( not noneAvailable );
+	instance.BiographyArea:SetHide( true );
+	
+	instance.EffectStack:CalculateSize();
+	instance.EffectStackScroller:CalculateSize();
+end
 
 -- =======================================================================================
 --	Layout the data for previously recruited great people.
