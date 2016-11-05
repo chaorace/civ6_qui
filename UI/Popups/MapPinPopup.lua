@@ -131,10 +131,15 @@ function PopulateIconOptions()
 	for item in GameInfo.Districts() do
 		local replaces = GameInfo.DistrictReplaces[item.DistrictType]; 
 		if (not replaces) then
+		print(item.DistrictType);
 			customName = "ICON_" .. item.DistrictType;
 			customTooltip = ToolTipHelper.GetToolTip(item.DistrictType, playerId);
-			CreateIconEntry(districtStack, customName, customTooltip, count);
-			count = count + 1;
+			
+			-- Invalid item in the GameInfo, for whatever reason
+			if (item.DistrictType ~= "DISTRICT_WONDER") then
+				CreateIconEntry(districtStack, customName, customTooltip, count);
+				count = count + 1;
+			end
 		end
 	end
 	
