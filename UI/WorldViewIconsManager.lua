@@ -184,15 +184,16 @@ function SetResourceIcon( pInstance:table, pPlot, type, state)
 			table.insert(toolTipItems, resourceString)
 			pInstance.ResourceIcon:SetToolTipString(table.concat(toolTipItems, "[NEWLINE]"));
 			
-			local plotWasImproved;
-		      	local ICON_LOW_OPACITY	:number = 0x77ffffff;
+			--CQUI: Resource icon becomes transparent after being improved
+			local CQUI_plotWasImproved;
+		      	local CQUI_ICON_LOW_OPACITY	:number = 0x77ffffff;
 		      	if (pPlot:GetImprovementType() == -1) then
-				plotWasImproved = false;
+				CQUI_plotWasImproved = false;
 		      	else
-				plotWasImproved = true;
+				CQUI_plotWasImproved = true;
 		      	end
-		      	if plotWasImproved then
-				pInstance.ResourceIcon:SetColor(ICON_LOW_OPACITY);
+		      	if CQUI_plotWasImproved then
+				pInstance.ResourceIcon:SetColor(CQUI_ICON_LOW_OPACITY);
 		      	end
 		end
 	end
