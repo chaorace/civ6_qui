@@ -183,6 +183,17 @@ function SetResourceIcon( pInstance:table, pPlot, type, state)
 			end
 			table.insert(toolTipItems, resourceString)
 			pInstance.ResourceIcon:SetToolTipString(table.concat(toolTipItems, "[NEWLINE]"));
+			
+			local plotWasImproved;
+		      	local ICON_LOW_OPACITY	:number = 0x77ffffff;
+		      	if (pPlot:GetImprovementType() == -1) then
+				plotWasImproved = false;
+		      	else
+				plotWasImproved = true;
+		      	end
+		      	if plotWasImproved then
+				pInstance.ResourceIcon:SetColor(ICON_LOW_OPACITY);
+		      	end
 		end
 	end
 end
@@ -659,6 +670,7 @@ function Initialize()
 	Events.ResourceVisibilityChanged.Add(OnResourceVisibilityChanged);
 	Events.ResourceAddedToMap.Add(OnResourceChanged);
 	Events.ResourceRemovedFromMap.Add(OnResourceRemovedFromMap);
+	Events.ImprovementAddedToMap.Add( OnResourceChanged );
 	Events.PlotVisibilityChanged.Add(OnPlotVisibilityChanged);
 	Events.PlotMarkerChanged.Add(OnPlotMarkersChanged);
 	Events.UnitSelectionChanged.Add( OnUnitSelectionChanged );
