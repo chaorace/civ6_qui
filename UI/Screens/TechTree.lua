@@ -107,6 +107,9 @@ local VERTICAL_CENTER				:number = (SIZE_NODE_Y) / 2;
 local MAX_BEFORE_TRUNC_TO_BOOST		:number = 310;
 local MAX_BEFORE_TRUNC_KEY_LABEL:number = 100;
 
+-- CQUI CONSTANTS
+local STATUS_MESSAGE_TECHS          :number = 4;    -- Number to distinguish tech messages
+
 
 STATUS_ART[ITEM_STATUS.BLOCKED]		= { Name="BLOCKED",		TextColor0=0xff202726, TextColor1=0x00000000, FillTexture="TechTree_GearButtonTile_Disabled.dds",BGU=0,BGV=(SIZE_NODE_Y*3),	IsButton=false,	BoltOn=false,	IconBacking=PIC_METER_BACK };
 STATUS_ART[ITEM_STATUS.READY]		= { Name="READY",		TextColor0=0xaaffffff, TextColor1=0x88000000, FillTexture=nil,									BGU=0,BGV=0,				IsButton=true,	BoltOn=false,	IconBacking=PIC_METER_BACK  };
@@ -145,6 +148,9 @@ local m_kFilters			:table = {};
 
 local m_shiftDown			:boolean = false;
 local m_ToggleTechTreeId;
+
+-- CQUI variables
+local cqui_halfwayNotified  :table = {};
 
 -- ===========================================================================
 -- Return string respresenation of a prereq table
@@ -1016,7 +1022,49 @@ function OnLocalPlayerTurnBegin()
 		    m_ePlayer = ePlayer;
 		    m_kCurrentData = GetLivePlayerData( ePlayer );		    
 	    end
+
+        --------------------------------------------------------------------------
+        -- CQUI Check for Tech Progress
+
+        -- Get the current tech
+        local kPlayer		:table	= Players[ePlayer];
+	    local playerTechs	:table	= kPlayer:GetTechs();
+	    local currentTechID	:number = playerTechs:GetResearchingTech();
+        local isCurrentBoosted :boolean = playerTechs:HasBoostBeenTriggered(currentTechID);
+        
+        -- Make sure there is a technology selected before continuing with checks
+        if currentTechID ~= -1 then
+            local techName = GameInfo.Technologies[currentTechID].Name;
+
+            local currentCost	        = playerTechs:GetResearchCost(currentTechID);
+	        local currentProgress	    = playerTechs:GetResearchProgress(currentTechID);
+            local currentYield          = playerTechs:GetScienceYield();
+            local percentageToBeDone    = (currentProgress + currentYield) / currentCost;
+
+        
+            -- Is the current tech completed?
+            -- Else is it greater than 50% and has yet to be displayed?
+            if percentageToBeDone >= 1 then
+                LuaEvents.CQUI_AddStatusMessage("The Technology, " .. Locale.ToUpper( techName ) .. ", is completed.", 10, STATUS_MESSAGE_TECHS);
+            elseif percentageToBeDone >= .50 and isCurrentBoosted == false and cqui_halfwayNotified[currentTechID] ~= true then
+                LuaEvents.CQUI_AddStatusMessage("The current Technology, " .. Locale.ToUpper( techName ) .. ", is at least 50% completed: " .. tostring(round(percentageToBeDone*100,2)) .. "%", 10, STATUS_MESSAGE_TECHS);
+                cqui_halfwayNotified[currentTechID] = true;
+            end
+        end
+
+        
+
+        --------------------------------------------------------------------------
+
     end
+
+    
+
+end
+
+function round(num, idp)
+  local mult = 10^(idp or 0)
+  return math.floor(num * mult + 0.5) / mult
 end
 
 -- ===========================================================================
