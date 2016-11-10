@@ -1040,31 +1040,22 @@ function OnLocalPlayerTurnBegin()
 	        local currentProgress	    = playerTechs:GetResearchProgress(currentTechID);
             local currentYield          = playerTechs:GetScienceYield();
             local percentageToBeDone    = (currentProgress + currentYield) / currentCost;
-
+            local percentageNextTurn    = (currentProgress + currentYield*2) / currentCost;
         
-            -- Is the current tech completed?
+            -- Is the current tech completed? -> Could be moved to the "OnResearchComplete" function
             -- Else is it greater than 50% and has yet to be displayed?
             if percentageToBeDone >= 1 then
                 LuaEvents.CQUI_AddStatusMessage("The Technology, " .. Locale.ToUpper( techName ) .. ", is completed.", 10, STATUS_MESSAGE_TECHS);
-            elseif percentageToBeDone >= .50 and isCurrentBoosted == false and cqui_halfwayNotified[currentTechID] ~= true then
-                LuaEvents.CQUI_AddStatusMessage("The current Technology, " .. Locale.ToUpper( techName ) .. ", is at least 50% completed: " .. tostring(round(percentageToBeDone*100,2)) .. "%", 10, STATUS_MESSAGE_TECHS);
+            elseif percentageNextTurn >= .50 and isCurrentBoosted == false and cqui_halfwayNotified[currentTechID] ~= true then
+                LuaEvents.CQUI_AddStatusMessage("The current Technology, " .. Locale.ToUpper( techName ) .. ", is one turn from 50%.", 10, STATUS_MESSAGE_TECHS);
                 cqui_halfwayNotified[currentTechID] = true;
             end
         end
-
-        
 
         --------------------------------------------------------------------------
 
     end
 
-    
-
-end
-
-function round(num, idp)
-  local mult = 10^(idp or 0)
-  return math.floor(num * mult + 0.5) / mult
 end
 
 -- ===========================================================================
@@ -1593,6 +1584,7 @@ function OnSearchCharCallback()
 		end
 	end
 end
+
 
 -- ===========================================================================
 --	Load all static information as well as display information for the

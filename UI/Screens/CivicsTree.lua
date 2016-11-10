@@ -1134,13 +1134,14 @@ function OnLocalPlayerTurnBegin()
 	        local currentProgress	    = playerCivics:GetCulturalProgress(currentCivicID);
             local currentYield          = playerCivics:GetCultureYield();
             local percentageToBeDone    = (currentProgress + currentYield) / currentCost;
+            local percentageNextTurn    = (currentProgress + currentYield*2) / currentCost;
         
-            -- Is the current civic completed?
+            -- Is the current civic completed? -> Could be moved to the "OnCivicComplete" function
             -- Else is it greater than 50% and has yet to be displayed?
             if percentageToBeDone >= 1 then
                 LuaEvents.CQUI_AddStatusMessage("The Civic, " .. Locale.ToUpper( civicName ) .. ", is completed.", 10, STATUS_MESSAGE_CIVIC);
-            elseif percentageToBeDone >= .50 and isCurrentBoosted == false and cqui_halfwayNotified[currentCivicID] ~= true then
-                LuaEvents.CQUI_AddStatusMessage("The current Civic, " .. Locale.ToUpper( civicName ) .. ", is at least 50% completed: " .. tostring(round(percentageToBeDone*100,2)) .. "%", 10, STATUS_MESSAGE_CIVIC);
+            elseif percentageNextTurn >= .50 and isCurrentBoosted == false and cqui_halfwayNotified[currentCivicID] ~= true then
+                LuaEvents.CQUI_AddStatusMessage("The current Civic, " .. Locale.ToUpper( civicName ) .. ", is one turn from 50%.", 10, STATUS_MESSAGE_CIVIC);
                 cqui_halfwayNotified[currentCivicID] = true;
             end
         end
@@ -1148,11 +1149,6 @@ function OnLocalPlayerTurnBegin()
         --------------------------------------------------------------------------
 
     end
-end
-
-function round(num, idp)
-  local mult = 10^(idp or 0)
-  return math.floor(num * mult + 0.5) / mult
 end
 
 -- ===========================================================================
@@ -1864,6 +1860,7 @@ function OnBuildingChanged( plotX:number, plotY:number, buildingIndex:number, pl
 	end
 end
 
+
 -- ===========================================================================
 --	Load all static information as well as display information for the
 --	current local player.
@@ -1919,5 +1916,6 @@ function Initialize()
 	Events.LocalPlayerTurnEnd.Add( OnLocalPlayerTurnEnd );
 	Events.LocalPlayerChanged.Add(AllocateUI);
 	Events.SystemUpdateUI.Add( OnUpdateUI );
+
 end
 Initialize();
