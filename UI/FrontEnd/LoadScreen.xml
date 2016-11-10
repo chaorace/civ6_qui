@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<Context>
+
+	<Box			ID="Background"				Color="0,0,0,255"				Anchor="C,C" Size="full,full" ConsumeMouse="1">
+
+		<TextButton				ID="FallbackMessage"	Anchor="C,C" Align="center" Style="FontFlair20"	SmallCapsType="EveryWord" SmallCaps="26" 	String="{LOC_LOADING_PLEASE_WAIT:upper}" Color="200,200,200,255"/>
+		
+		<Image						ID="BackgroundImage"	Anchor="C,C"																				Texture="LEADER_T_ROOSEVELT_BACKGROUND"		StretchMode="Auto"	/>
+
+		<Image						ID="Banner"						Anchor="C,C" Offset="-260,0"	Size="514,987"				Texture="Controls_BannerWideTint" >
+			<Image																															Size="parent,parent" 	Texture="Loading_Map" Alpha="0.2"/>
+			<Image					ID="BannerBarLeft"		Anchor="L,C" Offset="5,0"			Size="5,987"					Texture="Controls_BannerWideTint" TextureOffset="5,0" Color="255,255,255,50" />
+			<Image					ID="BannerBarRight"		Anchor="R,C" Offset="5,0"			Size="5,987"					Texture="Controls_BannerWideTint" TextureOffset="5,0" Color="255,255,255,50" />
+			<Image																Anchor="C,C"									Size="parent,parent"	Texture="Controls_Gradient" Color="0,0,0,100"/>
+			<Image																Anchor="C,C"									Size="parent,parent"	Texture="Controls_Gradient" Color="0,0,0,255"/>
+			<Container														Anchor="C,C"									Size="parent,765">
+				<Image				ID="LogoContainer"		Anchor="C,C"									Size="256,256"				Texture="CircleBacking256" Alpha="0.4" >
+					<Image			ID="Logo"							Anchor="C,C"									Size="200,200"				Texture="CivSymbols200"		 Alpha="0.3" />
+				</Image>
+				<Stack				ID="MainStack"				Anchor="C,T" StackGrowth="Down" StackPadding="10">
+					<Line															Start="0,0"	 End="470,0"			Width="2"							Color="200,200,200,100" />
+					<Label			ID="CivName"					Anchor="C,T"									Style="FontFlair22"		String="$Civ" SmallCapsType="EveryWord" SmallCaps="30" />
+					<Label														Anchor="C,T"									Style="FontFlair14"		String="{LOC_LOADING_JOIN_THE_WORLD_STAGE:upper}" SmallCapsType="EveryWord" SmallCaps="20" />
+					<Line															Start="0,0"	 End="470,0"			Width="2"							Color="200,200,200,100" />
+					<Label			ID="EraInfo"					Anchor="L,T" Offset="10,0"		WrapWidth="460"				Style="DawnText" String="$EraInfo$"  />
+					<Label			ID="LeaderName"				Anchor="C,T" Offset="0,10"		Style="FontFlair22"		String="$LeaderName" SmallCapsType="FirstOnly" SmallCaps="30" />
+					<Label			ID="LeaderInfo"				Anchor="L,T" Offset="10,0"		WrapWidth="460"				Style="DawnText" String="$LeaderInfo$"  />
+					<Label														Anchor="C,T" Offset="0,10"		Style="FontFlair14"		String="{LOC_LOADING_FEATURES_ABILITIES:upper}" SmallCapsType="EveryWord" SmallCaps="20" />
+					<Line															Start="0,0"	 End="470,0"			Width="2"							Color="200,200,200,100" />
+					<Stack			ID="FeaturesStack"		Anchor="L,T" Offset="10,0"		WrapWidth="500"				StackGrowth="Right" WrapGrowth="Down" Padding="10" WrapPadding="14" />
+				</Stack>						
+			</Container>
+
+
+			<Container			ID="LoadingContainer"	Anchor="C,C" Offset="0,0"			Size="parent,parent">	
+				<Label																Anchor="C,B" Offset="0,124"			Align="center" Style="FontFlair18"	SmallCapsType="EveryWord" SmallCaps="24" 	String="{LOC_LOADING_PLEASE_WAIT:upper}" Color="200,200,200,255"/>
+			</Container>
+
+			<AlphaAnim			ID="FadeAnim"						Anchor="C,C"								Size="parent,parent"	AlphaBegin="0" AlphaEnd="1" Cycle="Once" Speed=".5" Stopped="0" Pause="1" Function="Root">
+				<Container														Anchor="C,B" Offset="0,110"	Size="300,130">
+					<Image															Anchor="C,B" Offset="0,22"	Size="130,23"					Texture="Diplomacy_PortraitBacking" />
+					<Image															Anchor="C,B" Offset="0,0"		Size="305,58"					Texture="Controls_BannerBlueSmall">
+						<TextButton	ID="StartLabelButton"	Anchor="C,C" Offset="0,8"		Align="Center"				String="{LOC_START:upper}" SmallCapsType="Every" SmallCaps="24" Style="FontFlair18" Color="20,20,20,255" />
+					</Image>
+					<Image															Anchor="C,C" Offset="0,-17"	Size="91,92"					Texture="Shell_BeginButtonBacking">
+						<Button		ID="ActivateButton"			Anchor="C,C" Offset="0,0"		Size="80,80"					Texture="Shell_BeginButton" StateOffsetIncrement="0,80"/>
+					</Image>
+				</Container>
+			</AlphaAnim>
+			
+      <Container Size="512,parent" AnchorSide="O,I" Anchor="R,B">
+        <Image					ID="Portrait"						Anchor="C,T" Texture="LEADER_T_ROOSEVELT_NEUTRAL" StretchMode="Auto"/>
+      </Container>
+		</Image>			
+			
+		<Box						ID="BarTop"							Anchor="C,T" Size="parent,10"			Color="0,0,0,255"  >
+			<Image																Anchor="C,B" Size="parent,10"			Texture="Loading_LetterboxEdge" StretchMode="Tile" AnchorSide="O,O" />
+		</Box>
+		<Box						ID="BarBottom"					Anchor="C,B" Size="parent,10"			Color="0,0,0,255"  >
+			<Image																Anchor="C,T" Size="parent,10"			Texture="Loading_LetterboxEdge" StretchMode="Tile" AnchorSide="O,O" FlipY="1" />
+		</Box>
+		
+	</Box>
+
+	<Instance		Name="TextInfoInstance">
+		<Stack		ID="Top"					StackGrowth="Bottom" StackPadding="4">
+			<Label	ID="Header"				Style="FontFlair14"		WrapWidth="450" SmallCapsType="EveryWord" SmallCaps="20" String="$Header$"/>
+			<Label	ID="Description"	Style="DawnText"	WrapWidth="450" String="$Description$"/>
+		</Stack>
+	</Instance>
+
+	<Instance			Name="IconInfoInstance">
+		<Container	ID="Top"					Size="40,40" AutoSize="V">
+			<Image		ID="Icon"					Size="32,32" Offset="0,-10" />
+      <!--
+			<Stack		ID="TextStack"		Offset="36,0"		StackGrowth="Bottom" StackPadding="4">
+				<Label	ID="Header"				WrapWidth="195" SmallCapsType="EveryWord" SmallCaps="10" Style="FontFlair14"		String="$Header$"/>
+				<Label	ID="Description"	WrapWidth="195"	Style="DawnText"	String="$Description$/>
+			</Stack>
+      -->
+		</Container>
+	</Instance>
+
+</Context>
