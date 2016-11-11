@@ -23,7 +23,9 @@
 				<File>UI/WorldInput.lua</File>
 				<File>UI/WorldViewIconsManager.lua</File>
 				<File>UI/Civilopedia/CivilopediaSupport.lua</File>
-				<File>UI/Panels/CityPanel.lua</File>
+        <File>UI/FrontEnd/LoadScreen.lua</File>
+        <File>UI/FrontEnd/LoadScreen.xml</File>
+        <File>UI/Panels/CityPanel.lua</File>
 				<File>UI/Panels/CityPanel.xml</File>
 				<File>UI/Panels/CityPanelOverview.lua</File>
 				<File>UI/Panels/CityPanelOverview.xml</File>
@@ -89,7 +91,9 @@
 		<File>UI/WorldInput.lua</File>
 		<File>UI/WorldViewIconsManager.lua</File>
 		<File>UI/Civilopedia/CivilopediaSupport.lua</File>
-		<File>UI/Panels/CityPanel.lua</File>
+    <File>UI/FrontEnd/LoadScreen.lua</File>
+    <File>UI/FrontEnd/LoadScreen.xml</File>
+    <File>UI/Panels/CityPanel.lua</File>
 		<File>UI/Panels/CityPanel.xml</File>
 		<File>UI/Panels/CityPanelOverview.lua</File>
 		<File>UI/Panels/CityPanelOverview.xml</File>
