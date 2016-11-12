@@ -108,7 +108,7 @@ local MAX_BEFORE_TRUNC_TO_BOOST   :number = 310;
 local MAX_BEFORE_TRUNC_KEY_LABEL:number = 100;
 
 -- CQUI CONSTANTS
-local STATUS_MESSAGE_TECHS          :number = 4;    -- Number to distinguish tech messages
+local CQUI_STATUS_MESSAGE_TECHS          :number = 4;    -- Number to distinguish tech messages
 
 
 STATUS_ART[ITEM_STATUS.BLOCKED]   = { Name="BLOCKED",   TextColor0=0xff202726, TextColor1=0x00000000, FillTexture="TechTree_GearButtonTile_Disabled.dds",BGU=0,BGV=(SIZE_NODE_Y*3), IsButton=false, BoltOn=false, IconBacking=PIC_METER_BACK };
@@ -1036,33 +1036,35 @@ function OnLocalPlayerTurnBegin()
         
         -- Make sure there is a technology selected before continuing with checks
         if currentTechID ~= -1 then
-            local techName = GameInfo.Technologies[currentTechID].Name;
+          local techName = GameInfo.Technologies[currentTechID].Name;
 
-            local currentCost         = playerTechs:GetResearchCost(currentTechID);
+          local currentCost         = playerTechs:GetResearchCost(currentTechID);
           local currentProgress     = playerTechs:GetResearchProgress(currentTechID);
-            local currentYield          = playerTechs:GetScienceYield();
-            local percentageToBeDone    = (currentProgress + currentYield) / currentCost;
-            local percentageNextTurn    = (currentProgress + currentYield*2) / currentCost;
-      local halfway:number;
-      if(PlayerConfigurations[Game.GetLocalPlayer()]:GetCivilizationTypeName() == "CIVILIZATION_CHINA") then
-        halfway = CQUI_chinaHalfway;
-      else
-        halfway = CQUI_halfway;
-      end
+          local currentYield          = playerTechs:GetScienceYield();
+          local percentageToBeDone    = (currentProgress + currentYield) / currentCost;
+          local percentageNextTurn    = (currentProgress + currentYield*2) / currentCost;
+          local halfway:number;
+
+          if(PlayerConfigurations[Game.GetLocalPlayer()]:GetCivilizationTypeName() == "CIVILIZATION_CHINA") then
+            halfway = CQUI_chinaHalfway;
+          else
+            halfway = CQUI_halfway;
+          end
         
-            -- Is the current tech completed? -> Could be moved to the "OnResearchComplete" function
-            -- Else is it greater than 50% and has yet to be displayed?
-            if percentageToBeDone >= 1 then
-                LuaEvents.CQUI_AddStatusMessage("The Technology, " .. Locale.Lookup( techName ) .. ", is completed.", 10, STATUS_MESSAGE_TECHS);
-            elseif percentageNextTurn >= halfway and isCurrentBoosted == false and CQUI_halfwayNotified[currentTechID] ~= true then
-                LuaEvents.CQUI_AddStatusMessage("The current Technology, " .. Locale.Lookup( techName ) .. ", is one turn away from maximum Eureka potential.", 10, STATUS_MESSAGE_TECHS);
-                CQUI_halfwayNotified[currentTechID] = true;
-            end
-        end
+          -- Is the current tech completed? -> Could be moved to the "OnResearchComplete" function
+          -- Else is it greater than 50% and has yet to be displayed?
+          if percentageToBeDone >= 1 then
+              LuaEvents.CQUI_AddStatusMessage("The Technology, " .. Locale.Lookup( techName ) .. ", is completed.", 10, CQUI_STATUS_MESSAGE_TECHS);
+          elseif percentageNextTurn >= halfway and isCurrentBoosted == false and CQUI_halfwayNotified[currentTechID] ~= true and techName ~= "LOC_TECH_POTTERY_NAME" and techName ~= "LOC_TECH_ANIMAL_HUSBANDRY_NAME" and techName ~= "LOC_TECH_MINING_NAME" then
+              LuaEvents.CQUI_AddStatusMessage("The current Technology, " .. Locale.Lookup( techName ) .. ", is one turn away from maximum Eureka potential.", 10, CQUI_STATUS_MESSAGE_TECHS);
+              CQUI_halfwayNotified[currentTechID] = true;
+          end
+
+        end -- end of techID check
 
         --------------------------------------------------------------------------
 
-    end
+    end -- end of playerID check
 
 end
 
