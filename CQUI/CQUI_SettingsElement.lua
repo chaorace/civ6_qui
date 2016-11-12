@@ -1,4 +1,4 @@
-﻿--Custom localizations are temporarily disabled due to reloads breaking them at the moment. Localizations are complete, so remember to enable them once Firaxis fixes this!
+--Custom localizations are temporarily disabled due to reloads breaking them at the moment. Localizations are complete, so remember to enable them once Firaxis fixes this!
 
 include("Civ6Common");
 
@@ -18,8 +18,11 @@ function PopulateComboBox(control, values, default_value, setting_name, tooltip)
   control:ClearEntries();
   local current_value = GameConfiguration.GetValue(setting_name);
   if(current_value == nil) then
-    current_value = default_value;
-    GameConfiguration.SetValue(setting_name, default_value);
+	if(GameInfo.CQUI_Settings[setting_name]) then --LY Checks if this setting has a default state defined in the database
+		current_value = GameInfo.CQUI_Settings[setting_name].Value; --reads the default value from the database. Set them in Settings.sql
+	else current_value = default_value;
+	end
+    GameConfiguration.SetValue(setting_name, current_value); --/LY
   end
   for i, v in ipairs(values) do
     local instance = {};
@@ -52,9 +55,16 @@ end
 function PopulateCheckBox(control, default_value, setting_name, tooltip)
   local current_value = GameConfiguration.GetValue(setting_name);
   if(current_value == nil) then
-    GameConfiguration.SetValue(setting_name, default_value);
-    current_value = default_value;
-  end
+	if(GameInfo.CQUI_Settings[setting_name]) then --LY Checks if this setting has a default state defined in the database
+		if(GameInfo.CQUI_Settings[setting_name].Value == 0) then --because 0 is true in Lua
+			current_value = false;
+		else
+			current_value = true;
+		end
+	else current_value = default_value;
+	end
+		GameConfiguration.SetValue(setting_name, current_value); --/LY
+	end
     if(current_value == false) then
         control:SetSelected(false);
     else
