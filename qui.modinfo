@@ -57,6 +57,15 @@
 				<File>CQUI/CQUI_Text_Settings.xml</File>
 			</Items>
 		</LocalizedText>
+		<UpdateDatabase id="CQUI_Settings">
+            <Properties>
+                <Name>CQUI Settings</Name>
+            </Properties>
+            <Items>
+                <File>CQUI/CQUI_databaseShema.sql</File>
+                <File>Settings.sql</File>
+            </Items>
+        </UpdateDatabase>
 		<ImportFiles id="BETTER_TRADE_SCREEN_IMPORT_FILES">
 			<Items>
 				<File>BTS/TradeOverview.xml</File>
@@ -78,6 +87,8 @@
 		<File>CQUI/CQUI_SettingsElement.xml</File>
 		<File>CQUI/CQUI_Text_General.xml</File>
 		<File>CQUI/CQUI_Text_Settings.xml</File>
+		<File>CQUI/CQUI_databaseShema.sql</File>
+		<File>Settings.sql</File>
 		<File>UI/ActionPanel.lua</File>
 		<File>UI/CitySupport.lua</File>
 		<File>UI/MapPinManager.lua</File>
