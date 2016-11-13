@@ -1126,7 +1126,7 @@ function OnLocalPlayerTurnBegin()
     local kPlayer       :table  = Players[ePlayer];
     local playerCivics      :table  = kPlayer:GetCulture();
     local currentCivicID  :number = playerCivics:GetProgressingCivic();
-    local isCurrentBoosted  :boolean = playerCivics:HasBoostBeenTriggered(currentCivicsID);
+    local isCurrentBoosted  :boolean = playerCivics:HasBoostBeenTriggered(currentCivicID);
 
     -- Make sure there is a civic selected before continuing with checks
     if currentCivicID ~= -1 then
@@ -1149,9 +1149,11 @@ function OnLocalPlayerTurnBegin()
       -- Else is it greater than 50% and has yet to be displayed?
       if percentageToBeDone >= 1 then
           LuaEvents.CQUI_AddStatusMessage("The Civic, " .. Locale.Lookup( civicName ) .. ", is completed.", 10, CQUI_STATUS_MESSAGE_CIVIC);
-      elseif percentageNextTurn >= halfway and isCurrentBoosted == false and CQUI_halfwayNotified[currentCivicID] ~= true and civicName ~= "LOC_CIVIC_CODE_OF_LAWS_NAME" then
+      elseif isCurrentBoosted then
+        CQUI_halfwayNotified[civicName] = true;
+      elseif percentageNextTurn >= halfway and CQUI_halfwayNotified[civicName] ~= true then
           LuaEvents.CQUI_AddStatusMessage("The current Civic, " .. Locale.Lookup( civicName ) .. ", is one turn away from maximum Inspiration potential.", 10, CQUI_STATUS_MESSAGE_CIVIC);
-          CQUI_halfwayNotified[currentCivicID] = true;
+          CQUI_halfwayNotified[civicName] = true;
       end
 
     end -- end of if currentCivivID ~= -1
@@ -1926,6 +1928,9 @@ function Initialize()
   Events.LocalPlayerTurnEnd.Add( OnLocalPlayerTurnEnd );
   Events.LocalPlayerChanged.Add(AllocateUI);
   Events.SystemUpdateUI.Add( OnUpdateUI );
+
+  -- CQUI add exceptions to the 50% notifications by putting civics into the CQUI_halfwayNotified table
+  CQUI_halfwayNotified["LOC_CIVIC_CODE_OF_LAWS_NAME"] = true;
 
 end
 Initialize();

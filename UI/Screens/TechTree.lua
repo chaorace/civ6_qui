@@ -1055,9 +1055,11 @@ function OnLocalPlayerTurnBegin()
           -- Else is it greater than 50% and has yet to be displayed?
           if percentageToBeDone >= 1 then
               LuaEvents.CQUI_AddStatusMessage("The Technology, " .. Locale.Lookup( techName ) .. ", is completed.", 10, CQUI_STATUS_MESSAGE_TECHS);
-          elseif percentageNextTurn >= halfway and isCurrentBoosted == false and CQUI_halfwayNotified[currentTechID] ~= true and techName ~= "LOC_TECH_POTTERY_NAME" and techName ~= "LOC_TECH_ANIMAL_HUSBANDRY_NAME" and techName ~= "LOC_TECH_MINING_NAME" then
+          elseif isCurrentBoosted then
+            CQUI_halfwayNotified[techName] = true;
+          elseif percentageNextTurn >= halfway and isCurrentBoosted == false and CQUI_halfwayNotified[techName] ~= true then
               LuaEvents.CQUI_AddStatusMessage("The current Technology, " .. Locale.Lookup( techName ) .. ", is one turn away from maximum Eureka potential.", 10, CQUI_STATUS_MESSAGE_TECHS);
-              CQUI_halfwayNotified[currentTechID] = true;
+              CQUI_halfwayNotified[techName] = true;
           end
 
         end -- end of techID check
@@ -1660,5 +1662,11 @@ function Initialize()
   TruncateStringWithTooltip(Controls.UnavailableLabelKey, MAX_BEFORE_TRUNC_KEY_LABEL, Controls.UnavailableLabelKey:GetText());
   TruncateStringWithTooltip(Controls.ResearchingLabelKey, MAX_BEFORE_TRUNC_KEY_LABEL, Controls.ResearchingLabelKey:GetText());
   TruncateStringWithTooltip(Controls.CompletedLabelKey, MAX_BEFORE_TRUNC_KEY_LABEL, Controls.CompletedLabelKey:GetText());
+
+  -- CQUI add exceptions to the 50% notifications by putting techs into the CQUI_halfwayNotified table
+  CQUI_halfwayNotified["LOC_TECH_POTTERY_NAME"] = true;
+  CQUI_halfwayNotified["LOC_TECH_MINING_NAME"] = true;
+  CQUI_halfwayNotified["LOC_TECH_ANIMAL_HUSBANDRY_NAME"] = true;
+
 end
 Initialize();
