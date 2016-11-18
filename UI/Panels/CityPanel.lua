@@ -28,6 +28,7 @@ local SIZE_MAIN_ROW_LEFT_COLLAPSED  :number = 157;
 local TXT_NO_PRODUCTION       :string = Locale.Lookup("LOC_HUD_CITY_PRODUCTION_NOTHING_PRODUCED");
 local MAX_BEFORE_TRUNC_TURN_LABELS  :number = 160;
 local MAX_BEFORE_TRUNC_STATIC_LABELS:number = 110;
+local HEX_GROWTH_TEXT_PADDING   :number = 10;
 
 local UV_CITIZEN_GROWTH_STATUS    :table  = {};
     UV_CITIZEN_GROWTH_STATUS[0] = {u=0, v=0  };   -- revolt
@@ -59,6 +60,8 @@ local m_pPlayer           :table  = nil;
 local m_primaryColor        :number = 0xcafef00d; 
 local m_secondaryColor        :number = 0xf00d1ace;
 local m_kTutorialDisabledControls :table  = nil;
+local m_GrowthPlot          :number = -1;
+local m_GrowthHexTextWidth      :number = -1;
 
 -- ====================CQUI Cityview==========================================
 
@@ -94,6 +97,7 @@ function CQUI_OnCityviewEnabled()
   UILens.ToggleLayerOn(LensLayers.PURCHASE_PLOT);
   UILens.ToggleLayerOn(LensLayers.CITIZEN_MANAGEMENT);
   UI.SetFixedTiltMode(true);
+  DisplayGrowthTile();
   UI.SetInterfaceMode(InterfaceModeTypes.CITY_MANAGEMENT);
 end
 
@@ -103,6 +107,12 @@ function CQUI_OnCityviewDisabled()
   UILens.ToggleLayerOff(LensLayers.PURCHASE_PLOT);
   UILens.ToggleLayerOff(LensLayers.CITIZEN_MANAGEMENT);
   UI.SetFixedTiltMode(false);
+  if m_GrowthPlot ~= -1 then
+    Controls.GrowthHexAnchor:SetHide(true);
+    Events.Camera_Updated.Remove(OnCameraUpdate);
+    UILens.ClearHex(LensLayers.PURCHASE_PLOT, m_GrowthPlot);
+    m_GrowthPlot = -1;
+  end
   UI.SetInterfaceMode(InterfaceModeTypes.SELECTION);
 end
 
@@ -688,14 +698,14 @@ function SetYieldFocus( yieldType:number )
   local pCitizens   :table = m_pCity:GetCitizens();
   local tParameters :table = {};
   tParameters[CityCommandTypes.PARAM_FLAGS]   = 0;      -- Set Favored
-  tParameters[CityCommandTypes.PARAM_UNIT0_PLAYER]= yieldType;  -- Yield type 
+  tParameters[CityCommandTypes.PARAM_YIELD_TYPE]= yieldType;  -- Yield type 
   if pCitizens:IsFavoredYield(yieldType) then
-    tParameters[CityCommandTypes.PARAM_UNIT0_ID]= 0;      -- boolean (1=true, 0=false)
+    tParameters[CityCommandTypes.PARAM_DATA0]= 0;      -- boolean (1=true, 0=false)
   else
     if pCitizens:IsDisfavoredYield(yieldType) then
       SetYieldIgnore(yieldType);
     end
-    tParameters[CityCommandTypes.PARAM_UNIT0_ID] = 1;     -- boolean (1=true, 0=false)
+    tParameters[CityCommandTypes.PARAM_DATA0] = 1;     -- boolean (1=true, 0=false)
   end
   CityManager.RequestCommand(m_pCity, CityCommandTypes.SET_FOCUS, tParameters);
 end
@@ -707,14 +717,14 @@ function SetYieldIgnore( yieldType:number )
   local pCitizens   :table = m_pCity:GetCitizens();
   local tParameters :table = {};
   tParameters[CityCommandTypes.PARAM_FLAGS]   = 1;      -- Set Ignored
-  tParameters[CityCommandTypes.PARAM_UNIT0_PLAYER]= yieldType;  -- Yield type 
+  tParameters[CityCommandTypes.PARAM_YIELD_TYPE]= yieldType;  -- Yield type 
   if pCitizens:IsDisfavoredYield(yieldType) then
-    tParameters[CityCommandTypes.PARAM_UNIT0_ID]= 0;      -- boolean (1=true, 0=false)
+    tParameters[CityCommandTypes.PARAM_DATA0]= 0;      -- boolean (1=true, 0=false)
   else
     if ( pCitizens:IsFavoredYield(yieldType) ) then
       SetYieldFocus(yieldType);
     end
-    tParameters[CityCommandTypes.PARAM_UNIT0_ID] = 1;     -- boolean (1=true, 0=false)
+    tParameters[CityCommandTypes.PARAM_DATA0] = 1;     -- boolean (1=true, 0=false)
   end
   CityManager.RequestCommand(m_pCity, CityCommandTypes.SET_FOCUS, tParameters);
 end
@@ -765,6 +775,15 @@ function OnCityAddedToMap( ownerPlayerID:number, cityID:number )
         UI.DeselectAllCities();
       end
     end
+  end
+end
+
+function OnCityNameChanged( playerID:number, cityID:number )
+  local city = UI.GetHeadSelectedCity();      
+  if(city and city:GetOwner() == playerID and city:GetID() == cityID) then
+    local name = city:IsCapital() and "[ICON_Capital]" or "";
+    name = name .. Locale.ToUpper(Locale.Lookup(city:GetName()));
+    Controls.CityName:SetText(name);
   end
 end
 
@@ -1052,6 +1071,55 @@ function EnableIfNotTutorialBlocked( controlName:string )
   Controls[ controlName ]:SetDisabled( isDisabled );
 end
 
+function OnCameraUpdate( vFocusX:number, vFocusY:number, fZoomLevel:number )
+  if m_GrowthPlot ~= -1 then
+
+    if fZoomLevel and fZoomLevel > 0.5 then
+      local delta:number = (fZoomLevel - 0.3);
+      local alpha:number = delta / 0.7;
+      Controls.GrowthHexAlpha:SetProgress(alpha);
+    else
+      Controls.GrowthHexAlpha:SetProgress(0);
+    end
+
+    local plotX:number, plotY:number = Map.GetPlotLocation(m_GrowthPlot);
+    local worldX:number, worldY:number, worldZ:number = UI.GridToWorld(plotX, plotY);
+    Controls.GrowthHexAnchor:SetWorldPositionVal(worldX, worldY + HEX_GROWTH_TEXT_PADDING, worldZ);
+  end
+end
+
+function DisplayGrowthTile()
+  if m_pCity ~= nil then
+    local cityCulture:table = m_pCity:GetCulture();
+    if cityCulture ~= nil then
+      local newGrowthPlot:number = cityCulture:GetNextPlot();
+      if(newGrowthPlot ~= -1 and newGrowthPlot ~= m_GrowthPlot) then
+        m_GrowthPlot = newGrowthPlot;
+        
+        local cost:number = cityCulture:GetNextPlotCultureCost();
+        local currentCulture:number = cityCulture:GetCurrentCulture();
+        local currentYield:number = cityCulture:GetCultureYield();
+        local currentGrowth:number = math.max(math.min(currentCulture / cost, 1.0), 0);
+        local nextTurnGrowth:number = math.max(math.min((currentCulture + currentYield) / cost, 1.0), 0);
+
+        UILens.SetLayerGrowthHex(LensLayers.PURCHASE_PLOT, Game.GetLocalPlayer(), m_GrowthPlot, 1, "GrowthHexBG");
+        UILens.SetLayerGrowthHex(LensLayers.PURCHASE_PLOT, Game.GetLocalPlayer(), m_GrowthPlot, nextTurnGrowth, "GrowthHexNext");
+        UILens.SetLayerGrowthHex(LensLayers.PURCHASE_PLOT, Game.GetLocalPlayer(), m_GrowthPlot, currentGrowth, "GrowthHexCurrent");
+
+        local turnsRemaining:number = cityCulture:GetTurnsUntilExpansion();
+        Controls.TurnsLeftDescription:SetText(Locale.ToUpper(Locale.Lookup("LOC_HUD_CITY_TURNS_UNTIL_BORDER_GROWTH", turnsRemaining)));
+        Controls.TurnsLeftLabel:SetText(turnsRemaining);
+        Controls.GrowthHexStack:CalculateSize();
+        m_GrowthHexTextWidth = Controls.GrowthHexStack:GetSizeX();
+
+        Events.Camera_Updated.Add(OnCameraUpdate);
+        Controls.GrowthHexAnchor:SetHide(false);
+        OnCameraUpdate();
+      end
+    end
+  end
+end
+
 -- ===========================================================================
 --  Engine EVENT
 --  Local player changed; likely a hotseat game
@@ -1179,6 +1247,7 @@ function Initialize()
 
   -- Game Core Events
   Events.CityAddedToMap.Add(      OnCityAddedToMap );
+  Events.CityNameChanged.Add(     OnCityNameChanged );
   Events.CitySelectionChanged.Add(  CQUI_OnCitySelectionChanged );
   Events.CityFocusChanged.Add(    OnCityFocusChange );
   Events.CityProductionCompleted.Add( OnCityProductionCompleted );
