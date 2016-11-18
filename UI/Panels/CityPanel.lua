@@ -61,13 +61,13 @@ local m_primaryColor        :number = 0xcafef00d;
 local m_secondaryColor        :number = 0xf00d1ace;
 local m_kTutorialDisabledControls :table  = nil;
 local m_GrowthPlot          :number = -1;
-local m_GrowthHexTextWidth      :number = -1;
 
 -- ====================CQUI Cityview==========================================
 
 local CQUI_cityview = false;
 local CQUI_usingStrikeButton = false;
 local CQUI_wonderMode = false;
+local CQUI_growthTile = true;
 
 function CQUI_CityviewEnableManager()
   CQUI_cityview = true;
@@ -108,8 +108,6 @@ function CQUI_OnCityviewDisabled()
   UILens.ToggleLayerOff(LensLayers.CITIZEN_MANAGEMENT);
   UI.SetFixedTiltMode(false);
   if m_GrowthPlot ~= -1 then
-    Controls.GrowthHexAnchor:SetHide(true);
-    Events.Camera_Updated.Remove(OnCameraUpdate);
     UILens.ClearHex(LensLayers.PURCHASE_PLOT, m_GrowthPlot);
     m_GrowthPlot = -1;
   end
@@ -216,6 +214,16 @@ function CQUI_RecenterCameraGameStart()
       startY = firstUnit:GetY();
   end
   UI.LookAtPlot( startX, startY );
+end
+
+-- Toggles the visibility of the tile growth overlay
+function CQUI_ToggleGrowthTile()
+  CQUI_growthTile = not CQUI_growthTile;
+  if(CQUI_growthTile) then
+    m_GrowthPlot = -1;
+  end
+  UILens.ClearHex(LensLayers.PURCHASE_PLOT, m_GrowthPlot);
+  DisplayGrowthTile();
 end
 
 -- ===========================================================================
@@ -1071,29 +1079,12 @@ function EnableIfNotTutorialBlocked( controlName:string )
   Controls[ controlName ]:SetDisabled( isDisabled );
 end
 
-function OnCameraUpdate( vFocusX:number, vFocusY:number, fZoomLevel:number )
-  if m_GrowthPlot ~= -1 then
-
-    if fZoomLevel and fZoomLevel > 0.5 then
-      local delta:number = (fZoomLevel - 0.3);
-      local alpha:number = delta / 0.7;
-      Controls.GrowthHexAlpha:SetProgress(alpha);
-    else
-      Controls.GrowthHexAlpha:SetProgress(0);
-    end
-
-    local plotX:number, plotY:number = Map.GetPlotLocation(m_GrowthPlot);
-    local worldX:number, worldY:number, worldZ:number = UI.GridToWorld(plotX, plotY);
-    Controls.GrowthHexAnchor:SetWorldPositionVal(worldX, worldY + HEX_GROWTH_TEXT_PADDING, worldZ);
-  end
-end
-
 function DisplayGrowthTile()
   if m_pCity ~= nil then
     local cityCulture:table = m_pCity:GetCulture();
     if cityCulture ~= nil then
       local newGrowthPlot:number = cityCulture:GetNextPlot();
-      if(newGrowthPlot ~= -1 and newGrowthPlot ~= m_GrowthPlot) then
+      if(newGrowthPlot ~= -1 and newGrowthPlot ~= m_GrowthPlot and CQUI_growthTile) then
         m_GrowthPlot = newGrowthPlot;
         
         local cost:number = cityCulture:GetNextPlotCultureCost();
@@ -1107,14 +1098,6 @@ function DisplayGrowthTile()
         UILens.SetLayerGrowthHex(LensLayers.PURCHASE_PLOT, Game.GetLocalPlayer(), m_GrowthPlot, currentGrowth, "GrowthHexCurrent");
 
         local turnsRemaining:number = cityCulture:GetTurnsUntilExpansion();
-        Controls.TurnsLeftDescription:SetText(Locale.ToUpper(Locale.Lookup("LOC_HUD_CITY_TURNS_UNTIL_BORDER_GROWTH", turnsRemaining)));
-        Controls.TurnsLeftLabel:SetText(turnsRemaining);
-        Controls.GrowthHexStack:CalculateSize();
-        m_GrowthHexTextWidth = Controls.GrowthHexStack:GetSizeX();
-
-        Events.Camera_Updated.Add(OnCameraUpdate);
-        Controls.GrowthHexAnchor:SetHide(false);
-        OnCameraUpdate();
       end
     end
   end
@@ -1270,6 +1253,7 @@ function Initialize()
   LuaEvents.Tutorial_ContextDisableItems.Add( OnTutorial_ContextDisableItems );
   LuaEvents.CQUI_GoNextCity.Add( CQUI_OnNextCity );
   LuaEvents.CQUI_GoPrevCity.Add( CQUI_OnPreviousCity );
+  LuaEvents.CQUI_ToggleGrowthTile.Add( CQUI_ToggleGrowthTile );
 
   -- Truncate possible static text overflows
   TruncateStringWithTooltip(Controls.BreakdownLabel,  MAX_BEFORE_TRUNC_STATIC_LABELS, Controls.BreakdownLabel:GetText());

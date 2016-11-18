@@ -203,9 +203,12 @@ function ShowPurchases()
               pInstance.PurchaseButton:SetToolTipString("");
             end
             if (index == pNextPlotID ) then
-              pInstance.NextPlotLabel:SetString("[ICON_Turn]" .. Locale.Lookup("LOC_HUD_CITY_IN_TURNS" , TurnsUntilExpansion ) .. "   ");
-              pInstance.NextPlotLabel:SetToolTipString( " " .. Round(pCityCulture:GetCurrentCulture(), 1) .. "/" .. pCityCulture:GetNextPlotCultureCost() .. " (+" .. Round(pCityCulture:GetCultureYield(), 1) .. "[ICON_CULTURE]) " .. Locale.Lookup( "LOC_HUD_CITY_BORDER_EXPANSION" , TurnsUntilExpansion ).."[ICON_Turn]");
-              pInstance.NextPlotButton:SetHide( false );
+              pInstance.CQUI_NextPlotLabel:SetString("[ICON_Turn]" .. Locale.Lookup("LOC_HUD_CITY_IN_TURNS" , TurnsUntilExpansion ) .. "   ");
+              pInstance.CQUI_NextPlotLabel:SetToolTipString( " " .. Round(pCityCulture:GetCurrentCulture(), 1) .. "/" .. pCityCulture:GetNextPlotCultureCost() .. " (+" .. Round(pCityCulture:GetCultureYield(), 1) .. "[ICON_CULTURE]) " .. Locale.Lookup( "LOC_HUD_CITY_BORDER_EXPANSION" , TurnsUntilExpansion ).."[ICON_Turn]");
+              pInstance.CQUI_NextPlotButton:RegisterCallback( Mouse.eLClick, function()
+                LuaEvents.CQUI_ToggleGrowthTile();
+              end);
+              pInstance.CQUI_NextPlotButton:SetHide( false );
             end
             pInstance.PurchaseButton:SetHide( false );
             table.insert( m_uiPurchase, pInstance );
@@ -541,7 +544,7 @@ end
 function HidePurchases()  
   for _,pInstance in ipairs(m_uiPurchase) do
     pInstance.PurchaseButton:SetHide( true );
-    pInstance.NextPlotButton:SetHide( true );
+    pInstance.CQUI_NextPlotButton:SetHide( true );
     -- NOTE: This plot can't be returned to the instnace manager 
     -- (ReleaseInstance) unless the local cached version in (m_uiWorldMap) 
     -- is removed too; which is only safe if NOTHING else utilizing this 
