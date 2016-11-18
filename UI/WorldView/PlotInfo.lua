@@ -288,9 +288,11 @@ function ShowCitizens()
         --pInstance.CitizenButton:SetSizeVal(48, 48);
         pInstance.CitizenButton:SetHide(isCityCenterPlot);      
         pInstance.CitizenButton:SetDisabled(isCityCenterPlot);
-        
+
+        local numUnits:number = tUnits[i];
+        local maxUnits:number = tMaxUnits[i];
         --CQUI Citizen buttons tweaks
-        if(tUnits[i] >= 1) then
+        if(numUnits >= 1) then
           pInstance.CitizenButton:SetTextureOffsetVal(0, CITIZEN_BUTTON_HEIGHT*4);
           pInstance.CitizenButton:SetSizeVal(64,64);
           pInstance.CitizenButton:SetAlpha(.45);
@@ -300,11 +302,18 @@ function ShowCitizens()
           pInstance.CitizenButton:SetAlpha(.6);
         end
 
-        if(tMaxUnits[i] > 1) then
-          pInstance.CurrentAmount:SetText(tUnits[i]);
-          pInstance.TotalAmount:SetText(tMaxUnits[i]);
+        if(maxUnits > 1) then
+          --[[ TODO: Add back for Patch2, wasn't in due to missing TEXT lock. 
+          local toolTip:string = Locale.Lookup("LOC_HUD_CITY_SPECIALISTS", numUnits, maxUnits);
+          pInstance.CitizenMeterBG:SetToolTipString( toolTip );
+          --]]
+          pInstance.CitizenMeterBG:SetHide(false);          
+          pInstance.CurrentAmount:SetText(numUnits);
+          pInstance.TotalAmount:SetText(maxUnits);
+          pInstance.CitizenMeter:SetPercent(numUnits / maxUnits);         
+        else
+          pInstance.CitizenMeterBG:SetHide(true);
         end
-
         if(tLockedUnits[i] > 0) then
           pInstance.LockedIcon:SetHide(false);
         else
@@ -509,6 +518,7 @@ function HideCitizens()
 
   for _,kInstance in ipairs(m_uiCitizens) do
     kInstance.CitizenButton:SetHide( true );
+    kInstance.CitizenMeterBG:SetHide( true );
     kInstance.LockedIcon:SetHide( true );
   end
   m_uiCitizens = {};
@@ -735,6 +745,7 @@ end
 function OnCityWorkerChanged( owner:number, cityID:number, plotX:number, plotY:number )
   if owner == Game.GetLocalPlayer() then
     RefreshCitizenManagement();
+    LuaEvents.PlotInfo_UpdatePlotTooltip(true);
   end
 end
 
