@@ -1090,15 +1090,6 @@ function DefaultKeyUpHandler( uiKey:number )
       CQUI_BuildImprovement(UI.GetHeadSelectedUnit(), -1355513600); --Oil Well
       CQUI_BuildImprovement(UI.GetHeadSelectedUnit(), -396628467); --Offshore Platform
     end
-    if( uiKey == Keys.Y ) then
-      LuaEvents.CQUI_Option_ToggleYields();
-    end
-    if( uiKey == Keys.VK_OEM_PERIOD ) then
-      UI.SelectNextReadyUnit();
-    end
-    if( uiKey == Keys.VK_OEM_COMMA ) then
-      UI.SelectPrevReadyUnit();
-    end
     if( m_isALTDown ) then --Overridden classic binds get an alt-version as well as the normal alt-shortcuts
       if( uiKey == Keys.C ) then
         UnitManager.RequestOperation(UI.GetHeadSelectedUnit(), UnitOperationTypes.HARVEST_RESOURCE);
