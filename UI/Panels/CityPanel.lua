@@ -427,7 +427,7 @@ function ViewMain( data:table )
       end
     end
   else
-	ReligionTooltip = Locale.Lookup("LOC_RELIGIONPANEL_NO_RELIGION");
+    ReligionTooltip = Locale.Lookup("LOC_RELIGIONPANEL_NO_RELIGION");
   end
   -- District tooltip
   local DistrictTooltip = "";
