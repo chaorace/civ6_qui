@@ -31,6 +31,18 @@
   <Row Tag="LOC_CQUI_GENERAL_SMARTBANNER_TOOLTIP" Language="en_US">
       <Text>Displays new icons in the city banner. A food icon is displayed whenever there are unlocked citizens being automatically assigned by the AI city governor. District icons indicate built districts</Text>
     </Row>
+    <Row Tag="LOC_CQUI_GENERAL_TOGGLEYIELDSONLOAD" Language="en_US">
+      <Text>Toggles yields ON by default</Text>
+    </Row>
+  <Row Tag="LOC_CQUI_GOSSIP" Language="en_US">
+    <Text>Gossip</Text>
+  </Row>
+  <Row Tag="LOC_CQUI_GOSSIP_TRIMMESSAGE" Language="en_US">
+    <Text>Trim gossip messages</Text>
+  </Row>
+  <Row Tag="LOC_CQUI_GOSSIP_TRIMMESSAGE_TOOLTIP" Language="en_US">
+    <Text>Removes the mostly useless start of the gossip message describing where the information came from</Text>
+  </Row>
   <Row Tag="LOC_CQUI_HIDDEN" Language="en_US">
       <Text>Hidden</Text>
     </Row>
@@ -55,6 +67,12 @@
   <Row Tag="LOC_CQUI_POPUPS_TECHAUDIO_TOOLTIP" Language="en_US">
       <Text>Toggles the popup audio that plays whenever a new tech or civic is achieved. Is fully indepenedent of the visual component and can play even when there is no visible popup</Text>
     </Row>
+  <Row Tag="LOC_CQUI_PRODUCTION" Language="en_US">
+    <Text>Production</Text>
+  </Row>
+  <Row Tag="LOC_CQUI_PRODUCTION_ITEMHEIGHT" Language="en_US">
+    <Text>Production item height</Text>
+  </Row>
   <Row Tag="LOC_CQUI_SETTINGS_REMINDER" Language="en_US">
       <Text>Remember: CQUI settings are attached to individual saves!</Text>
     </Row>
