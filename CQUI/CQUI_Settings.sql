@@ -36,4 +36,5 @@ INSERT INTO CQUI_Settings -- Don't touch this line!
 */
 
 INSERT INTO CQUI_Settings -- Don't touch this line!
-  VALUES  ("CQUI_BindingsMode", 1); -- Set of keybindings used │ 0=Civ6 default │ 1=keybinds from Civ5 │ 2=Civ5 with additions such as WASD camera control │
+  VALUES  ("CQUI_ResourceIconStyle", 0),
+    ("CQUI_BindingsMode", 1); -- Set of keybindings used │ 0=Civ6 default │ 1=keybinds from Civ5 │ 2=Civ5 with additions such as WASD camera control │
