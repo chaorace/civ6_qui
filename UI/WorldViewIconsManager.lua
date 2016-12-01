@@ -29,7 +29,7 @@ local m_RecommendedImprovementPlots :table = {};
 -- Used to efficiently clear settlement recommendations
 local m_RecommendedSettlementPlots :table = {};
 
-local g_resource_icon_style = 1;
+local CQUI_ResourceIconStyle = 1;
 
 -- ===========================================================================
 function GetStartingPlotPlayer( pPlot )
@@ -189,7 +189,7 @@ function SetResourceIcon( pInstance:table, pPlot, type, state)
       --CQUI: Resource icon becomes transparent after being improved
       local CQUI_ICON_LOW_OPACITY :number = 0x77ffffff;
 
-      local icon_style = g_resource_icon_style;
+      local icon_style = CQUI_ResourceIconStyle;
 
       if icon_style == 0 then
         local white :number = 0xffffffff;
@@ -686,8 +686,8 @@ end
 -- ===========================================================================
 -- register the settings callback
 function CQUI_OnIconStyleSettingsUpdate()
-  g_resource_icon_style = GameConfiguration.GetValue("CQUI_ResourceIconStyle");
-  --print("resource icon style global setting: ", g_resource_icon_style);
+  CQUI_ResourceIconStyle = GameConfiguration.GetValue("CQUI_ResourceDimmingStyle");
+  --print("resource icon style global setting: ", CQUI_ResourceIconStyle);
   Rebuild();
 end
 LuaEvents.CQUI_SettingsUpdate.Add( CQUI_OnIconStyleSettingsUpdate );
