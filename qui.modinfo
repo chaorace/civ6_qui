@@ -94,6 +94,24 @@
                 <File>URS/UnitPromotionPopup.lua</File>
             </Items>
         </ImportFiles>
+		<ImportFiles id="MORELENSES_IMPORT_FILES">
+			<Items>
+				<File>ML/UI/MinimapPanel.lua</File>
+				<File>ML/UI/MinimapPanel.xml</File>
+				<File>ML/UI/Panels/ModalLensPanel.lua</File>
+				<File>ML/UI/Panels/ModalLensPanel.xml</File>
+			</Items>
+		</ImportFiles>
+		<UpdateDatabase id="MORELENSES_DATABASE">
+			<Items>
+				<File>ML/MoreLenses_Colors.sql</File>
+			</Items>
+		</UpdateDatabase>
+		<LocalizedText id="MORELENSES_TEXT">
+			<Items>
+				<File>ML/Text/MoreLenses_Text.xml</File>
+			</Items>
+		</LocalizedText>
     </Components>
     <Files>
         <File>CQUI/CQUI_DatabaseSchema.sql</File>
@@ -151,6 +169,12 @@
         <File>URS/ReportScreen.lua</File>
         <File>URS/ReportScreen.xml</File>
         <File>URS/UnitPromotionPopup.lua</File>
+		<File>ML/UI/MinimapPanel.lua</File>
+		<File>ML/UI/MinimapPanel.xml</File>
+		<File>ML/UI/Panels/ModalLensPanel.lua</File>
+		<File>ML/UI/Panels/ModalLensPanel.xml</File>
+		<File>ML/MoreLenses_Colors.sql</File>
+		<File>ML/Text/MoreLenses_Text.xml</File>
     </Files>
     <Settings>
         <Custom id="BETTER_TRADE_SCREEN_SETTINGS">
@@ -160,5 +184,12 @@
                 <Component>BETTER_TRADE_DATABASE</Component>
             </Items>
         </Custom>
+		<Custom id="MORELENSES_SETTINGS">
+			<Items>
+				<Component>MORELENSES_IMPORT_FILES</Component>
+				<Component>MORELENSES_TEXT</Component>
+				<Component>MORELENSES_DATABASE</Component>
+			</Items>
+		</Custom>
     </Settings>
 </Mod>
