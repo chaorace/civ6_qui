@@ -45,6 +45,23 @@ local PRODUCTION_TYPE :table = {
     PROJECT   = 6
 };
 
+--CQUI Members
+local CQUI_INSTANCE_Y :number = 32;
+local CQUI_ProductionQueue :boolean = true;
+function CQUI_OnSettingsUpdate()
+  CQUI_INSTANCE_Y = GameConfiguration.GetValue("CQUI_ProductionItemHeight");
+  CQUI_ProductionQueue = GameConfiguration.GetValue("CQUI_ProductionQueue");
+  if(not CQUI_ProductionQueue) then
+    ResetAllCityQueues();
+    Controls.QueueAlphaIn:SetHide(true);
+  else
+    Controls.QueueAlphaIn:SetHide(false);
+    Refresh();
+  end
+end
+LuaEvents.CQUI_SettingsUpdate.Add(CQUI_OnSettingsUpdate);
+LuaEvents.CQUI_SettingsInitialized.Add(CQUI_OnSettingsUpdate);
+
 -- ===========================================================================
 --  Members
 -- ===========================================================================
@@ -582,6 +599,7 @@ function PopulateList(data, listIM)
         unitListing = unitList["unitListIM"]:GetInstance();
       end
       ResetInstanceVisibility(unitListing);
+      unitListing.ButtonContainer:SetSizeY(CQUI_INSTANCE_Y);
       -- Check to see if this item is recommended
       --for _,hash in ipairs( m_recommendedItems) do
       --  if(item.Hash == hash.BuildItemHash) then
@@ -726,7 +744,7 @@ function PopulateList(data, listIM)
       unitListing.Icon:SetIcon(ICON_PREFIX..item.Type);
 
       unitListing.TrainUnit:RegisterCallback( Mouse.eLClick, function()
-        QueueUnit(data.City, item, m_isCONTROLpressed);
+        QueueUnit(data.City, item, (m_isCONTROLpressed or not CQUI_ProductionQueue));
       end);
 
       unitListing.TrainUnit:RegisterCallback( Mouse.eMClick, function()
@@ -765,6 +783,13 @@ function PopulateList(data, listIM)
       -- Want a special text string for this!! #NEW TEXT #LOCALIZATION - "You can only directly build corps and armies once you have constructed a military academy."
       -- LOC_UNIT_TRAIN_NEED_MILITARY_ACADEMY
       if item.Corps or item.Army then
+        unitListing.ArmyCorpsDrawer:SetOffsetY(CQUI_INSTANCE_Y - 2);
+        unitListing.CorpsButtonContainer:SetSizeY(CQUI_INSTANCE_Y);
+        unitListing.CorpsPurchaseButton:SetSizeY(CQUI_INSTANCE_Y - 9);
+        unitListing.CorpsFaithPurchaseButton:SetSizeY(CQUI_INSTANCE_Y - 9);
+        unitListing.ArmyButtonContainer:SetSizeY(CQUI_INSTANCE_Y);
+        unitListing.ArmyPurchaseButton:SetSizeY(CQUI_INSTANCE_Y - 9);
+        unitListing.ArmyFaithPurchaseButton:SetSizeY(CQUI_INSTANCE_Y - 9);
         unitListing.CorpsArmyDropdownButton:RegisterCallback( Mouse.eLClick, function()
           local isExpanded = unitListing.CorpsArmyArrow:IsSelected();
           unitListing.CorpsArmyArrow:SetSelected(not isExpanded);
@@ -893,7 +918,7 @@ function PopulateList(data, listIM)
         unitListing.TrainArmyButton:SetToolTipString(item.ArmyTooltip);
         unitListing.ArmyDisabled:SetToolTipString(item.ArmyTooltip);
         unitListing.TrainArmyButton:RegisterCallback( Mouse.eLClick, function()
-          QueueUnitArmy(data.City, item);
+          QueueUnitArmy(data.City, item, not CQUI_ProductionQueue);
         end);
 
         unitListing.TrainArmyButton:RegisterCallback( Mouse.eMClick, function()
@@ -1023,6 +1048,8 @@ function PopulateList(data, listIM)
       end
 
       local districtListing = districtList["districtListIM"]:GetInstance();
+      districtListing.ButtonContainer:SetSizeY(CQUI_INSTANCE_Y);
+      districtListing.BuildingDrawer:SetOffsetY(CQUI_INSTANCE_Y);
       ResetInstanceVisibility(districtListing);
       -- Check to see if this district item is one of the items that is recommended:
       --for _,hash in ipairs( m_recommendedItems) do
@@ -1109,7 +1136,7 @@ function PopulateList(data, listIM)
       end
       districtListing.Button:SetDisabled(item.Disabled);
       districtListing.Button:RegisterCallback( Mouse.eLClick, function()
-        if(m_isCONTROLpressed) then
+        if(m_isCONTROLpressed or not CQUI_ProductionQueue) then
           nextDistrictSkipToFront = true;
         else
           nextDistrictSkipToFront = false;
@@ -1227,7 +1254,7 @@ function PopulateList(data, listIM)
           buildingListing.Disabled:SetToolTipString(buildingItem.ToolTip);
           buildingListing.Icon:SetIcon(ICON_PREFIX..buildingItem.Type);
           buildingListing.Button:RegisterCallback( Mouse.eLClick, function()
-            QueueBuilding(data.City, buildingItem);
+            QueueBuilding(data.City, buildingItem, not CQUI_ProductionQueue);
           end);
 
           buildingListing.Button:RegisterCallback( Mouse.eMClick, function()
@@ -1275,7 +1302,8 @@ function PopulateList(data, listIM)
           else
             buildingListing.Button:SetHide(false);
             buildingListing.Disabled:SetHide(true);
-            buildingListing.Button:SetSizeY(BUTTON_Y);
+            buildingListing.ButtonContainer:SetSizeY(CQUI_INSTANCE_Y);
+            buildingListing.Button:SetSizeY(CQUI_INSTANCE_Y);
             buildingListing.Button:SetColor(0xffffffff);
           end
           buildingListing.Button:SetDisabled(buildingItem.Disabled);
@@ -1298,6 +1326,8 @@ function PopulateList(data, listIM)
       if(item.IsWonder) then
         local wonderListing = wonderList["wonderListIM"]:GetInstance();
         ResetInstanceVisibility(wonderListing);
+        wonderListing.ButtonContainer:SetSizeY(CQUI_INSTANCE_Y);
+        wonderListing.Button:SetSizeY(CQUI_INSTANCE_Y);
         wonderListing.PurchaseButton:SetHide(true);
         wonderListing.FaithPurchaseButton:SetHide(true);
         --for _,hash in ipairs( m_recommendedItems) do
@@ -1339,7 +1369,6 @@ function PopulateList(data, listIM)
         else
           wonderListing.Button:SetHide(false);
           wonderListing.Disabled:SetHide(true);
-          wonderListing.Button:SetSizeY(BUTTON_Y);
           wonderListing.Button:SetColor(0xffffffff);
         end
         wonderListing.Button:SetDisabled(item.Disabled);
@@ -1422,6 +1451,7 @@ function PopulateList(data, listIM)
       projectListing.Button:SetToolTipString(item.ToolTip);
       projectListing.Disabled:SetToolTipString(item.ToolTip);
       projectListing.Icon:SetIcon(ICON_PREFIX..item.Type);
+      projectListing.ButtonContainer:SetSizeY(CQUI_INSTANCE_Y);
       if (item.Disabled) then 
         if(showDisabled) then
           projectListing.Disabled:SetHide(false);
@@ -1436,7 +1466,7 @@ function PopulateList(data, listIM)
       end
       projectListing.Button:SetDisabled(item.Disabled);
       projectListing.Button:RegisterCallback( Mouse.eLClick, function()
-          QueueProject(data.City, item);
+          QueueProject(data.City, item, not CQUI_ProductionQueue);
       end);
 
       projectListing.Button:RegisterCallback( Mouse.eMClick, function()
@@ -2544,7 +2574,11 @@ end
 --  Fires when a city's current production changes
 --- ===========================================================================
 function OnCityProductionChanged(playerID:number, cityID:number)
-  Refresh();
+  if (not CQUI_ProductionQueue) then --If production queue is disabled, clear out the queue
+    ResetSelectedCityQueue();
+  else
+    Refresh();  
+  end
   CQUI_previousProductionHash[cityID] = CQUI_currentProductionHash[cityID];
   GameConfiguration.SetValue("CQUI_previousProductionHash" .. cityID, CQUI_previousProductionHash[cityID]);
 end
@@ -3539,14 +3573,15 @@ function RecenterCameraToSelectedCity()
   UI.LookAtPlot( kCity:GetX(), kCity:GetY() );
 end
 
-function ResetSelectedCityQueue()
-  local selectedCity = UI.GetHeadSelectedCity();
-  if(not selectedCity) then return end
+function ResetCityQueue(cityID, player)
+  if (not player) then
+    player = Players[Game.GetLocalPlayer()];
+  end
+  if(not player) then return end
+  local city = player:GetCities():FindID(cityID);
+  if(not city) then return end
 
-  local cityID = selectedCity:GetID();
-  if(not cityID) then return end
-
-  local buildQueue = selectedCity:GetBuildQueue();
+  local buildQueue = city:GetBuildQueue();
   local currentProductionHash = buildQueue:GetCurrentProductionTypeHash();
   local plotID = -1;
 
@@ -3555,7 +3590,7 @@ function ResetSelectedCityQueue()
   if(currentProductionHash ~= 0) then
     -- Determine the type of the item
     local currentType = 0;
-    local productionInfo = GetProductionInfoOfCity(selectedCity, currentProductionHash);
+    local productionInfo = GetProductionInfoOfCity(city, currentProductionHash);
     productionInfo.Hash = currentProductionHash;
 
     if(productionInfo.Type == "UNIT") then
@@ -3564,8 +3599,8 @@ function ResetSelectedCityQueue()
       if(GameInfo.Buildings[currentProductionHash].MaxWorldInstances == 1) then
         currentType = PRODUCTION_TYPE.PLACED;
 
-        local pCityBuildings  :table = selectedCity:GetBuildings();
-        local kCityPlots    :table = Map.GetCityPlots():GetPurchasedPlots( selectedCity );
+        local pCityBuildings  :table = city:GetBuildings();
+        local kCityPlots    :table = Map.GetCityPlots():GetPurchasedPlots( city );
         if (kCityPlots ~= nil) then
           for _,plot in pairs(kCityPlots) do
             local kPlot:table =  Map.GetPlotByIndex(plot);
@@ -3594,6 +3629,27 @@ function ResetSelectedCityQueue()
       plotID=plotID
     }
   end
+end
+
+function ResetAllCityQueues()
+  local player = Players[Game.GetLocalPlayer()];
+  if(not player) then return end
+
+  for _,x in player:GetCities():Members() do
+    ResetCityQueue(x:GetID(), player);
+  end
+
+  Refresh();
+end
+
+function ResetSelectedCityQueue()
+  local selectedCity = UI.GetHeadSelectedCity();
+  if(not selectedCity) then return end
+
+  local cityID = selectedCity:GetID();
+  if(not cityID) then return end
+
+  ResetCityQueue(cityID);
 
   Refresh();
 end
@@ -3661,6 +3717,10 @@ function Initialize()
   Events.CityProductionUpdated.Add(OnCityProductionUpdated);
   
   Events.CityWorkerChanged.Add(Refresh);
+
+  -- CQUI Setting Controls
+  PopulateCheckBox(Controls.CQUI_ProductionQueueCheckbox, "CQUI_ProductionQueue");
+  RegisterControl(Controls.CQUI_ProductionQueueCheckbox, "CQUI_ProductionQueue", UpdateCheckbox);
 
   -- CQUI Loading Previous Turn items
   -- ===================================================================

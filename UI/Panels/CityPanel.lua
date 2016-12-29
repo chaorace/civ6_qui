@@ -107,10 +107,6 @@ function CQUI_OnCityviewDisabled()
   UILens.ToggleLayerOff(LensLayers.PURCHASE_PLOT);
   UILens.ToggleLayerOff(LensLayers.CITIZEN_MANAGEMENT);
   UI.SetFixedTiltMode(false);
-  if m_GrowthPlot ~= -1 then
-    UILens.ClearHex(LensLayers.PURCHASE_PLOT, m_GrowthPlot);
-    m_GrowthPlot = -1;
-  end
   UI.SetInterfaceMode(InterfaceModeTypes.SELECTION);
 end
 
@@ -147,6 +143,14 @@ function CQUI_OnInterfaceModeChanged( eOldMode:number, eNewMode:number )
   end
 end
 
+-- Clear city culture growth tile overlay if one exists
+function CQUI_ClearGrowthTile()
+  if m_GrowthPlot ~= -1 then
+    UILens.ClearHex(LensLayers.PURCHASE_PLOT, m_GrowthPlot);
+    m_GrowthPlot = -1;
+  end
+end
+
 function CQUI_OnCitySelectionChanged( ownerPlayerID:number, cityID:number, i:number, j:number, k:number, isSelected:boolean, isEditable:boolean)
   if (ownerPlayerID == Game.GetLocalPlayer()) then
     if (isSelected) then
@@ -172,6 +176,8 @@ function CQUI_OnCitySelectionChanged( ownerPlayerID:number, cityID:number, i:num
         LuaEvents.CQUI_CityviewEnable();
         Refresh();
       end
+    else
+      CQUI_ClearGrowthTile();
     end
   end
 end
@@ -216,14 +222,25 @@ function CQUI_RecenterCameraGameStart()
   UI.LookAtPlot( startX, startY );
 end
 
+
+-- Sets the visibility of the tile growth overlay
+function CQUI_SetGrowthTile(state)
+  GameConfiguration.SetValue("CQUI_ShowCultureGrowth", state);
+  LuaEvents.CQUI_SettingsUpdate();
+end
 -- Toggles the visibility of the tile growth overlay
 function CQUI_ToggleGrowthTile()
-  CQUI_growthTile = not CQUI_growthTile;
+  CQUI_SetGrowthTile(not CQUI_growthTile);
+end
+function CQUI_SettingsUpdate()
+  CQUI_growthTile = GameConfiguration.GetValue("CQUI_ShowCultureGrowth");
   if(CQUI_growthTile) then
     m_GrowthPlot = -1;
   end
   UILens.ClearHex(LensLayers.PURCHASE_PLOT, m_GrowthPlot);
-  DisplayGrowthTile();
+  if(UI.GetInterfaceMode() == InterfaceModeTypes.CITY_MANAGEMENT) then
+    DisplayGrowthTile();
+  end
 end
 
 -- ===========================================================================
@@ -773,6 +790,12 @@ end
 -- ===========================================================================
 --  GAME Event
 -- ===========================================================================
+function OnPlayerResourceChanged( ownerPlayerID:number, resourceTypeID:number)
+  if (Game.GetLocalPlayer() ~= nil and ownerPlayerID == Game.GetLocalPlayer()) then
+    Refresh();
+  end
+end
+
 function OnCityAddedToMap( ownerPlayerID:number, cityID:number )
   if Game.GetLocalPlayer() ~= nil then
     if ownerPlayerID == Game.GetLocalPlayer() then
@@ -1103,6 +1126,7 @@ function DisplayGrowthTile()
   end
 end
 
+
 -- ===========================================================================
 --  Engine EVENT
 --  Local player changed; likely a hotseat game
@@ -1243,6 +1267,7 @@ function Initialize()
   Events.InterfaceModeChanged.Add(  CQUI_OnInterfaceModeChanged );
   Events.LocalPlayerChanged.Add(    OnLocalPlayerChanged );
   Events.UnitSelectionChanged.Add(  OnUnitSelectionChanged );
+  Events.PlayerResourceChanged.Add( OnPlayerResourceChanged );
   Events.LoadScreenClose.Add( CQUI_OnLoadScreenClose );
 
   -- LUA Events
@@ -1254,6 +1279,7 @@ function Initialize()
   LuaEvents.CQUI_GoNextCity.Add( CQUI_OnNextCity );
   LuaEvents.CQUI_GoPrevCity.Add( CQUI_OnPreviousCity );
   LuaEvents.CQUI_ToggleGrowthTile.Add( CQUI_ToggleGrowthTile );
+  LuaEvents.CQUI_SettingsUpdate.Add( CQUI_SettingsUpdate );
 
   -- Truncate possible static text overflows
   TruncateStringWithTooltip(Controls.BreakdownLabel,  MAX_BEFORE_TRUNC_STATIC_LABELS, Controls.BreakdownLabel:GetText());

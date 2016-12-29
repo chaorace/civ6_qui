@@ -13,75 +13,12 @@ local bindings_options = {
   {"Enhanced", 2}
 };
 
---Used to populate combobox options
-function PopulateComboBox(control, values, setting_name, tooltip)
-  control:ClearEntries();
-  local current_value = GameConfiguration.GetValue(setting_name);
-  if(current_value == nil) then
-  if(GameInfo.CQUI_Settings[setting_name]) then --LY Checks if this setting has a default state defined in the database
-    current_value = GameInfo.CQUI_Settings[setting_name].Value; --reads the default value from the database. Set them in Settings.sql
-  else current_value = 0;
-  end
-    GameConfiguration.SetValue(setting_name, current_value); --/LY
-  end
-  for i, v in ipairs(values) do
-    local instance = {};
-    control:BuildEntry( "InstanceOne", instance );
-    instance.Button:SetVoid1(i);
-        instance.Button:LocalizeAndSetText(v[1]);
-    if(v[2] == current_value) then
-      local button = control:GetButton();
-      button:LocalizeAndSetText(v[1]);
-    end
-  end
-  control:CalculateInternals();
-  if(setting_name) then
-    control:RegisterSelectionCallback(
-      function(voidValue1, voidValue2, control)
-        local option = values[voidValue1];
-        local button = control:GetButton();
-        button:LocalizeAndSetText(option[1]);
-        GameConfiguration.SetValue(setting_name, option[2]);
-        LuaEvents.CQUI_SettingsUpdate();
-      end
-    );
-  end
-  if(tooltip ~= nil)then
-    control:SetToolTipString(tooltip);
-  end
-end
-
---Used to populate checkboxes
-function PopulateCheckBox(control, setting_name, tooltip)
-  local current_value = GameConfiguration.GetValue(setting_name);
-  if(current_value == nil) then
-  if(GameInfo.CQUI_Settings[setting_name]) then --LY Checks if this setting has a default state defined in the database
-    if(GameInfo.CQUI_Settings[setting_name].Value == 0) then --because 0 is true in Lua
-      current_value = false;
-    else
-      current_value = true;
-    end
-  else current_value = false;
-  end
-    GameConfiguration.SetValue(setting_name, current_value); --/LY
-  end
-    if(current_value == false) then
-        control:SetSelected(false);
-    else
-        control:SetSelected(true);
-    end
-  control:RegisterCallback(Mouse.eLClick, 
-    function()
-      local selected = not control:IsSelected();
-      control:SetSelected(selected);
-      GameConfiguration.SetValue(setting_name, selected);
-      LuaEvents.CQUI_SettingsUpdate();
-    end
-  );
-  if(tooltip ~= nil)then
-    control:SetToolTipString(tooltip);
-  end
-end
+local resource_icon_style_options = 
+{
+  {"Solid", 0},
+  {"Transparent", 1},
+  {"Hidden", 2}
+};
 
 --Used to switch active panels/tabs in the settings panel
 function ShowTab(button, panel)
@@ -227,6 +164,22 @@ function InitializeGossipCheckboxes()
   PopulateCheckBox(Controls.LOC_GOSSIP_WONDER_STARTEDCheckbox, "CQUI_LOC_GOSSIP_WONDER_STARTED");
 end
 
+--Used to convert between slider steps and production item height
+--Minimum value is 24, maximum is 128. This translates to the 0th step and the 104th
+local ProductionItemHeightConverter = {
+  ToSteps = function(value)
+    local out = value - 24;
+    if(out < 0) then out = 0;
+    elseif(out > 104) then out = 104; end
+    return out;
+  end,
+  ToValue = function(steps)
+    local out = steps + 24;
+    if(out > 128) then out = 128; end
+    return out;
+  end
+};
+
 function Initialize()
   --Adding/binding tabs...
   m_tabs = {
@@ -234,6 +187,7 @@ function Initialize()
     {Controls.BindingsTab, Controls.BindingsOptions},
     {Controls.PopupsTab, Controls.PopupsOptions},
     {Controls.GossipTab, Controls.GossipOptions},
+    {Controls.ProductionTab, Controls.ProductionOptions},
     {Controls.HiddenTab, Controls.HiddenOptions}
   };
   for i, tab in ipairs(m_tabs) do
@@ -244,9 +198,15 @@ function Initialize()
   --Populating/binding comboboxes...
   --PopulateComboBox(Controls.BindingsPullDown, bindings_options, "CQUI_BindingsMode", Locale.Lookup("LOC_CQUI_BINDINGS_DROPDOWN_TOOLTIP"));
   PopulateComboBox(Controls.BindingsPullDown, bindings_options, "CQUI_BindingsMode", "Standard: Unchanged[NEWLINE]Classic: Civ V binds[NEWLINE]Enhanced: Civ V Binds with the following changes[NEWLINE]  WASD camera control[NEWLINE]  Q/E unit/city cycling[NEWLINE]  Shift toggles city/unit selection[NEWLINE]  Quarry/Airstrike are moved to alt-key + Q/S[NEWLINE]  NOTE:UNBIND W/E IN SETTINGS OR THINGS WON'T WORK!");
+  -- PopulateComboBox(Controls.ResourceIconStyle, resource_icon_style_options, "CQUI_ResourceDimmingStyle", "LOC_CQUI_GENERAL_RESOURCEDIMMINGSTYLE", "LOC_CQUI_GENERAL_RESOURCEDIMMINGSTYLE_TOOLTIP");
+  PopulateComboBox(Controls.ResourceIconStyle, resource_icon_style_options, "CQUI_ResourceDimmingStyle", "Solid: always draw resource icons[NEWLINE]Transparent: improved resource icons are transparent[NEWLINE]Hidden: improved resource icons are hidden");
   
   --Populating/binding checkboxes...
+  PopulateCheckBox(Controls.ProductionQueueCheckbox, "CQUI_ProductionQueue");
+  RegisterControl(Controls.ProductionQueueCheckbox, "CQUI_ProductionQueue", UpdateCheckbox);
   PopulateCheckBox(Controls.ShowLuxuryCheckbox, "CQUI_ShowLuxuries");
+  PopulateCheckBox(Controls.ShowCultureGrowthCheckbox, "CQUI_ShowCultureGrowth", "This can also be toggled by clicking on the growth emblem in the cityview");
+  --PopulateCheckBox(Controls.ShowCultureGrowthCheckbox, "CQUI_ShowCultureGrowth", Locale.Lookup("LOC_CQUI_GENERAL_SHOWCULTUREGROWTH_TOOLTIP"));
   --PopulateCheckBox(Controls.SmartbannerCheckbox, "CQUI_Smartbanner", Locale.Lookup("LOC_CQUI_GENERAL_SMARTBANNER_TOOLTIP"));
   PopulateCheckBox(Controls.SmartbannerCheckbox, "CQUI_Smartbanner", "Displays new icons in the city banner. A food icon is displayed whenever there are unlocked citizens being automatically assigned by the AI city governor. District icons indicate built districts");
   PopulateCheckBox(Controls.ToggleYieldsOnLoadCheckbox, "CQUI_ToggleYieldsOnLoad");
@@ -256,6 +216,8 @@ function Initialize()
   PopulateCheckBox(Controls.TechAudioCheckbox, "CQUI_TechPopupAudio", "Toggles the popup audio that plays whenever a new tech or civic is achieved. Is fully indepenedent of the visual component and can play even when there is no visible popup");
   -- PopulateCheckBox(Controls.TrimGossipCheckbox, "CQUI_TrimGossip", Locale.Lookup("LOC_CQUI_GOSSIP_TRIMMESSAGE_TOOLTIP"));
   PopulateCheckBox(Controls.TrimGossipCheckbox, "CQUI_TrimGossip", "Removes the mostly useless start of the gossip message describing where the information came from");
+
+  PopulateSlider(Controls.ProductionItemHeightSlider, Controls.ProductionItemHeightText, "CQUI_ProductionItemHeight", ProductionItemHeightConverter);
 
   InitializeGossipCheckboxes();
   

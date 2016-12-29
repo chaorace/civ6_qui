@@ -20,7 +20,9 @@
 */
 
 INSERT INTO CQUI_Settings -- Don't touch this line!
-  VALUES  ("CQUI_ShowLuxuries", 1), -- Luxury resources will show in the top-bar next to strategic resources
+  VALUES  ("CQUI_ProductionQueue", 1), -- A production queue appears next to the production panel, allowing multiple constructions to be queued at once
+      ("CQUI_ShowCultureGrowth", 1), -- Shows cultural growth overlay in cityview
+      ("CQUI_ShowLuxuries", 1), -- Luxury resources will show in the top-bar next to strategic resources
       ("CQUI_Smartbanner", 1), -- Additional informations such as districts will show in the city banner
       ("CQUI_TechPopupVisual", 0), -- Popups will be displayed when you discover a new tech or civic (this is the normal behavior for the unmoded game)
       ("CQUI_TechPopupAudio", 1), -- Play the voiceovers when you discover a new tech or civic (this is the normal behavior for the unmoded game)
@@ -37,7 +39,21 @@ INSERT INTO CQUI_Settings -- Don't touch this line!
 */
 
 INSERT INTO CQUI_Settings -- Don't touch this line!
-  VALUES  ("CQUI_BindingsMode", 1); -- Set of keybindings used │ 0=Civ6 default │ 1=keybinds from Civ5 │ 2=Civ5 with additions such as WASD camera control │
+  VALUES  ("CQUI_BindingsMode", 1), -- Set of keybindings used │ 0=Civ6 default │ 1=keybinds from Civ5 │ 2=Civ5 with additions such as WASD camera control |
+      ("CQUI_ResourceDimmingStyle", 1); -- Affects the way resource icons look when they have been improved  | 0=No Change | 1=Transparent | 2=Hidden |
+
+/*  
+    ┌────────────────────────────────────────────────────────────────────────────────────────────┐
+    │                                    Slider settings                                         │
+    ├────────────────────────────────────────────────────────────────────────────────────────────┤
+    │These settings control the default value of the CQUI configuration sliders.                 │
+    │Different values can be used depending on individual settings.                              │
+    │Don't change the names of the settings or the first line!                                   │
+    └────────────────────────────────────────────────────────────────────────────────────────────┘
+*/
+
+INSERT INTO CQUI_Settings -- Don't touch this line!
+  VALUES  ("CQUI_ProductionItemHeight", 32); -- Height used for individual items in the production queue. Recommended values fall between 24 and 128, though any positive could work
 
 /*  
     ┌────────────────────────────────────────────────────────────────────────────────────────────┐
