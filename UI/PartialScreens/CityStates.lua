@@ -1,4 +1,4 @@
-﻿-- ===========================================================================
+-- ===========================================================================
 --	CityStates "Rundown" partial-screen
 --
 --	su·ze·rain (noun)
@@ -797,6 +797,49 @@ function AddCityStateRow( kCityState:table )
 	kInst.SuzerainLabel:SetColor( kCityState.isBonusSuzerain and kCityState.ColorSecondary or COLOR_ICON_BONUS_OFF );
 	kInst.Suzerain:SetColor( kCityState.isBonusSuzerain and kCityState.ColorSecondary or COLOR_ICON_BONUS_OFF );
 	kInst.Suzerain:SetText( kCityState.SuzerainName );
+
+	-- Begin CQUI Changes Marker
+	local localPlayerID = Game.GetLocalPlayer();
+	local secondHighestName :string = "";
+	local highestEnvoys :number = 0;
+	local secondHighestEnvoys :number = 0;
+	local secondHighestIsPlayer :boolean = false;
+
+	-- Iterate through all players that have influenced this city state
+	for iOtherPlayer,influence in pairs(kCityState.Influence) do
+		local pLocalPlayer	:table	= Players[localPlayerID];
+		local civName		:string = "LOCAL_CITY_STATES_UNKNOWN";
+		if (pLocalPlayer ~= nil) then
+			local pPlayerConfig :table = PlayerConfigurations[iOtherPlayer];
+			if (localPlayerID == iOtherPlayer) then
+				civName = Locale.Lookup("LOC_CITY_STATES_YOU");
+			elseif (pLocalPlayer:GetDiplomacy():HasMet(iOtherPlayer)) then
+				civName = pPlayerConfig:GetPlayerName();
+			end
+		end
+		-- Grab the second highest number of envoys plus the name of that civ. Prioritizes picking the player if there are ties.
+		if (influence > highestEnvoys) then
+		  highestEnvoys = influence;
+		elseif (influence >= secondHighestEnvoys and localPlayerID == iOtherPlayer) then
+		  secondHighestIsPlayer = true;
+			secondHighestEnvoys = influence;
+			secondHighestName = Locale.Lookup( civName );
+		elseif (influence > secondHighestEnvoys ) then
+      secondHighestIsPlayer = false;
+			secondHighestEnvoys = influence;
+			secondHighestName = Locale.Lookup( civName );
+		end
+	end
+
+	-- Add changes to the actual UI object placeholders, which are created in the CityStates.xml file
+	kInst.SecondHighestLabel:SetColor( secondHighestIsPlayer and kCityState.ColorSecondary or COLOR_ICON_BONUS_OFF );
+	-- CQUI Note: SecondHighestLabel needs to be localized, but is hard coded for now
+	kInst.SecondHighestLabel:SetText( "2nd" );
+	kInst.SecondHighestName:SetColor( secondHighestIsPlayer and kCityState.ColorSecondary or COLOR_ICON_BONUS_OFF );
+	kInst.SecondHighestName:SetText( secondHighestName );
+	kInst.SecondHighestEnvoys:SetColor( secondHighestIsPlayer and kCityState.ColorSecondary or COLOR_ICON_BONUS_OFF );
+	kInst.SecondHighestEnvoys:SetText( secondHighestEnvoys );
+	-- End CQUI Changes Marker
 
 	kInst.LookAtButton:SetVoid1( kCityState.iPlayer );
 	kInst.LookAtButton:RegisterCallback( Mouse.eLClick, LookAtCityState );
