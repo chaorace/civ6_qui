@@ -73,6 +73,8 @@ local m_isMouseDragging         :boolean = false; -- Was LMB clicked inside the 
 local m_hasMouseDragged         :boolean = false; -- Has there been any movements since m_isMouseDragging became true?
 local m_wasMouseInMinimap       :boolean = false; -- Was the mouse over the minimap the last time we checked?
 
+local CQUI_bigMinimap = true;
+
 local m_CurrentModdedLensOn     :number  = MODDED_LENS_ID.NONE;
 -- ===========================================================================
 --  FUNCTIONS
@@ -585,6 +587,7 @@ function OnCollapseToggle()
   if ( m_isCollapsed ) then
     UI.PlaySound("Minimap_Open");
     Controls.ExpandButton:SetHide( true );
+    Controls.CollapseButton:SetHide( false );
     Controls.ExpandAnim:SetEndVal(0, -Controls.MinimapImage:GetOffsetY() - Controls.MinimapImage:GetSizeY());
     Controls.ExpandAnim:SetToBeginning();
     Controls.ExpandAnim:Play();
@@ -592,6 +595,7 @@ function OnCollapseToggle()
   else
     UI.PlaySound("Minimap_Closed");
     Controls.ExpandButton:SetHide( false );
+    Controls.CollapseButton:SetHide( true );
     Controls.Pause:Play();
     Controls.CollapseAnim:SetEndVal(0, Controls.MinimapImage:GetOffsetY() + Controls.MinimapImage:GetSizeY());
     Controls.CollapseAnim:SetToBeginning();
