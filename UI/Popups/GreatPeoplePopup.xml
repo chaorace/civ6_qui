@@ -8,7 +8,7 @@
     <ScrollPanel          ID="PeopleScroller"                         Offset="0,0"    Size="parent,parent"  Vertical="0" AutoScrollBar="1">
       <Image              ID="WoodPaneling"                                           Size="full,768"       Texture="Wood_Pattern" StretchMode="Tile"/>
       <Stack              ID="PeopleStack"                            Offset="0,78"   StackGrowth="Right"   StackPadding="0" />
-      <ScrollBar                                        Anchor="L,B"  Offset="0,10"   Size="parent-10,8"    Style="ScrollHorizontalBackingAlt">
+      <ScrollBar                                        Anchor="L,B"  Offset="0,0"   Size="parent-10,8"    Style="ScrollHorizontalBackingAlt">
         <Thumb                                                                                              Style="ScrollThumbHAlt" />
       </ScrollBar>
 
@@ -94,12 +94,12 @@
           <Label      ID="RecruitInfo"        Anchor="C,B"  Offset="0,40"   Style="GreatPeopleText" String="LOC_GREAT_PEOPLE_OR_RECRUIT_WITH_PATRONAGE" />
           <GridButton ID="GoldButton"         Anchor="C,B"  Offset="-50,2"  Size="80,32"              SliceCorner="12,12" SliceSize="1,1" SliceTextureSize="24,24" Texture="Controls_ButtonControl_Brown" TextColor="126,123,120" Style="FontNormal18" StateOffsetIncrement="0,24"            String="999" />
           <GridButton ID="FaithButton"        Anchor="C,B"  Offset="50,2"   Size="80,32"              SliceCorner="12,12" SliceSize="1,1" SliceTextureSize="24,24" Texture="Controls_ButtonControl_Brown" TextColor="126,123,120" Style="FontNormal18" StateOffsetIncrement="0,24"            String="999" />         
-          <GridButton ID="RecruitButton"      Anchor="C,B"  Offset="0,34"   Size="190,26"             Style="ButtonConfirmSmall"      Hidden="1" String="LOC_GREAT_PEOPLE_RECRUIT" />
+          <GridButton ID="RecruitButton"      Anchor="C,B"  Offset="0,30"   Size="190,26"             Style="ButtonConfirmSmall"      Hidden="1" String="LOC_GREAT_PEOPLE_RECRUIT" />
           <GridButton ID="RejectButton"       Anchor="C,B"  Offset="0,6"    Size="190,24"             Style="ButtonLightweightSmall"  Hidden="1" String="LOC_GREAT_PEOPLE_PASS" />
           <Grid                                             Offset="2,2"    Size="parent-4,parent-4"  SliceCorner="19,24" SliceSize="1,1" SliceTextureSize="39,49" Texture="Controls_Deco" Color="210,190,140,90" />      
         </Box>
       </Container>      
-      <GridButton     ID="BiographyBackButton"  Anchor="C,B"  Offset="0,-15"    Size="parent-60,28" SliceCorner="12,12" SliceSize="1,1" SliceTextureSize="24,24" Texture="Controls_ButtonControl_Tan" TextColor="20,20,20" Style="FontNormal16" String="LOC_GREAT_PEOPLE_BIOGRAPHY" StateOffsetIncrement="0,24" />
+      <GridButton     ID="BiographyBackButton"  Anchor="C,B"  Offset="0,-12"    Size="parent-60,28" SliceCorner="12,12" SliceSize="1,1" SliceTextureSize="24,24" Texture="Controls_ButtonControl_Tan" TextColor="20,20,20" Style="FontNormal16" String="LOC_GREAT_PEOPLE_BIOGRAPHY" StateOffsetIncrement="0,24" />
       <Label          ID="ClaimedLabel"         Anchor="C,C"  Offset="0,-120" Align="Center" WrapWidth="200" Style="FontFlair16" FontStyle="Shadow" ColorSet="GreatPeopleCS" String="LOC_GREAT_PEOPLE_ALL_POSSIBLE_CHOSEN" />
             
       <Container        ID="BiographyArea"                    Offset="0,305"  Size="215,310" >

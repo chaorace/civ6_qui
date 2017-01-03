@@ -107,23 +107,23 @@ function ViewCurrent( data:table )
       instance.ClassName:SetText(classText);
     --end]]
 	if(i==1) then
-		instance.ClassName:SetText(Locale.Lookup("LOC_GREAT_PERSON_CLASS_GENERAL_NAME"));
+	  instance.ClassName:SetText(Locale.Lookup("LOC_GREAT_PERSON_CLASS_GENERAL_NAME"));
 	elseif(i==2) then
-		instance.ClassName:SetText(Locale.Lookup("LOC_GREAT_PERSON_CLASS_ADMIRAL_NAME"));
+      instance.ClassName:SetText(Locale.Lookup("LOC_GREAT_PERSON_CLASS_ADMIRAL_NAME"));
 	elseif(i==3) then
-		instance.ClassName:SetText(Locale.Lookup("LOC_GREAT_PERSON_CLASS_ENGINEER_NAME"));
+	  instance.ClassName:SetText(Locale.Lookup("LOC_GREAT_PERSON_CLASS_ENGINEER_NAME"));
 	elseif(i==4) then
-		instance.ClassName:SetText(Locale.Lookup("LOC_GREAT_PERSON_CLASS_MERCHANT_NAME"));
+	  instance.ClassName:SetText(Locale.Lookup("LOC_GREAT_PERSON_CLASS_MERCHANT_NAME"));
 	elseif(i==5) then
-		instance.ClassName:SetText(Locale.Lookup("LOC_GREAT_PERSON_CLASS_PROPHET_NAME"));
+	  instance.ClassName:SetText(Locale.Lookup("LOC_GREAT_PERSON_CLASS_PROPHET_NAME"));
 	elseif(i==6) then
-		instance.ClassName:SetText(Locale.Lookup("LOC_GREAT_PERSON_CLASS_SCIENTIST_NAME"));
+	  instance.ClassName:SetText(Locale.Lookup("LOC_GREAT_PERSON_CLASS_SCIENTIST_NAME"));
 	elseif(i==7) then
-		instance.ClassName:SetText(Locale.Lookup("LOC_GREAT_PERSON_CLASS_WRITER_NAME"));
+	  instance.ClassName:SetText(Locale.Lookup("LOC_GREAT_PERSON_CLASS_WRITER_NAME"));
 	elseif(i==8) then
-		instance.ClassName:SetText(Locale.Lookup("LOC_GREAT_PERSON_CLASS_ARTIST_NAME"));
+	  instance.ClassName:SetText(Locale.Lookup("LOC_GREAT_PERSON_CLASS_ARTIST_NAME"));
 	else
-		instance.ClassName:SetText(Locale.Lookup("LOC_GREAT_PERSON_CLASS_MUSICIAN_NAME"));
+	  instance.ClassName:SetText(Locale.Lookup("LOC_GREAT_PERSON_CLASS_MUSICIAN_NAME"));
 	end
 	
     if kPerson.IndividualID ~= nil then
@@ -290,8 +290,9 @@ function ViewCurrent( data:table )
           recruitInst.Country:SetText( kPlayerPoints.PlayerName );
           --recruitInst.Amount:SetText( tostring(Round(kPlayerPoints.PointsTotal,1)) .. "/" .. tostring(kPerson.RecruitCost) );
 
-          -- CQUI Points Per Turn and Turns Left -- Add the turn icon into the text 
-          local recruitTurnsLeft:number = Round((kPerson.RecruitCost-kPlayerPoints.PointsTotal)/kPlayerPoints.PointsPerTurn,0);
+          -- CQUI Points Per Turn and Turns Left -- Add the turn icon into the text
+          --recruitTurnsLeft gets +0.5 so that's rounded up
+          local recruitTurnsLeft:number = Round((kPerson.RecruitCost-kPlayerPoints.PointsTotal)/kPlayerPoints.PointsPerTurn + 0.5,0);
 		  recruitInst.CQUI_PerTurn:SetText( "+" .. tostring(Round(kPlayerPoints.PointsPerTurn,1)) .. " /[ICON_Turn] " .. tostring(recruitTurnsLeft) .. "[ICON_Turn]");
 		  
 
