@@ -4,7 +4,7 @@
     <Name>Chao Quick UI</Name>
     <Description>Reduce clicks and make empire management easy</Description>
     <Teaser>Reduce clicks and make empire management easy</Teaser>
-    <Authors>vans163, chaorace, zgavin, olegbl, jacks0n, OfekA, Proustldee, RatchetJ, kblease, benjaminjackman, LordYanaek, zeyangl, velit, the-m4a</Authors>
+    <Authors>vans163, chaorace, zgavin, olegbl, jacks0n, OfekA, Proustldee, RatchetJ, kblease, benjaminjackman, LordYanaek, zeyangl, velit, the-m4a, Remolten</Authors>
     <SpecialThanks>vans163 for his original qui mod. astog for his Better Trade Screen mod + More Lenses mod. Ace for his Next City Plot mod. Divine Yuri for his Custom City Panel mod. Greg Miller for his Unit Report Screen mod. Lozenged/kblease for his Production Queue mod. ZhouYzzz for providing the Chinese translation of CQUI</SpecialThanks>
   </Properties>
   <Components>
@@ -33,6 +33,8 @@
         <File>UI/Panels/StatusMessagePanel.lua</File>
         <File>UI/Panels/StatusMessagePanel.xml</File>
         <File>UI/Panels/UnitPanel.lua</File>
+        <File>UI/PartialScreens/CityStates.lua</File>
+        <File>UI/PartialScreens/CityStates.xml</File>
         <File>UI/Popups/GreatPeoplePopup.lua</File>
         <File>UI/Popups/GreatPeoplePopup.xml</File>
         <File>UI/Popups/MapPinListPanel.lua</File>
@@ -129,7 +131,7 @@
     <File>UI/MinimapPanel.xml</File>
     <File>UI/ProductionPanel.xml</File>
     <File>UI/TopPanel.lua</File>
-    <File>UI/UnitPanel.xml</File> 
+    <File>UI/UnitPanel.xml</File>
     <File>UI/WorldInput.lua</File>
     <File>UI/WorldViewIconsManager.lua</File>
     <File>UI/Civilopedia/CivilopediaSupport.lua</File>
@@ -142,6 +144,8 @@
     <File>UI/Panels/StatusMessagePanel.lua</File>
     <File>UI/Panels/StatusMessagePanel.xml</File>
     <File>UI/Panels/UnitPanel.lua</File>
+    <File>UI/PartialScreens/CityStates.lua</File>
+    <File>UI/PartialScreens/CityStates.xml</File>
     <File>UI/Popups/GreatPeoplePopup.lua</File>
     <File>UI/Popups/GreatPeoplePopup.xml</File>
     <File>UI/Popups/MapPinListPanel.lua</File>
@@ -194,4 +198,19 @@
       </Items>
     </Custom>
   </Settings>
+  <!--Incompatible mods.-->
+  <Blocks>
+    <!-- Divine Yuri's Citypanel mod: Integrated already, doubling up on installed mods is bad! -->
+    <Mod id="37b5fdca-2690-96ff-ea23-d8612ae7a757" title="Divine Yuri's Custom City Panel" />
+    <!-- Next City Plot: Integrated already, doubling up on installed mods is bad! -->
+    <Mod id="37b5fdca-2690-96ff-ea23-d8612ae7a758" title="Next City Plot by Ace" />
+    <!-- Unit Report Screen: Integrated already, doubling up on installed mods is bad! -->
+    <Mod id="4becac48-4a0c-379a-5dd1-33d0c65a471d" title="Unit Report Screen" />
+    <!-- Production Queue: Integrated already, doubling up on installed mods is bad! -->
+    <Mod id="2027E5A2-A48D-E606-031F-141E1196975A" title="Production Queue" />
+    <!-- More Lenses: Integrated already, doubling up on installed mods is bad! -->
+    <Mod id="35f33319-ad93-4d6b-bf27-406fac382d06" title="More Lenses" />
+    <!-- YnAMP: Breaks CQUI for some reason... see issue #207 on the Github tracker and issue #43 on the YnAMP Github tracker for more details -->
+    <Mod id="36e88483-48fe-4545-b85f-bafc50dde315" title="Yet (not) Another Maps Pack" />
+  </Blocks>
 </Mod>
