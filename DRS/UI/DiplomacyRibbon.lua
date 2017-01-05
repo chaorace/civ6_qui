@@ -24,7 +24,7 @@ local VALID_RELATIONSHIPS	:table = {
 	"DIPLO_STATE_DENOUNCED",
 	"DIPLO_STATE_WAR"
 };
-
+  
 -- ===========================================================================
 --	VARIABLES
 -- ===========================================================================
@@ -114,8 +114,12 @@ function AddLeader(iconName : string, playerID : number, isUniqueLeader: boolean
 				bShowRelationshipIcon = true;
 			end
 		end
+    
+    -- Set score values
+    -- instance.ScoreOverall:SetText(Players[playerID]:GetScore());
+    
 	end
-
+  
 	instance.Relationship:SetHide(not bShowRelationshipIcon);
 
 	-- Set the tooltip
