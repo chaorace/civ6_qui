@@ -24,7 +24,7 @@ local VALID_RELATIONSHIPS	:table = {
 	"DIPLO_STATE_DENOUNCED",
 	"DIPLO_STATE_WAR"
 };
-
+  
 -- ===========================================================================
 --	VARIABLES
 -- ===========================================================================
@@ -115,7 +115,12 @@ function AddLeader(iconName : string, playerID : number, isUniqueLeader: boolean
 			end
 		end
 	end
-
+  
+  -- DRS MOD: Set score values for DRS display
+  instance.DRSScoreOverall:SetText("[ICON_Capital]"..Players[playerID]:GetScore());
+  instance.DRSScienceRate:SetText("[ICON_Science]"..Round(Players[playerID]:GetTechs():GetScienceYield(),1));
+  instance.DRSMilitaryStrength:SetText("[ICON_Strength]"..Players[playerID]:GetStats():GetMilitaryStrength());
+  
 	instance.Relationship:SetHide(not bShowRelationshipIcon);
 
 	-- Set the tooltip
@@ -397,6 +402,7 @@ function OnTurnEnd(playerID:number)
 		if(leader ~= nil) then
 			leader.LeaderContainer:Reverse();
 		end
+    UpdateLeaders();
 	end
 end
 
@@ -413,6 +419,16 @@ end
 function OnScrollRight()
 	if CanScroll(1) then Scroll(1); end
 end
+
+-- ===========================================================================
+--	DRS Mod Functions
+-- ===========================================================================
+function Round(num, numDecimalPlaces)
+    local mult = 10^(numDecimalPlaces or 0)
+    if num >= 0 then return math.floor(num * mult + 0.5) / mult
+    else return math.ceil(num * mult - 0.5) / mult end
+end
+
 
 -- ===========================================================================
 --	Debug Helper
