@@ -118,7 +118,7 @@ function AddLeader(iconName : string, playerID : number, isUniqueLeader: boolean
   
   -- DRS MOD: Set score values for DRS display
   instance.DRSScoreOverall:SetText("[ICON_Capital]"..Players[playerID]:GetScore());
-  instance.DRSScienceRate:SetText("[ICON_Science]"..Round(Players[playerID]:GetTechs():GetScienceYield(),1));
+  instance.DRSScienceRate:SetText("[ICON_Science]"..Round(Players[playerID]:GetTechs():GetScienceYield(),0));
   instance.DRSMilitaryStrength:SetText("[ICON_Strength]"..Players[playerID]:GetStats():GetMilitaryStrength());
   
 	instance.Relationship:SetHide(not bShowRelationshipIcon);
