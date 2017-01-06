@@ -114,11 +114,12 @@ function AddLeader(iconName : string, playerID : number, isUniqueLeader: boolean
 				bShowRelationshipIcon = true;
 			end
 		end
-    
-    -- Set score values
-    -- instance.ScoreOverall:SetText(Players[playerID]:GetScore());
-    
 	end
+  
+  -- DRS MOD: Set score values for DRS display
+  instance.DRSScoreOverall:SetText("[ICON_Capital]"..Players[playerID]:GetScore());
+  instance.DRSScienceRate:SetText("[ICON_Science]"..Round(Players[playerID]:GetTechs():GetScienceYield(),1));
+  instance.DRSMilitaryStrength:SetText("[ICON_Strength]"..Players[playerID]:GetStats():GetMilitaryStrength());
   
 	instance.Relationship:SetHide(not bShowRelationshipIcon);
 
@@ -417,6 +418,16 @@ end
 function OnScrollRight()
 	if CanScroll(1) then Scroll(1); end
 end
+
+-- ===========================================================================
+--	DRS Mod Functions
+-- ===========================================================================
+function Round(num, numDecimalPlaces)
+    local mult = 10^(numDecimalPlaces or 0)
+    if num >= 0 then return math.floor(num * mult + 0.5) / mult
+    else return math.ceil(num * mult - 0.5) / mult end
+end
+
 
 -- ===========================================================================
 --	Debug Helper
