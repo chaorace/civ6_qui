@@ -49,7 +49,7 @@
           <Image ID="Portrait" Anchor="C,C" Size="45,45" Texture="Leaders45" />
           <Button ID="Relationship" StretchMode="None" Style="DiplomacyRelationshipPips" Anchor="L,B" Disabled="1" ConsumeMouse="0"/>
         </Button>
-        <Stack ID="ScoreDisplayStack" Size="30,30" Anchor="C,B" Offset="0,0" StackGrowth="Bottom" StackPadding="2" >
+        <Stack ID="ScoreDisplayStack" Size="30,30" Anchor="C,T" Offset="0,52" StackGrowth="Bottom" StackPadding="2" >
           <Label  ID="DRSScoreOverall"                Anchor="B,B" Offset="0,0"     Style="CityPanelNumSmall"   String="-" />
           <Label  ID="DRSScienceRate"                Anchor="B,B" Offset="0,0"     Style="CityPanelCBScience"   String="Sci" />
           <Label  ID="DRSMilitaryStrength"               Anchor="B,B" Offset="0,0"     Style="CityPanelCBProduction"   String="Mil" />

@@ -402,6 +402,7 @@ function OnTurnEnd(playerID:number)
 		if(leader ~= nil) then
 			leader.LeaderContainer:Reverse();
 		end
+    UpdateLeaders();
 	end
 end
 
