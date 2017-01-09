@@ -121,6 +121,12 @@
         <File>ML/Text/MoreLenses_Text.xml</File>
       </Items>
     </LocalizedText>
+    <ImportFiles id="DIPLOMACY_RIBBON_SCORE_IMPORT_FILES">
+      <Items>
+        <File>DRS/UI/DiplomacyRibbon.lua</File>
+      <File>DRS/UI/DiplomacyRibbon.xml</File>
+      </Items>
+    </ImportFiles>
   </Components>
   <Files>
     <File>CQUI/CQUI_DatabaseSchema.sql</File>
@@ -193,6 +199,8 @@
     <File>ML/UI/Panels/ModalLensPanel.xml</File>
     <File>ML/MoreLenses_Colors.sql</File>
     <File>ML/Text/MoreLenses_Text.xml</File>
+    <File>DRS/UI/DiplomacyRibbon.lua</File>
+    <File>DRS/UI/DiplomacyRibbon.xml</File>
   </Files>
   <!--Incompatible mods.-->
   <Blocks>
