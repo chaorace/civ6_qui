@@ -292,18 +292,19 @@
 
     <!-- City Overlap Lens -->
     <Replace Tag="LOC_HUD_CITYOVERLAP6_LENS" Language="ru_RU">
-      <Text>Перекрытие городов 6</Text>
+      <Text>Общие клетки 6</Text>
     </Replace>
     <Replace Tag="LOC_HUD_CITYOVERLAP6_LENS_TOOLTIP" Language="ru_RU">
-      <Text>Показывает, как много городов (в размере от 6 клеток) c перекрытыми клетками</Text>
+      <Text>Показывает, как много городов (в диапазоне 6 клеток) c общими клетками</Text>
     </Replace>
 
     <!-- City Overlap Lens -->
     <Replace Tag="LOC_HUD_CITYOVERLAP9_LENS" Language="ru_RU">
-      <Text>Перекрытие городов 9</Text>
+      <Text>Общие клетки 9</Text>
+
     </Replace>
     <Replace Tag="LOC_HUD_CITYOVERLAP9_LENS_TOOLTIP" Language="ru_RU">
-      <Text>Показывает, как много городов (в размере от 9 клеток) c перекрытыми клетками</Text>
+      <Text>Показывает, как много городов (в диапазоне 9 клеток) c общими клетками</Text>
     </Replace>
 
     <!-- Barbarian Lens -->
