@@ -63,6 +63,7 @@ function OnClickSwapTile( plotId:number )
   tParameters[CityCommandTypes.PARAM_Y] = kPlot:GetY();
 
   local tResults :table = CityManager.RequestCommand( pSelectedCity, CityCommandTypes.SWAP_TILE_OWNER, tParameters );
+  OnClickCitizen();
   return true;
 end
 
@@ -95,6 +96,7 @@ function OnClickPurchasePlot( plotId:number )
   --     you must wait for the event raised from the gamecore before figuring
   --     out which plots need a display.
 
+  OnClickCitizen();
   return true;
 end
 
