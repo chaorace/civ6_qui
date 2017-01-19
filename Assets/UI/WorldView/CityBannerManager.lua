@@ -1250,6 +1250,7 @@ function OnCityBannerClick( playerID:number, cityID:number )
     end
     
   end
+  OnClickCitizen();
 end
 
 -- ===========================================================================
@@ -3140,6 +3141,20 @@ function Initialize()
 
   LuaEvents.GameDebug_Return.Add(OnGameDebugReturn);  
   LuaEvents.CQUI_SettingsInitialized.Add(CQUI_OnSettingsUpdate);
+end
+
+-- ===========================================================================
+function OnClickCitizen( plotId:number )
+
+	local pSelectedCity	:table = UI.GetHeadSelectedCity();
+	local kPlot			:table = Map.GetPlotByIndex(plotId);
+	local tParameters	:table = {};
+	tParameters[CityCommandTypes.PARAM_MANAGE_CITIZEN] = UI.GetInterfaceModeParameter(CityCommandTypes.PARAM_MANAGE_CITIZEN);
+	tParameters[CityCommandTypes.PARAM_X] = kPlot:GetX();
+	tParameters[CityCommandTypes.PARAM_Y] = kPlot:GetY();
+
+	local tResults :table = CityManager.RequestCommand( pSelectedCity, CityCommandTypes.MANAGE, tParameters );
+	return true;
 end
 Initialize();
 
