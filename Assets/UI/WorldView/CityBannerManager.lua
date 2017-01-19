@@ -3157,4 +3157,3 @@ function OnClickCitizen( plotId:number )
 	return true;
 end
 Initialize();
-
