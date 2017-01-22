@@ -160,7 +160,7 @@
     <Row Tag="LOC_CQUI_GENERAL_RESOURCEDIMMINGSTYLE" Language="zh_Hans_CN">
       <Text>修改改良过的资源的图标</Text>
     </Row>
-    <Row Tag="LOC_CQUI_GENERAL_RESOURCEDIMMINGSTYLE_TOOLTIP" Language="en_US">
+    <Row Tag="LOC_CQUI_GENERAL_RESOURCEDIMMINGSTYLE_TOOLTIP" Language="zh_Hans_CN">
       <Text>固定：总是显示资源的图标[NEWLINE]透明：改良过的资源的图标透明显示[NEWLINE]隐藏：改良过的资源的图标隐藏</Text>
     </Row>
     <Row Tag="LOC_CQUI_GENERAL_SHOWLUXURY" Language="zh_Hans_CN">
@@ -202,16 +202,16 @@
     <Row Tag="LOC_CQUI_HIDDEN" Language="zh_Hans_CN">
       <Text>隐藏</Text>
     </Row>
-    <Row Tag="LOC_CQUI_LENSES" Language="en_US">
+    <Row Tag="LOC_CQUI_LENSES" Language="zh_Hans_CN">
       <Text>滤镜</Text>
     </Row>
-    <Row Tag="LOC_CQUI_LENSES_AUTOAPPLYARCHAEOLOGISTLENS" Language="en_US">
+    <Row Tag="LOC_CQUI_LENSES_AUTOAPPLYARCHAEOLOGISTLENS" Language="zh_Hans_CN">
       <Text>选中考古学家自动切换为考古透镜</Text>
     </Row>
-    <Row Tag="LOC_CQUI_LENSES_AUTOAPPLYBUILDERLENS" Language="en_US">
+    <Row Tag="LOC_CQUI_LENSES_AUTOAPPLYBUILDERLENS" Language="zh_Hans_CN">
       <Text>选中建造者自动切换为建造者透镜</Text>
     </Row>
-    <Row Tag="LOC_CQUI_LENSES_AUTOAPPLYSCOUTLENS" Language="en_US">
+    <Row Tag="LOC_CQUI_LENSES_AUTOAPPLYSCOUTLENS" Language="zh_Hans_CN">
       <Text>选中侦察兵自动切换为侦查透镜</Text>
     </Row>
     <Row Tag="LOC_CQUI_POPUPS" Language="zh_Hans_CN">
@@ -230,7 +230,7 @@
       <Text>每当新的科技/市政完成时播放语音。即使没有弹窗也可以播放。</Text>
     </Row>
     <Row Tag="LOC_CQUI_SETTINGS_REMINDER" Language="zh_Hans_CN">
-      <Text>注意：CQUI的设置在存档间是相互独立的。[NEWLINE]如果你想要修改默认配置，请编辑[MOD INSTALL DIRECTORY]/CQUI/Assets目录下的CQUI_Settings.sql文件</Text>
+      <Text>注意：CQUI的设置在存档间是相互独立的。[NEWLINE]如果你想要修改默认配置，请编辑 [MOD INSTALL DIRECTORY]/CQUI/Assets目录下的CQUI_Settings.sql文件</Text>
     </Row>
 
     <!-- ITALIAN -->
