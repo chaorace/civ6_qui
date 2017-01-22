@@ -146,10 +146,10 @@
       <Text>启用生产队列</Text>
     </Row>
     <Row Tag="LOC_CQUI_CITYVIEW_SHOWCULTUREGROWTH" Language="zh_Hans_CN">
-      <Text>显示边境将要拓展的下一区块</Text>
+      <Text>显示边境拓展的高亮</Text>
     </Row>
     <Row Tag="LOC_CQUI_CITYVIEW_SHOWCULTUREGROWTH_TOOLTIP" Language="zh_Hans_CN">
-      <Text>这也可以通过点击城市视图中的成长按钮显示</Text>
+      <Text>点击城市视图中的成长按钮也可切换显示/隐藏</Text>
     </Row>
     <Row Tag="LOC_CQUI_GENERAL" Language="zh_Hans_CN">
       <Text>通用</Text>
@@ -158,7 +158,7 @@
       <Text>隐藏</Text>
     </Row>
     <Row Tag="LOC_CQUI_GENERAL_RESOURCEDIMMINGSTYLE" Language="zh_Hans_CN">
-      <Text>修改改良过的资源的图标</Text>
+      <Text>已开发过的资源图标</Text>
     </Row>
     <Row Tag="LOC_CQUI_GENERAL_RESOURCEDIMMINGSTYLE_TOOLTIP" Language="zh_Hans_CN">
       <Text>固定：总是显示资源的图标[NEWLINE]透明：改良过的资源的图标透明显示[NEWLINE]隐藏：改良过的资源的图标隐藏</Text>
@@ -170,7 +170,7 @@
       <Text>选中或者鼠标指向时显示单位行进路径</Text>
     </Row>
     <Row Tag="LOC_CQUI_GENERAL_SHOWYIELDSONCITYHOVER" Language="zh_Hans_CN">
-      <Text>鼠标指向时显示市民分配信息</Text>
+      <Text>鼠标指向时显示城市市民分配信息</Text>
     </Row>
     <Row Tag="LOC_CQUI_GENERAL_SHOWYIELDSONCITYHOVER_TOOLTIP" Language="zh_Hans_CN">
       <Text>鼠标指向时显示市民分配，顶部显示，以及边境增长</Text>

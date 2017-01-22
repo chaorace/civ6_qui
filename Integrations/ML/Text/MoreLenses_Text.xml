@@ -201,22 +201,22 @@
       <Text>高亮显示地图上的资源</Text>
     </Replace>
     <Replace Tag="LOC_TOOLTIP_RESOURCE_LENS_LUXURY" Language="zh_Hans_CN">
-      <Text>奢侈资源</Text>
+      <Text>已开发奢侈资源</Text>
     </Replace>
     <Replace Tag="LOC_TOOLTIP_RESOURCE_LENS_NLUXURY" Language="zh_Hans_CN">
-      <Text>非奢侈资源</Text>
+      <Text>奢侈资源</Text>
     </Replace>
     <Replace Tag="LOC_TOOLTIP_RESOURCE_LENS_STRATEGIC" Language="zh_Hans_CN">
-      <Text>战略资源</Text>
+      <Text>已开发战略资源</Text>
     </Replace>
     <Replace Tag="LOC_TOOLTIP_RESOURCE_LENS_NSTRATEGIC" Language="zh_Hans_CN">
-      <Text>非战略资源</Text>
+      <Text>战略资源</Text>
     </Replace>
     <Replace Tag="LOC_TOOLTIP_RESOURCE_LENS_BONUS" Language="zh_Hans_CN">
-      <Text>奖励资源</Text>
+      <Text>已开发奖励资源</Text>
     </Replace>
     <Replace Tag="LOC_TOOLTIP_RESOURCE_LENS_NBONUS" Language="zh_Hans_CN">
-      <Text>非奖励资源</Text>
+      <Text>奖励资源</Text>
     </Replace>
 
     <!-- Wonder Lens -->
