@@ -13,27 +13,39 @@
   <LocalizedText>
     <Text id="CQUI_TEASER">
       <en_US>Reduce clicks and make empire management easy</en_US>
+      <zh_Hans_CN>一键化操作，轻松管理您的帝国</zh_Hans_CN>
       <pl_PL>Zmniejsz ilość kliknięć i spraw by zarządzanie imperium było łatwiejsze</pl_PL>
+      <ru_RU>Убирает лишние клики и облегчает управление империей</ru_RU>
     </Text>
     <Text id="CQUI_STABILITY_ALPHA">
       <en_US>Alpha</en_US>
+      <zh_Hans_CN>Alpha测试</zh_Hans_CN>
       <pl_PL>Alpha</pl_PL>
+      <ru_RU>Альфа</ru_RU>
     </Text>
     <Text id="CQUI_STABILITY_BETA">
       <en_US>Beta</en_US>
+      <zh_Hans_CN>Beta测试</zh_Hans_CN>
       <pl_PL>Beta</pl_PL>
+      <ru_RU>Бета</ru_RU>
     </Text>
     <Text id="CQUI_STABILITY_RELEASECANDIDATE">
       <en_US>Release Candidate</en_US>
+      <zh_Hans_CN>待发布</zh_Hans_CN>
       <pl-PL>Kandydat do wydania</pl_PL>
+      <ru_RU>Релиз-кандидат</ru_RU>
     </Text>
     <Text id="CQUI_STABILITY_RELEASE">
       <en_US>Release</en_US>
+      <zh_Hans_CN>发布</zh_Hans_CN>
       <pl_PL>Wersa stabilna</pl_PL>
+      <ru_RU>Релиз</ru_RU>
     </Text>
     <Text id="CQUI_STABILITY_NIGHTLY">
       <en_US>Nightly</en_US>
+      <zh_Hans_CN>测试中</zh_Hans_CN>
       <pl_PL>Wersja testowa</pl_PL>
+      <ru_RU>Ночная сборка</ru_RU>
     </Text>
   </LocalizedText>
 
@@ -43,11 +55,11 @@
     <File>Assets/CQUI_Settings.sql</File>
     <File>Assets/CQUI_SettingsElement.lua</File>
     <File>Assets/CQUI_SettingsElement.xml</File>
-    <File>Assets/CQUI_Text_General.xml</File>
-    <File>Assets/CQUI_Text_Settings.xml</File>
     <File>Assets/CQUI_Main.lua</File>
     <File>Assets/CQUI_TopLayer.xml</File>
     <File>Assets/CQUI_TopLayer.lua</File>
+    <File>Assets/Text/CQUI_Text_General.xml</File>
+    <File>Assets/Text/CQUI_Text_Settings.xml</File>
     <File>Assets/UI/ActionPanel.lua</File>
     <File>Assets/UI/CitySupport.lua</File>
     <File>Assets/UI/Civ6Common.lua</File>
@@ -60,6 +72,8 @@
     <File>Assets/UI/MinimapPanel.lua</File>
     <File>Assets/UI/MinimapPanel.xml</File>
     <File>Assets/UI/ProductionPanel.xml</File>
+    <File>Assets/UI/StrategicView_MapPlacement.lua</File>
+    <File>Assets/UI/SupportFunctions.lua</File>
     <File>Assets/UI/TopPanel.lua</File>
     <File>Assets/UI/UnitPanel.xml</File>
     <File>Assets/UI/UnitFlagManager.lua</File>
@@ -102,8 +116,6 @@
     <File>Integrations/BTS/UI/Choosers/TradeOriginChooser.xml</File>
     <File>Integrations/BTS/UI/Choosers/TradeOriginChooser.lua</File>
     <File>Integrations/BTS/Text/BTS_Text.xml</File>
-    <File>Integrations/PQ/StrategicView_MapPlacement.lua</File>
-    <File>Integrations/PQ/SupportFunctions.lua</File>
     <File>Integrations/URS/ReportScreen.lua</File>
     <File>Integrations/URS/ReportScreen.xml</File>
     <File>Integrations/URS/UnitPromotionPopup.lua</File>
@@ -133,6 +145,8 @@
         <File>Assets/UI/MinimapPanel.lua</File>
         <File>Assets/UI/MinimapPanel.xml</File>
         <File>Assets/UI/ProductionPanel.xml</File>
+        <File>Assets/UI/StrategicView_MapPlacement.lua</File>
+        <File>Assets/UI/SupportFunctions.lua</File>
         <File>Assets/UI/TopPanel.lua</File>
         <File>Assets/UI/UnitPanel.xml</File>
         <File>Assets/UI/UnitFlagManager.lua</File>
@@ -172,8 +186,8 @@
     <!-- CQUI specific LOCs  -->
     <LocalizedText id="CQUI_TEXT">
       <Items>
-        <File>Assets/CQUI_Text_General.xml</File>
-        <File>Assets/CQUI_Text_Settings.xml</File>
+        <File>Assets/Text/CQUI_Text_General.xml</File>
+        <File>Assets/Text/CQUI_Text_Settings.xml</File>
       </Items>
     </LocalizedText>
     <!-- CQUI specific settings -->
@@ -221,12 +235,6 @@
         <File>Integrations/BTS/Text/BTS_Text.xml</File>
       </Items>
     </LocalizedText>
-    <ImportFiles id="PRODUCTION_QUEUE_IMPORT_FILES">
-      <Items>
-        <File>Integrations/PQ/StrategicView_MapPlacement.lua</File>
-        <File>Integrations/PQ/SupportFunctions.lua</File>
-      </Items>
-    </ImportFiles>
     <ImportFiles id="UNITREPORT_IMPORT_FILES">
       <Items>
         <File>Integrations/URS/ReportScreen.lua</File>
@@ -253,7 +261,7 @@
       </Items>
     </LocalizedText>
   </Components>
-  
+
   <!--Incompatible mods.-->
   <Blocks>
     <!-- Divine Yuri's Citypanel mod: Integrated already, doubling up on installed mods is bad! -->
