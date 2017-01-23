@@ -1312,7 +1312,7 @@ function RefreshFilters()
     end
 
     -- Add "City States" Filter
-    AddFilter("LOC_HUD_REPORTS_CITY_STATE"), IsCityState);
+    AddFilter(Locale.Lookup("LOC_HUD_REPORTS_CITY_STATE"), IsCityState);
 
     -- Add filters to pulldown
     for index, filter in ipairs(m_filterList) do

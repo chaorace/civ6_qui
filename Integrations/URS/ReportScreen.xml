@@ -1385,7 +1385,7 @@
 				<Box Offset="1,0" Size="2,parent" Color="46,70,95,128"/>
 
 				<Container Offset="1,0" Size="477,parent">
-						<Label ID="LOC_CURRENT_DEALS_INCOMING" Style="ReportValueText" Anchor="C,C" String=""/>
+						<Label ID="Incoming" Style="ReportValueText" Anchor="C,C" String=""/>
 				</Container>
 				
 				<Box Offset="1,0" Size="2,parent" Color="46,70,95,128"/>
