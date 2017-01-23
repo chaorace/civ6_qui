@@ -245,7 +245,7 @@
                       <Image ID="HousingStatusIconContainerWater" Anchor="C,C" Size="50,50" Texture="CityPanel_StatusIcon">
                         <Image ID="HousingStatusIconWater" Anchor="C,C" Offset="-2,-3" Size="35,35" Texture="Stats45" Icon="ICON_GREAT_PERSON_CLASS_ADMIRAL" />
                         <Label ID="HousingStatusYieldWater" Anchor="C,C" Offset="-2,0" Style="CityPanelSubPanelTitle" String="1" />
-                        <Label ID="HousingStatusLabelWater" Anchor="C,C" Offset="0,30" Style="UnitPanelStatLabel" Align="Center" String="Water" />
+                        <Label ID="HousingStatusLabelWater" Anchor="C,C" Offset="0,30" Style="UnitPanelStatLabel" Align="Center" String="LOC_CQUI_CITY_HOUSE" />
                       </Image>
                       <Image ID="HousingStatusIconContainerImprovements" Anchor="C,C" Size="50,50" Texture="CityPanel_StatusIcon">
                         <Image ID="HousingStatusIconImprovements" Anchor="C,C" Offset="-2,-3" Size="35,35" Texture="Stats45" Icon="ICON_IMPROVEMENT_PASTURE" />

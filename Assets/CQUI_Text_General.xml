@@ -32,6 +32,9 @@
     <Row Tag="LOC_CQUI_CITY_WAR_WEARINESS" Language="en_US">
       <Text>War[NEWLINE]Weariness</Text>
     </Row>
+    <Row Tag="LOC_CQUI_CITY_HOUSE" Language="en_US">
+      <Text>House</Text>
+    </Row>
 
 	<!-- SIMPLIFY-CHINESE -->
 
@@ -64,6 +67,9 @@
     </Replace>
     <Replace Tag="LOC_CQUI_CITY_WAR_WEARINESS" Language="zh_Hans_CN">
       <Text>厌战</Text>
+    </Replace>
+    <Replace Tag="LOC_CQUI_CITY_HOUSE" Language="zh_Hans_CN">
+      <Text>住房</Text>
     </Replace>
 
     <!--  ITALIAN -->

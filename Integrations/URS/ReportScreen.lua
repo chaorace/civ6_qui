@@ -212,21 +212,21 @@ function GetData()
 
 		if kUnitData["Unit_Report"][group_name] == nil then
 			if group_name == "GREAT_PERSON" then
-				kUnitData["Unit_Report"][group_name] = { Name = "Great People", ID = 6, func = group_great, Header = "UnitsGreatPeopleHeaderInstance", Entry = "UnitsGreatPeopleEntryInstance", units = {} }
+				kUnitData["Unit_Report"][group_name] = { Name = Locale.Lookup("LOC_SLOT_GREAT_PERSON_NAME"), ID = 6, func = group_great, Header = "UnitsGreatPeopleHeaderInstance", Entry = "UnitsGreatPeopleEntryInstance", units = {} }
 			elseif group_name == "SPY" then
-				kUnitData["Unit_Report"][group_name] = { Name = "Spy", ID = 8, func = group_spy, Header = "UnitsSpyHeaderInstance", Entry = "UnitsSpyEntryInstance", units = {} }
+				kUnitData["Unit_Report"][group_name] = { Name = Locale.Lookup("LOC_UNIT_SPY_NAME"), ID = 8, func = group_spy, Header = "UnitsSpyHeaderInstance", Entry = "UnitsSpyEntryInstance", units = {} }
 			elseif group_name == "RELIGIOUS" then
-				kUnitData["Unit_Report"][group_name] = { Name = "Religious", ID = 5, func = group_religious, Header = "UnitsReligiousHeaderInstance", Entry = "UnitsReligiousEntryInstance", units = {} }
+				kUnitData["Unit_Report"][group_name] = { Name = Locale.Lookup("LOC_HUD_CITY_RELIGION"), ID = 5, func = group_religious, Header = "UnitsReligiousHeaderInstance", Entry = "UnitsReligiousEntryInstance", units = {} }
 			elseif group_name == "TRADER" then
-				kUnitData["Unit_Report"][group_name] = { Name = "Trader", ID = 7, func = group_trader, Header = "UnitsTraderHeaderInstance", Entry = "UnitsTraderEntryInstance", units = {} }
+				kUnitData["Unit_Report"][group_name] = { Name = Locale.Lookup("LOC_UNIT_TRADER_NAME"), ID = 7, func = group_trader, Header = "UnitsTraderHeaderInstance", Entry = "UnitsTraderEntryInstance", units = {} }
 			elseif group_name == "MILITARY_LAND" then
-				kUnitData["Unit_Report"][group_name] = { Name = "Military (Land)", ID = 1, func = group_military,  Header = "UnitsMilitaryHeaderInstance", Entry = "UnitsMilitaryEntryInstance", units = {} }
+				kUnitData["Unit_Report"][group_name] = { Name = Locale.Lookup("LOC_UNITS_MILITARY_LAND"), ID = 1, func = group_military,  Header = "UnitsMilitaryHeaderInstance", Entry = "UnitsMilitaryEntryInstance", units = {} }
 			elseif group_name == "MILITARY_AIR" then
-				kUnitData["Unit_Report"][group_name] = { Name = "Military (Air)", ID = 3, func = group_military, Header = "UnitsMilitaryHeaderInstance", Entry = "UnitsMilitaryEntryInstance", units = {} }
+				kUnitData["Unit_Report"][group_name] = { Name = Locale.Lookup("LOC_UNITS_MILITARY_AIR"), ID = 3, func = group_military, Header = "UnitsMilitaryHeaderInstance", Entry = "UnitsMilitaryEntryInstance", units = {} }
 			elseif group_name == "MILITARY_SEA" then
-				kUnitData["Unit_Report"][group_name] = { Name = "Military (Sea)", ID = 2, func = group_military, Header = "UnitsMilitaryHeaderInstance", Entry = "UnitsMilitaryEntryInstance", units = {} }
+				kUnitData["Unit_Report"][group_name] = { Name = Locale.Lookup("LOC_UNITS_MILITARY_SEA"), ID = 2, func = group_military, Header = "UnitsMilitaryHeaderInstance", Entry = "UnitsMilitaryEntryInstance", units = {} }
 			else
-				kUnitData["Unit_Report"][group_name] = { Name = "Civilian and Support", ID = 4, func = group_civilian, Header = "UnitsCivilianHeaderInstance", Entry = "UnitsCivilianEntryInstance", units = {} }
+				kUnitData["Unit_Report"][group_name] = { Name = Locale.Lookup("LOC_UNITS_CIVILIAN_AND_SUPPORT"), ID = 4, func = group_civilian, Header = "UnitsCivilianHeaderInstance", Entry = "UnitsCivilianEntryInstance", units = {} }
 			end
 		end
 
@@ -1017,28 +1017,22 @@ function ViewYieldsPage()
 		-- Tooltip shows districts have a -1 gpt cost, not sure if this goes up or if its different for other districts or
 		-- later eras
 
-		local iNumDistricts : number = 0
-
 		-- Can't find/figure out how to find district type, so i'll do it myself
 		-- this goes through the districts and adds the maintenance if not pillaged/being built
 		for _,kBuilding in ipairs(kCityData.BuildingsAndDistricts) do
 			if kBuilding.isBuilt then
 				for i = 1, #GameInfo.Districts do
-					if kBuilding.Name == Locale.Lookup( GameInfo.Districts[i].Name ) then
-						iNumDistricts = iNumDistricts + GameInfo.Districts[i].Maintenance
-						break
+					if kBuilding.Name == Locale.Lookup( GameInfo.Districts[i].Name ) and GameInfo.Districts[i].Maintenance > 0 then
+                        local pBuildingInstance:table = {};
+                        ContextPtr:BuildInstanceForControl( "BuildingExpensesEntryInstance", pBuildingInstance, instance.ContentStack );
+                        pBuildingInstance.CityName:SetText( Locale.Lookup(cityName) );
+                        pBuildingInstance.BuildingName:SetText( Locale.Lookup( GameInfo.Districts[i].Name ) );
+                        pBuildingInstance.Gold:SetText( "-" .. tostring( GameInfo.Districts[i].Maintenance ) );
+                        iTotalBuildingMaintenance = iTotalBuildingMaintenance - GameInfo.Districts[i].Maintenance;
+						break;
 					end
 				end
 			end
-		end
-
-		if ( iNumDistricts > 0 ) then
-			local pBuildingInstance:table = {}
-			ContextPtr:BuildInstanceForControl( "BuildingExpensesEntryInstance", pBuildingInstance, instance.ContentStack )
-			pBuildingInstance.CityName:SetText( Locale.Lookup(cityName) )
-			pBuildingInstance.BuildingName:SetText( "Districts" )
-			pBuildingInstance.Gold:SetText( "-" .. tostring( iNumDistricts ) )
-			iTotalBuildingMaintenance = iTotalBuildingMaintenance - iNumDistricts
 		end
 
 		for i,kBuilding in ipairs(kCityData.Buildings) do
@@ -1093,7 +1087,7 @@ function ViewYieldsPage()
 	-- ========== !! Unit Expenses ==========
 
 	instance = NewCollapsibleGroupInstance();
-	instance.RowHeaderButton:SetText( Locale.Lookup( "Unit Expenses" ) );
+	instance.RowHeaderButton:SetText( Locale.Lookup("LOC_HUD_REPORTS_ROW_UNIT_EXPENSES") );
 
 	local pHeader:table = {};
 	ContextPtr:BuildInstanceForControl( "UnitExpensesHeaderInstance", pHeader, instance.ContentStack ) ;
@@ -1638,8 +1632,8 @@ function group_trader( unit, unitInstance, group, parent, type )
 										  }
 	local yields : string = ""
 	
-	unitInstance.UnitYields:SetText( "No Yields" )
-	unitInstance.UnitRoute:SetText( "No Route" )
+	unitInstance.UnitYields:SetText( Locale.Lookup("LOC_CURRENT_DEALS_NO_YIELDS") )
+	unitInstance.UnitRoute:SetText( Locale.Lookup("LOC_CURRENT_DEALS_NO_ROUTE") )
 	unit.yields = "No Yields"
 	unit.route = "No Route"
 
@@ -1690,8 +1684,8 @@ function ViewDealsPage()
 
 		local instance : table = NewCollapsibleGroupInstance()
 
-		instance.RowHeaderButton:SetText( "Deal With " .. pDeal.WithCivilization )
-		instance.RowHeaderLabel:SetText( "Ends in " .. ending .. " " .. turns .. " (" .. pDeal.EndTurn .. ")" )
+		instance.RowHeaderButton:SetText( Locale.Lookup("LOC_CURRENT_DEALS_DEAL_WITH") .. " " .. pDeal.WithCivilization )
+		instance.RowHeaderLabel:SetText( Locale.Lookup("LOC_CURRENT_DEALS_ENDS_IN") .. ending .. " " .. Locale.Lookup("LOC_CURRENT_DEALS_ENDS_TURNS") .. " (" .. pDeal.EndTurn .. ")" )
 		instance.RowHeaderLabel:SetHide( false )
 
 		local dealHeaderInstance : table = {}
@@ -1725,8 +1719,8 @@ function ViewDealsPage()
 	
 		local pFooterInstance:table = {}
 		ContextPtr:BuildInstanceForControl( "DealsFooterInstance", pFooterInstance, instance.ContentStack )
-		pFooterInstance.Outgoing:SetText( "Total: " .. #pDeal.Sending )
-		pFooterInstance.Incoming:SetText( "Total: " .. #pDeal.Receiving )
+		pFooterInstance.Outgoing:SetText( Locale.Lookup("LOC_HUD_REPORTS_TOTALS") .. " " .. #pDeal.Sending )
+		pFooterInstance.Incoming:SetText( Locale.Lookup("LOC_HUD_REPORTS_TOTALS") .. " " .. #pDeal.Receiving )
 	
 		SetGroupCollapsePadding( instance, pFooterInstance.Top:GetSizeY() )
 		RealizeGroup( instance );
@@ -1892,8 +1886,8 @@ function Initialize()
 	AddTabSection( "LOC_HUD_REPORTS_TAB_YIELDS",		ViewYieldsPage );
 	AddTabSection( "LOC_HUD_REPORTS_TAB_RESOURCES",		ViewResourcesPage );
 	AddTabSection( "LOC_HUD_REPORTS_TAB_CITY_STATUS",	ViewCityStatusPage );
-	AddTabSection( "Current Deals",						ViewDealsPage );
-	AddTabSection( "Units",								ViewUnitsPage );
+	AddTabSection( "LOC_HUD_REPORTS_TAB_CURRENT_DEALS",	ViewDealsPage );
+	AddTabSection( "LOC_UNIT_NAME",			ViewUnitsPage );
 
 	m_tabs.SameSizedTabs(50);
 	m_tabs.CenterAlignTabs(-10);
