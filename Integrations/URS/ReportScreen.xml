@@ -1139,7 +1139,7 @@
 				</Container>
 				
 				<Container Offset="1,0" Size="73,parent">
-					<Button ID="LookAtButton" Anchor="R,C" Size="23,31" Texture="Controls_ShowMe" StateOffsetIncrement="0,0" Offset="10,0" ToolTip="View this unit on the map."/>
+					<Button ID="LookAtButton" Anchor="R,C" Size="23,31" Texture="Controls_ShowMe" StateOffsetIncrement="0,0" Offset="10,0" ToolTip="LOC_UNITS_VIEW_ON_THE_MAP"/>
 				</Container>
 				
 				<Box Offset="1,0" Size="2,parent" Color="46,70,95,128"/>
@@ -1175,7 +1175,7 @@
 				</Container>
 				
 				<Container Offset="1,0" Size="401,parent">
-					<Button ID="LookAtButton" Anchor="R,C" Size="23,31" Texture="Controls_ShowMe" StateOffsetIncrement="0,0" Offset="10,0" ToolTip="View this unit on the map."/>
+					<Button ID="LookAtButton" Anchor="R,C" Size="23,31" Texture="Controls_ShowMe" StateOffsetIncrement="0,0" Offset="10,0" ToolTip="LOC_UNITS_VIEW_ON_THE_MAP"/>
 				</Container>
 				
 				<Box Offset="1,0" Size="2,parent" Color="46,70,95,128"/>
@@ -1210,7 +1210,7 @@
 				</Container>
 				
 				<Container Offset="1,0" Size="26,parent">
-					<Button ID="LookAtButton" Anchor="R,C" Size="23,31" Texture="Controls_ShowMe" StateOffsetIncrement="0,0" Offset="10,0" ToolTip="View this unit on the map."/>
+					<Button ID="LookAtButton" Anchor="R,C" Size="23,31" Texture="Controls_ShowMe" StateOffsetIncrement="0,0" Offset="10,0" ToolTip="LOC_UNITS_VIEW_ON_THE_MAP"/>
 				</Container>				
 				
 				<Box Offset="1,0" Size="2,parent" Color="46,70,95,128"/>
@@ -1246,7 +1246,7 @@
 				</Container>
 				
 				<Container Offset="1,0" Size="251,parent">
-					<Button ID="LookAtButton" Anchor="R,C" Size="23,31" Texture="Controls_ShowMe" StateOffsetIncrement="0,0" Offset="10,0" ToolTip="View this unit on the map."/>
+					<Button ID="LookAtButton" Anchor="R,C" Size="23,31" Texture="Controls_ShowMe" StateOffsetIncrement="0,0" Offset="10,0" ToolTip="LOC_UNITS_VIEW_ON_THE_MAP"/>
 				</Container>
 				
 				<Box Offset="1,0" Size="2,parent" Color="46,70,95,128"/>
@@ -1286,7 +1286,7 @@
 				</Container>
 				
 				<Container Offset="1,0" Size="300,parent">
-					<Button ID="LookAtButton" Anchor="R,C" Size="23,31" Texture="Controls_ShowMe" StateOffsetIncrement="0,0" Offset="10,0" ToolTip="View this unit on the map."/>
+					<Button ID="LookAtButton" Anchor="R,C" Size="23,31" Texture="Controls_ShowMe" StateOffsetIncrement="0,0" Offset="10,0" ToolTip="LOC_UNITS_VIEW_ON_THE_MAP"/>
 				</Container>
 				
 				<Box Offset="1,0" Size="2,parent" Color="46,70,95,128"/>
@@ -1326,7 +1326,7 @@
 				</Container>
 				
 				<Container Offset="1,0" Size="100,parent">
-					<Button ID="LookAtButton" Anchor="R,C" Size="23,31" Texture="Controls_ShowMe" StateOffsetIncrement="0,0" Offset="10,0" ToolTip="View this unit on the map."/>
+					<Button ID="LookAtButton" Anchor="R,C" Size="23,31" Texture="Controls_ShowMe" StateOffsetIncrement="0,0" Offset="10,0" ToolTip="LOC_UNITS_VIEW_ON_THE_MAP"/>
 				</Container>
 				
 				<Box Offset="1,0" Size="2,parent" Color="46,70,95,128"/>

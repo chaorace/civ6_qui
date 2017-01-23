@@ -52,6 +52,9 @@
         <Row Tag="LOC_UNITS_TYPE">
             <Text>Type</Text>
         </Row>
+        <Row Tag="LOC_UNITS_VIEW_ON_THE_MAP">
+            <Text>View this unit on the map.</Text>
+        </Row>
         <Row Tag="LOC_UNITS_NUMBER_OF_UNITS">
             <Text>Number of Units</Text>
         </Row>
@@ -109,6 +112,9 @@
         </Replace>
         <Replace Tag="LOC_UNITS_TYPE" Language="zh_Hans_CN">
             <Text>类型</Text>
+        </Replace>
+        <Replace Tag="LOC_UNITS_VIEW_ON_THE_MAP" Language="zh_Hans_CN">
+            <Text>在地图上查看该单位。</Text>
         </Replace>
         <Replace Tag="LOC_UNITS_NUMBER_OF_UNITS" Language="zh_Hans_CN">
             <Text>单位总计</Text>
