@@ -5,19 +5,16 @@ include("Civ6Common");
 -- Members
 local m_tabs; --Add new options tabs to this in Initialize function
 local bindings_options = {
-  --{"LOC_CQUI_BINDINGS_STANDARD", 0},
-  --{"LOC_CQUI_BINDINGS_CLASSIC", 1},
-  --{"LOC_CQUI_BINDINGS_ENHANCED", 2}
-  {"Standard", 0},
-  {"Classic", 1},
-  {"Enhanced", 2}
+  {"LOC_CQUI_BINDINGS_STANDARD", 0},
+  {"LOC_CQUI_BINDINGS_CLASSIC", 1},
+  {"LOC_CQUI_BINDINGS_ENHANCED", 2}
 };
 
 local resource_icon_style_options = 
 {
-  {"Solid", 0},
-  {"Transparent", 1},
-  {"Hidden", 2}
+  {"LOC_CQUI_GENERAL_SOLID", 0},
+  {"LOC_CQUI_GENERAL_TRANSPARENT", 1},
+  {"LOC_CQUI_GENERAL_HIDDEN", 2}
 };
 
 --Used to switch active panels/tabs in the settings panel
@@ -216,6 +213,7 @@ local ProductionItemHeightConverter = {
 };
 
 function Initialize()
+  ContextPtr:SetHide(true);
   --Adding/binding tabs...
   m_tabs = {
     {Controls.GeneralTab, Controls.GeneralOptions},
@@ -259,6 +257,9 @@ function Initialize()
   --Setting up panel controls
   ShowTab(m_tabs[1][1], m_tabs[1][2]); --Show General Settings on start
   ContextPtr:SetInputHandler( OnInputHandler, true );
+
+  --Bind CQUI events
+  LuaEvents.CQUI_ToggleSettings.Add(function() ContextPtr:SetHide(not ContextPtr:IsHidden()); end);
 
   LuaEvents.CQUI_SettingsInitialized(); --Tell other elements that the settings have been initialized and it's safe to try accessing settings now
 end
