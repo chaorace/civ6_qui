@@ -32,8 +32,8 @@
       <pl-PL>Kandydat do wydania</pl_PL>
     </Text>
     <Text id="CQUI_STABILITY_RELEASE">
-      <en_US>发布</en_US>
-      <zh_Hans_CN>Release</zh_Hans_CN>
+      <en_US>Release</en_US>
+      <zh_Hans_CN>发布</zh_Hans_CN>
       <pl_PL>Wersa stabilna</pl_PL>
     </Text>
     <Text id="CQUI_STABILITY_NIGHTLY">
