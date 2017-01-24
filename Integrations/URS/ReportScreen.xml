@@ -667,7 +667,7 @@
 				<Container																										Size="100,parent">
 					<GridButton		ID="CityPopulationButton"  Size="parent,parent" Style="ButtonLightWeightSquareGrid" Anchor="C,C">
 						<Label													Style="ReportHeaderSmallText"		String="LOC_HUD_REPORTS_HEADER_POPULATION" />
-					</GridButton
+					</GridButton>
 				</Container>
 				<Box																													Size="2,parent"	Color="46,70,95,255" />
 				<Container																										Size="80,parent">
@@ -814,7 +814,7 @@
 
 				<Container Offset="1,0" Size="50,parent">
 					<GridButton		ID="UnitTypeButton"  Size="parent,parent" Style="ButtonLightWeightSquareGrid" Anchor="C,C">
-						<Label Style="ReportHeaderSmallText" String="LOC_UNITS_TYPE"/>
+						<Label Style="ReportHeaderSmallText" String="LOC_CITY_STATES_TYPE"/>
 					</GridButton>
 				</Container>
 				
@@ -870,7 +870,7 @@
 				
 				<Container Offset="1,0" Size="50,parent">
 					<GridButton		ID="UnitTypeButton"  Size="parent,parent" Style="ButtonLightWeightSquareGrid" Anchor="C,C">
-						<Label Style="ReportHeaderSmallText" String="LOC_UNITS_TYPE"/>
+						<Label Style="ReportHeaderSmallText" String="LOC_CITY_STATES_TYPE"/>
 					</GridButton>
 				</Container>
 				
@@ -914,7 +914,7 @@
 				
 				<Container Offset="1,0" Size="50,parent">
 					<GridButton		ID="UnitTypeButton"  Size="parent,parent" Style="ButtonLightWeightSquareGrid" Anchor="C,C">
-						<Label Style="ReportHeaderSmallText" String="LOC_UNITS_TYPE"/>
+						<Label Style="ReportHeaderSmallText" String="LOC_CITY_STATES_TYPE"/>
 					</GridButton>
 				</Container>
 				
@@ -958,7 +958,7 @@
 				
 				<Container Offset="1,0" Size="50,parent">
 					<GridButton		ID="UnitTypeButton"  Size="parent,parent" Style="ButtonLightWeightSquareGrid" Anchor="C,C">
-						<Label Style="ReportHeaderSmallText" String="LOC_UNITS_TYPE"/>
+						<Label Style="ReportHeaderSmallText" String="LOC_CITY_STATES_TYPE"/>
 					</GridButton>
 				</Container>
 				
@@ -1002,7 +1002,7 @@
 				
 				<Container Offset="1,0" Size="50,parent">
 					<GridButton		ID="UnitTypeButton"  Size="parent,parent" Style="ButtonLightWeightSquareGrid" Anchor="C,C">
-						<Label Style="ReportHeaderSmallText" String="LOC_UNITS_TYPE"/>
+						<Label Style="ReportHeaderSmallText" String="LOC_CITY_STATES_TYPE"/>
 					</GridButton>
 				</Container>
 				
@@ -1052,7 +1052,7 @@
 				
 				<Container Offset="1,0" Size="50,parent">
 					<GridButton		ID="UnitTypeButton"  Size="parent,parent" Style="ButtonLightWeightSquareGrid" Anchor="C,C">
-						<Label Style="ReportHeaderSmallText" String="LOC_UNITS_TYPE"/>
+						<Label Style="ReportHeaderSmallText" String="LOC_CITY_STATES_TYPE"/>
 					</GridButton>
 				</Container>
 				
@@ -1202,11 +1202,11 @@
 				</Container>
 
 				<Container Offset="1,0" Size="300,parent">
-					<Label ID="UnitRoute" Style="ReportValueText" String="LOC_CURRENT_DEALS_NO_ROUTE" Align="Center" Anchor="C,C" Offset="0,0"/>
+					<Label ID="UnitRoute" Style="ReportValueText" String="LOC_CITY_STATES_NONE" Align="Center" Anchor="C,C" Offset="0,0"/>
 				</Container>
 
 				<Container Offset="1,0" Size="300,parent">
-					<Label ID="UnitYields" Style="ReportValueText" String="LOC_CURRENT_DEALS_NO_YIELDS" Align="Center" Anchor="C,C" Offset="0,0"/>
+					<Label ID="UnitYields" Style="ReportValueText" String="LOC_CITY_STATES_NONE" Align="Center" Anchor="C,C" Offset="0,0"/>
 				</Container>
 				
 				<Container Offset="1,0" Size="26,parent">
@@ -1340,7 +1340,7 @@
 			<Stack StackGrowth="Right">
 				<Box Size="2,26"	Color="46,70,95,128"/>
 				<Container Size="780,26">
-					<Label Anchor="R,C" Offset="5,1" Style="ReportTotalText" String="LOC_UNITS_NUMBER_OF_UNITS"/>
+					<Label Anchor="R,C" Offset="5,1" Style="ReportTotalText" String="LOC_HUD_REPORTS_HEADER_UNITCOUNT"/>
 				</Container>
 				<Box Size="2,26" Color="46,70,95,255"/>
 				<Container Size="200,26">
@@ -1400,13 +1400,13 @@
 				<Box Size="2,parent" Color="46,70,95,128"/>
 				
 				<Container Offset="1,0" Size="500,parent">
-					<Label ID="Outgoing" Style="ReportHeaderSmallText" Anchor="C,C" Offset="0,-3" String="LOC_CURRENT_DEALS_NONE_TOTALS"/>
+					<Label ID="Outgoing" Style="ReportHeaderSmallText" Anchor="C,C" Offset="0,-3" String="Total: 0"/>
 				</Container>
 
 				<Box Offset="1,0" Size="2,parent-5" Color="46,70,95,128"/>
 
 				<Container Offset="1,0" Size="477,parent">
-						<Label ID="Incoming" Style="ReportHeaderSmallText" Anchor="C,C" Offset="0,-3" String="LOC_CURRENT_DEALS_NONE_TOTALS"/>
+						<Label ID="Incoming" Style="ReportHeaderSmallText" Anchor="C,C" Offset="0,-3" String="Total: 0"/>
 				</Container>
 				
 				<Box Offset="1,0" Size="2,parent" Color="46,70,95,128"/>

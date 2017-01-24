@@ -225,7 +225,7 @@ function GetData()
 			elseif group_name == "MILITARY_SEA" then
 				kUnitData["Unit_Report"][group_name] = { Name = Locale.Lookup("LOC_UNITS_MILITARY_SEA"), ID = 2, func = group_military, Header = "UnitsMilitaryHeaderInstance", Entry = "UnitsMilitaryEntryInstance", units = {} }
 			else
-				kUnitData["Unit_Report"][group_name] = { Name = Locale.Lookup("LOC_UNITS_CIVILIAN_AND_SUPPORT"), ID = 4, func = group_civilian, Header = "UnitsCivilianHeaderInstance", Entry = "UnitsCivilianEntryInstance", units = {} }
+				kUnitData["Unit_Report"][group_name] = { Name = (Locale.Lookup("LOC_FORMATION_CLASS_CIVILIAN_NAME") .. " / " .. Locale.Lookup("LOC_FORMATION_CLASS_SUPPORT_NAME")), ID = 4, func = group_civilian, Header = "UnitsCivilianHeaderInstance", Entry = "UnitsCivilianEntryInstance", units = {} }
 			end
 		end
 
@@ -1817,8 +1817,8 @@ function group_trader( unit, unitInstance, group, parent, type )
 										  }
 	local yields : string = ""
 
-	unitInstance.UnitYields:SetText( Locale.Lookup("LOC_CURRENT_DEALS_NO_YIELDS") )
-	unitInstance.UnitRoute:SetText( Locale.Lookup("LOC_CURRENT_DEALS_NO_ROUTE") )
+	unitInstance.UnitYields:SetText( Locale.Lookup("LOC_CITY_STATES_NONE") )
+	unitInstance.UnitRoute:SetText( Locale.Lookup("LOC_CITY_STATES_NONE") )
 	unit.yields = "No Yields"
 	unit.route = "No Route"
 
@@ -1869,8 +1869,8 @@ function ViewDealsPage()
 
 		local instance : table = NewCollapsibleGroupInstance()
 
-		instance.RowHeaderButton:SetText( Locale.Lookup("LOC_CURRENT_DEALS_DEAL_WITH") .. " " .. pDeal.WithCivilization )
-		instance.RowHeaderLabel:SetText(  Locale.Lookup("LOC_CURRENT_DEALS_ENDS_IN") .. ending .. " " .. Locale.Lookup("LOC_CURRENT_DEALS_ENDS_TURNS") .. " (" .. pDeal.EndTurn .. ")" )
+		instance.RowHeaderButton:SetText( Locale.Lookup("LOC_HUD_REPORTS_TRADE_DEAL_WITH", pDeal.WithCivilization) )
+		instance.RowHeaderLabel:SetText(  Locale.Lookup("LOC_ESPIONAGEPANEL_PANEL_TURNS") .. ending .. "[ICON_Turn]" .. " (" .. pDeal.EndTurn .. ")" )
 		instance.RowHeaderLabel:SetHide( false )
 
 		local dealHeaderInstance : table = {}
