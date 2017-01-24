@@ -391,7 +391,7 @@ function GetData()
 							if pReceivingName == "Agreements" then
 								deal.Name = pDealItem:GetSubTypeNameID()
 							elseif pReceivingName == "Gold" then
-								deal.Name = deal.Amount .. " Gold Per Turn"
+								deal.Name = deal.Amount .. Locale.Lookup("LOC_DIPLOMACY_DEAL_GOLD_PER_TURN")
 								deal.Icon = "[ICON_GOLD]"
 							else
 								if deal.Amount > 1 then
@@ -421,7 +421,7 @@ function GetData()
 							if pSendingName == "Agreements" then
 								deal.Name = pDealItem:GetSubTypeNameID()
 							elseif pSendingName == "Gold" then
-								deal.Name = deal.Amount .. " Gold Per Turn"
+								deal.Name = deal.Amount .. Locale.Lookup("LOC_DIPLOMACY_DEAL_GOLD_PER_TURN")
 								deal.Icon = "[ICON_GOLD]"
 							else
 								if deal.Amount > 1 then
