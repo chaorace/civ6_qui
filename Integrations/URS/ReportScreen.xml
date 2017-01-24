@@ -248,27 +248,27 @@
 				<Container																										Size="33,40" />
 				<Box																													Size="2,40"	Color="46,70,95,255" />
 				<Container																										Size="100,40">
-					<Label		ID="Production"				Style="ReportValueText"			String="P"  Color="Production" />
+					<Label		ID="Production"				Style="ReportValueText"			String=""  Color="Production" />
 				</Container>
 				<Box																													Size="2,40"	Color="46,70,95,255" />
 				<Container																										Size="100,40">
-					<Label		ID="Food"							Style="ReportValueText"			String="F"	Color="Food" />
+					<Label		ID="Food"							Style="ReportValueText"			String=""	Color="Food" />
 				</Container>
 				<Box																													Size="2,40"	Color="46,70,95,255" />
 				<Container																										Size="100,40">
-					<Label		ID="Gold"							Style="ReportValueText"			String="G"	Color="Gold" />
+					<Label		ID="Gold"							Style="ReportValueText"			String=""	Color="Gold" />
 				</Container>
 				<Box																													Size="2,40"	Color="46,70,95,255" />
 				<Container																										Size="100,40">
-					<Label		ID="Faith"						Style="ReportValueText"			String="F"	Color="Faith" />
+					<Label		ID="Faith"						Style="ReportValueText"			String=""	Color="Faith" />
 				</Container>
 				<Box																													Size="2,40"	Color="46,70,95,255" />
 				<Container																										Size="100,40">
-					<Label		ID="Science"					Style="ReportValueText"			String="S"	Color="Science" />
+					<Label		ID="Science"					Style="ReportValueText"			String=""	Color="Science" />
 				</Container>
 				<Box																													Size="2,40"	Color="46,70,95,255" />
 				<Container																										Size="100,40">
-					<Label		ID="Culture"					Style="ReportValueText"			String="C"	Color="Culture" />
+					<Label		ID="Culture"					Style="ReportValueText"			String=""	Color="Culture" />
 				</Container>
 				<Box																													Size="2,40"	Color="46,70,95,255" />
 				<Container																										Size="100,40">
@@ -301,27 +301,27 @@
 				<Container																										Size="33,parent" />
 				<Box																													Size="2,parent"	Color="46,70,95,255" />
 				<Container																										Size="100,20">
-					<Label		ID="Production"				Style="ReportValueText"			String="P"  Color="Production" />
+					<Label		ID="Production"				Style="ReportValueText"			String=""  Color="Production" />
 				</Container>
 				<Box																													Size="2,20"	Color="46,70,95,255" />
 				<Container																										Size="100,20">
-					<Label		ID="Food"							Style="ReportValueText"			String="F"	Color="Food" />
+					<Label		ID="Food"							Style="ReportValueText"			String=""	Color="Food" />
 				</Container>
 				<Box																													Size="2,20"	Color="46,70,95,255" />
 				<Container																										Size="100,20">
-					<Label		ID="Gold"							Style="ReportValueText"			String="G"	Color="Gold" />
+					<Label		ID="Gold"							Style="ReportValueText"			String=""	Color="Gold" />
 				</Container>
 				<Box																													Size="2,20"	Color="46,70,95,255" />
 				<Container																										Size="100,20">
-					<Label		ID="Faith"						Style="ReportValueText"			String="F"	Color="Faith" />
+					<Label		ID="Faith"						Style="ReportValueText"			String=""	Color="Faith" />
 				</Container>
 				<Box																													Size="2,20"	Color="46,70,95,255" />
 				<Container																										Size="100,20">
-					<Label		ID="Science"					Style="ReportValueText"			String="S"	Color="Science" />
+					<Label		ID="Science"					Style="ReportValueText"			String=""	Color="Science" />
 				</Container>
 				<Box																													Size="2,20"	Color="46,70,95,255" />
 				<Container																										Size="100,20">
-					<Label		ID="Culture"					Style="ReportValueText"			String="C"	Color="Culture" />
+					<Label		ID="Culture"					Style="ReportValueText"			String=""	Color="Culture" />
 				</Container>
 				<Box																													Size="2,20"	Color="46,70,95,255" />
 				<Container																										Size="100,20">
