@@ -35,14 +35,13 @@
       <Text>CQUI</Text>
     </Replace>
     <Replace Tag="LOC_CQUI_CIVIC_MESSAGE_S" Language="fr_FR">
-      <Text>La Civilization actuelle, </Text>
+      <Text>La Civilisation actuelle, </Text>
     </Replace>
     <Replace Tag="LOC_CQUI_TECH_MESSAGE_S" Language="fr_FR">
-      <Text>La technologie actuelle, </Text>
+      <Text>La Technologie actuelle, </Text>
     </Replace>
     <Replace Tag="LOC_CQUI_HALF_MESSAGE_E" Language="fr_FR">
-      <!-- TODO: Provide a better translation -->
-      <Text>, n'est plus qu'à un tour du maximum Inspiration potentielle.</Text>
+      <Text>, n'est plus qu'à un tour de l'Inspiration maximum potentiel.</Text>
     </Replace>
     <Replace Tag="LOC_CQUI_FINISH_MESSAGE_E" Language="fr_FR">
       <Text>, est terminée.</Text>
