@@ -58,7 +58,7 @@
     </Text>
     <Text id="CQUI_STABILITY_NIGHTLY">
       <en_US>Nightly</en_US>
-      <fr_FR>Prototype</fr_FR>
+      <fr_FR>Développement</fr_FR>
       <zh_Hans_CN>测试中</zh_Hans_CN>
       <pl_PL>Wersja testowa</pl_PL>
       <ru_RU>Ночная сборка</ru_RU>
