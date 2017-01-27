@@ -383,6 +383,14 @@
     <!-- RUSSIAN -->
 
     <!-- Common Text -->
+    <Replace Tag="LOC_TRADE_GROUP_SETTINGS" Language="ru_RU">
+        <Text>Настройки Групп</Text>
+    </Replace>
+
+    <Replace Tag="LOC_TRADE_FILTER_SETTINGS" Language="ru_RU">
+        <Text>Настройки Фильтра</Text>
+    </Replace>
+
     <Replace Tag="LOC_TRADE_SORT_BY_FOOD_TOOLTIP" Language="ru_RU">
         <Text>Сортировать по [ICON_Food]Пище.</Text>
     </Replace>
