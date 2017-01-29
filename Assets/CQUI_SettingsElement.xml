@@ -82,6 +82,12 @@
             <Stack Anchor="R,T" StackGrowth="Left" Offset="0,5">
               <GridButton ID="SmartbannerDistrictsCheckbox" Anchor="L,C" Offset="0,0" Size="300,24" Style="CheckBoxControl" String="LOC_CQUI_CITYVIEW_SMARTBANNER_DISTRICTS" />
             </Stack>
+            <Stack Anchor="R,T" StackGrowth="Left" Offset="0,5">
+              <GridButton ID="SmartbannerPopulationCheckbox" Anchor="L,C" Offset="0,0" Size="300,24" Style="CheckBoxControl" String="LOC_CQUI_CITYVIEW_SMARTBANNER_POPULATION" />
+            </Stack>
+            <Stack Anchor="R,T" StackGrowth="Left" Offset="0,5">
+              <GridButton ID="SmartbannerCulturalCheckbox" Anchor="L,C" Offset="0,0" Size="300,24" Style="CheckBoxControl" String="LOC_CQUI_CITYVIEW_SMARTBANNER_CULTURAL" />
+            </Stack>
           </Stack>
         </Stack>
       </Container>

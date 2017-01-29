@@ -32,6 +32,8 @@ INSERT INTO CQUI_Settings -- Don't touch this line!
       ("CQUI_Smartbanner", 1), -- Additional informations such as districts will show in the city banner
 	  ("CQUI_Smartbanner_UnlockedCitizen", 1), -- Shows if city have Unmanaged citizens in the banner
 	  ("CQUI_Smartbanner_Districts", 1), -- Shows city districts in the banner
+	  ("CQUI_Smartbanner_Population", 1), -- Shows turns to city population growth in the banner
+	  ("CQUI_Smartbanner_Cultural", 1), -- Shows turns to city cultural growth in the banner
       ("CQUI_TechPopupVisual", 0), -- Popups will be displayed when you discover a new tech or civic (this is the normal behavior for the unmoded game)
       ("CQUI_TechPopupAudio", 1), -- Play the voiceovers when you discover a new tech or civic (this is the normal behavior for the unmoded game)
       ("CQUI_ToggleYieldsOnLoad", 1); -- Toggles yields immediately on load

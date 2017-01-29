@@ -243,6 +243,8 @@ function Initialize()
   PopulateCheckBox(Controls.SmartbannerCheckbox, "CQUI_Smartbanner", Locale.Lookup("LOC_CQUI_CITYVIEW_SMARTBANNER_TOOLTIP"));
   PopulateCheckBox(Controls.SmartbannerUnlockedCitizenCheckbox, "CQUI_Smartbanner_UnlockedCitizen", Locale.Lookup("LOC_CQUI_CITYVIEW_SMARTBANNER_UNLOCKEDCITIZEN_TOOLTIP"));
   PopulateCheckBox(Controls.SmartbannerDistrictsCheckbox, "CQUI_Smartbanner_Districts", Locale.Lookup("LOC_CQUI_CITYVIEW_SMARTBANNER_DISTRICTS_TOOLTIP"));
+  PopulateCheckBox(Controls.SmartbannerPopulationCheckbox, "CQUI_Smartbanner_Population", Locale.Lookup("LOC_CQUI_CITYVIEW_SMARTBANNER_POPULATION_TOOLTIP"));
+  PopulateCheckBox(Controls.SmartbannerCulturalCheckbox, "CQUI_Smartbanner_Cultural", Locale.Lookup("LOC_CQUI_CITYVIEW_SMARTBANNER_CULTURAL_TOOLTIP"));
   PopulateCheckBox(Controls.ToggleYieldsOnLoadCheckbox, "CQUI_ToggleYieldsOnLoad");
   PopulateCheckBox(Controls.TechVisualCheckbox, "CQUI_TechPopupVisual", Locale.Lookup("LOC_CQUI_POPUPS_TECHVISUAL_TOOLTIP"));
   PopulateCheckBox(Controls.TechAudioCheckbox, "CQUI_TechPopupAudio", Locale.Lookup("LOC_CQUI_POPUPS_TECHAUDIO_TOOLTIP"));

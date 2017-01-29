@@ -167,6 +167,8 @@ function CQUI_OnSettingsUpdate()
   g_smartbanner = GameConfiguration.GetValue("CQUI_Smartbanner")
   g_smartbanner_unmanaged_citizen = GameConfiguration.GetValue("CQUI_Smartbanner_UnlockedCitizen")
   g_smartbanner_districts = GameConfiguration.GetValue("CQUI_Smartbanner_Districts")
+  g_smartbanner_population = GameConfiguration.GetValue("CQUI_Smartbanner_Population")
+  g_smartbanner_cultural = GameConfiguration.GetValue("CQUI_Smartbanner_Cultural")
   Reload();
 end
 LuaEvents.CQUI_SettingsUpdate.Add( CQUI_OnSettingsUpdate );
@@ -981,9 +983,8 @@ function CityBanner.UpdateStats( self : CityBanner)
         turnsUntilGrowth = -pCityGrowth:GetTurnsUntilStarvation();  -- Make negative
       end 
       --- POPULATION AND GROWTH INFO ---
-      if g_smartbanner then
-        self.m_Instance.CityPopTurnsLeft:SetHide(false);
-        self.m_Instance.CityCultureTurnsLeft:SetHide(false);
+      self.m_Instance.CityPopulation:SetText(currentPopulation);
+      if (self.m_Player == Players[localPlayerID]) then --Only show growth data if the player is you
         local popTooltip :string = Locale.Lookup("LOC_CITY_BANNER_POPULATION") .. ": " .. currentPopulation;
         if turnsUntilGrowth > 0 then
           popTooltip = popTooltip .. "[NEWLINE]  " .. Locale.Lookup("LOC_CITY_BANNER_TURNS_GROWTH", turnsUntilGrowth);
@@ -995,19 +996,29 @@ function CityBanner.UpdateStats( self : CityBanner)
         else
           self.m_Instance.CityPopTurnsLeft:SetColorByName("StatNormalCS");
         end
-        self.m_Instance.CityPopulation:SetText(currentPopulation);
 
-        if (self.m_Player == Players[localPlayerID]) then     --Only show growth data if the player is you
-          self.m_Instance.CityPopulation:SetToolTipString(popTooltip);
-          local turnsUntilBorderGrowth = pCityCulture:GetTurnsUntilExpansion();
-          local housing = pCityGrowth:GetHousing();
-          local CTLS = turnsUntilGrowth.."  ["..currentPopulation.."/"..housing.."]  ";
-          self.m_Instance.CityCultureTurnsLeft:SetText(turnsUntilBorderGrowth);
-          self.m_Instance.CityPopTurnsLeft:SetText(CTLS);
+        if g_smartbanner then
+          if g_smartbanner_cultural then
+            local turnsUntilBorderGrowth = pCityCulture:GetTurnsUntilExpansion();
+            self.m_Instance.CityCultureTurnsLeft:SetText(turnsUntilBorderGrowth);
+            self.m_Instance.CityCultureTurnsLeft:SetHide(false);
+          else
+            self.m_Instance.CityCultureTurnsLeft:SetHide(true);
+          end
+
+          if g_smartbanner_population then
+            self.m_Instance.CityPopulation:SetToolTipString(popTooltip);
+            local housing = pCityGrowth:GetHousing();
+            local CTLS = turnsUntilGrowth.."  ["..currentPopulation.."/"..housing.."]  ";
+            self.m_Instance.CityPopTurnsLeft:SetText(CTLS);
+            self.m_Instance.CityPopTurnsLeft:SetHide(false);
+          else
+            self.m_Instance.CityPopTurnsLeft:SetHide(true);
+          end
+        else
+          self.m_Instance.CityPopTurnsLeft:SetHide(true);
+          self.m_Instance.CityCultureTurnsLeft:SetHide(true);
         end
-      else
-        self.m_Instance.CityPopTurnsLeft:SetHide(true);
-        self.m_Instance.CityCultureTurnsLeft:SetHide(true);
       end
 
       local food             :number = pCityGrowth:GetFood();
