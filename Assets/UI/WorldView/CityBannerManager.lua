@@ -981,26 +981,33 @@ function CityBanner.UpdateStats( self : CityBanner)
         turnsUntilGrowth = -pCityGrowth:GetTurnsUntilStarvation();  -- Make negative
       end 
       --- POPULATION AND GROWTH INFO ---
-      local popTooltip :string = Locale.Lookup("LOC_CITY_BANNER_POPULATION") .. ": " .. currentPopulation;
-      if turnsUntilGrowth > 0 then
-        popTooltip = popTooltip .. "[NEWLINE]  " .. Locale.Lookup("LOC_CITY_BANNER_TURNS_GROWTH", turnsUntilGrowth);
-        popTooltip = popTooltip .. "[NEWLINE]  " .. Locale.Lookup("LOC_CITY_BANNER_FOOD_SURPLUS", round(foodSurplus,1));        
-        self.m_Instance.CityPopTurnsLeft:SetColorByName("StatGoodCS");
-      elseif turnsUntilGrowth < 0 then
-        popTooltip = popTooltip .. "[NEWLINE]  " .. Locale.Lookup("LOC_CITY_BANNER_TURNS_STARVATION", -turnsUntilGrowth);
-        self.m_Instance.CityPopTurnsLeft:SetColorByName("StatBadCS");
-      else
-        self.m_Instance.CityPopTurnsLeft:SetColorByName("StatNormalCS");
-      end
-      self.m_Instance.CityPopulation:SetText(currentPopulation);
+      if g_smartbanner then
+        self.m_Instance.CityPopTurnsLeft:SetHide(false);
+        self.m_Instance.CityCultureTurnsLeft:SetHide(false);
+        local popTooltip :string = Locale.Lookup("LOC_CITY_BANNER_POPULATION") .. ": " .. currentPopulation;
+        if turnsUntilGrowth > 0 then
+          popTooltip = popTooltip .. "[NEWLINE]  " .. Locale.Lookup("LOC_CITY_BANNER_TURNS_GROWTH", turnsUntilGrowth);
+          popTooltip = popTooltip .. "[NEWLINE]  " .. Locale.Lookup("LOC_CITY_BANNER_FOOD_SURPLUS", round(foodSurplus,1));        
+          self.m_Instance.CityPopTurnsLeft:SetColorByName("StatGoodCS");
+        elseif turnsUntilGrowth < 0 then
+          popTooltip = popTooltip .. "[NEWLINE]  " .. Locale.Lookup("LOC_CITY_BANNER_TURNS_STARVATION", -turnsUntilGrowth);
+          self.m_Instance.CityPopTurnsLeft:SetColorByName("StatBadCS");
+        else
+          self.m_Instance.CityPopTurnsLeft:SetColorByName("StatNormalCS");
+        end
+        self.m_Instance.CityPopulation:SetText(currentPopulation);
 
-      if (self.m_Player == Players[localPlayerID]) then     --Only show growth data if the player is you
-        self.m_Instance.CityPopulation:SetToolTipString(popTooltip);
-        local turnsUntilBorderGrowth = pCityCulture:GetTurnsUntilExpansion();
-        local housing = pCityGrowth:GetHousing();
-        local CTLS = turnsUntilGrowth.."  ["..currentPopulation.."/"..housing..
-          "]  "..turnsUntilBorderGrowth;
-        self.m_Instance.CityPopTurnsLeft:SetText(CTLS);
+        if (self.m_Player == Players[localPlayerID]) then     --Only show growth data if the player is you
+          self.m_Instance.CityPopulation:SetToolTipString(popTooltip);
+          local turnsUntilBorderGrowth = pCityCulture:GetTurnsUntilExpansion();
+          local housing = pCityGrowth:GetHousing();
+          local CTLS = turnsUntilGrowth.."  ["..currentPopulation.."/"..housing.."]  ";
+          self.m_Instance.CityCultureTurnsLeft:SetText(turnsUntilBorderGrowth);
+          self.m_Instance.CityPopTurnsLeft:SetText(CTLS);
+        end
+      else
+        self.m_Instance.CityPopTurnsLeft:SetHide(true);
+        self.m_Instance.CityCultureTurnsLeft:SetHide(true);
       end
 
       local food             :number = pCityGrowth:GetFood();
