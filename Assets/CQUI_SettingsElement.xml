@@ -77,16 +77,16 @@
           <Stack ID="SmartbannerCheckboxes" Anchor="R,T" StackGrowth="Down">
             <Line Start="0,0" End="300,0" Width="2" Color="84,77,66,255" />
             <Stack Anchor="R,T" StackGrowth="Left" Offset="0,5">
-              <GridButton ID="SmartbannerUnlockedCitizenCheckbox" Anchor="L,C" Offset="0,0" Size="300,24" Style="CheckBoxControl" String="LOC_CQUI_CITYVIEW_SMARTBANNER_UNLOCKEDCITIZEN" />
+              <GridButton ID="SmartbannerUnlockedCitizenCheckbox" Anchor="L,C" Offset="0,0" Size="300,24" Style="CheckBoxControl" String="LOC_HUD_CITY_UNASSIGNED_CITIZENS" />
             </Stack>
             <Stack Anchor="R,T" StackGrowth="Left" Offset="0,5">
-              <GridButton ID="SmartbannerDistrictsCheckbox" Anchor="L,C" Offset="0,0" Size="300,24" Style="CheckBoxControl" String="LOC_CQUI_CITYVIEW_SMARTBANNER_DISTRICTS" />
+              <GridButton ID="SmartbannerDistrictsCheckbox" Anchor="L,C" Offset="0,0" Size="300,24" Style="CheckBoxControl" String="LOC_PEDIA_DISTRICTS_TITLE" />
             </Stack>
             <Stack Anchor="R,T" StackGrowth="Left" Offset="0,5">
-              <GridButton ID="SmartbannerPopulationCheckbox" Anchor="L,C" Offset="0,0" Size="300,24" Style="CheckBoxControl" String="LOC_CQUI_CITYVIEW_SMARTBANNER_POPULATION" />
+              <GridButton ID="SmartbannerPopulationCheckbox" Anchor="L,C" Offset="0,0" Size="300,24" Style="CheckBoxControl" String="LOC_CIVINFO_POPULATION" />
             </Stack>
             <Stack Anchor="R,T" StackGrowth="Left" Offset="0,5">
-              <GridButton ID="SmartbannerCulturalCheckbox" Anchor="L,C" Offset="0,0" Size="300,24" Style="CheckBoxControl" String="LOC_CQUI_CITYVIEW_SMARTBANNER_CULTURAL" />
+              <GridButton ID="SmartbannerCulturalCheckbox" Anchor="L,C" Offset="0,0" Size="300,24" Style="CheckBoxControl" String="LOC_PEDIA_CITYSTATES_PAGEGROUP_CULTURAL_NAME" />
             </Stack>
           </Stack>
         </Stack>
