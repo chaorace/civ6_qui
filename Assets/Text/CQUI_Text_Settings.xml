@@ -603,7 +603,7 @@
     
     <!-- GERMAN -->
 	
-	  <Row Tag="LOC_CQUI_BINDINGS" Language="de_DE">
+	<Row Tag="LOC_CQUI_BINDINGS" Language="de_DE">
       <Text>Tastaturbelegung</Text>
     </Row>
     <Row Tag="LOC_CQUI_BINDINGS_DROPDOWN" Language="de_DE">
