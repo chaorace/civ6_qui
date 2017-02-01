@@ -146,7 +146,7 @@
     <Replace Tag="LOC_CQUI_FINISH_MESSAGE_E" Language="de_DE">
       <Text>" ist abgeschlossen.</Text>
     </Replace>
-    <!-- CITY PANEL AMENITY -->
+    <!-- CITY PANEL AMENITY -->	
     <Replace Tag="LOC_CQUI_CITY_ENTERTAINMENT" Language="de_DE">
       <Text>Entertainment</Text>
 	<!-- POPUPS -->
