@@ -655,7 +655,7 @@
       <Text>BezirksIcons symbolisieren die gebauten Bezirke</Text>
     </Row>
   	<Row Tag="LOC_CQUI_CITYVIEW_SMARTBANNER_POPULATION_TOOLTIP" Language="de_DE">
-      <Text>Zeigt die Rundenzahl bis zum Bevölkerungswachstum an[NEWLINE]und die [current population/max housing].</Text>
+      <Text>Zeigt die Rundenzahl bis zum Bevölkerungswachstum[NEWLINE]und die Wohnraumbelegung an.</Text>
     </Row>
   	<Row Tag="LOC_CQUI_CITYVIEW_SMARTBANNER_CULTURAL_TOOLTIP" Language="de_DE">
       <Text>Zeigt die Rundenzahl bis zur Grenzausdehnung an.</Text>
