@@ -631,34 +631,37 @@
       <Text>Produktionsliste einschalten</Text>
     </Row>
     <Row Tag="LOC_CQUI_CITYVIEW_SHOWCULTUREGROWTH" Language="de_DE">
-      <Text>Kulturelles Wachstumsoverlay anzeigen</Text>
+      <Text>Zeige Overlay Grenzausdehnung</Text>
     </Row>
     <Row Tag="LOC_CQUI_CITYVIEW_SHOWCULTUREGROWTH_TOOLTIP" Language="de_DE">
-      <Text>Kann umgeschaltet werden per Anklicken des Wachstumssymbols in der Stadtansicht</Text>
+      <Text>Kann außerdem aktiviert werden per Anklicken des Grenzausdehnungssymbols in der Stadtansicht</Text>
     </Row>
     <Row Tag="LOC_CQUI_CITYVIEW_SHOWYIELDSONCITYHOVER" Language="de_DE">
-      <Text>Aktive BürgerIcons beim Hovern anzeigen</Text>
+      <Text>Zeige aktive BürgerIcons beim Hovern</Text>
     </Row>
     <Row Tag="LOC_CQUI_CITYVIEW_SHOWYIELDSONCITYHOVER_TOOLTIP" Language="de_DE">
-      <Text>Zeige BürgerIcons, Erträge pro Feld und Stadtgrenzenwachstum beim Hovern</Text>
+      <Text>Zeige BürgerIcons, Erträge pro Feld und Grenzausdehnung beim Hovern.</Text>
     </Row>
-    <Row Tag="LOC_CQUI_CITYVIEW_SMARTBANNER_HEADER" Language="de_DE">
+	<Row Tag="LOC_CQUI_CITYVIEW_SMARTBANNER_HEADER" Language="de_DE">
       <Text>Smartbanner</Text>
-  	</Row>
+	</Row>  
     <Row Tag="LOC_CQUI_CITYVIEW_SMARTBANNER" Language="de_DE">
       <Text>Aktiviere Smartbanner</Text>
     </Row>
     <Row Tag="LOC_CQUI_CITYVIEW_SMARTBANNER_TOOLTIP" Language="de_DE">
-      <Text>Ein [ICON_EXCLAMATION] wird angezeigt, wenn immer ein frei verfügbarer Stadtbewohner automatisch von der StadtverwaltungsAI zugewiesen wurde.</Text>
+      <Text>Zeige neue Symbole und Informationen im Stadtbanner an.</Text>
     </Row>
-    <Row Tag="LOC_CQUI_CITYVIEW_SMARTBANNER_DISTRICTS_TOOLTIP" Language="de_DE">
-      <Text>BezirksIcons symbolisieren die gebauten Bezirke</Text>
+	<Row Tag="LOC_CQUI_CITYVIEW_SMARTBANNER_UNLOCKEDCITIZEN_TOOLTIP" Language="de_DE">
+      <Text>Zeige ein [ICON_EXCLAMATION] , immer wenn ein frei verfügbarer Bürger automatisch von der StadtverwaltungsAI zugewiesen wurde.</Text>
     </Row>
-  	<Row Tag="LOC_CQUI_CITYVIEW_SMARTBANNER_POPULATION_TOOLTIP" Language="de_DE">
-      <Text>Zeigt die Rundenzahl bis zum Bevölkerungswachstum[NEWLINE]und die Wohnraumbelegung an.</Text>
+	<Row Tag="LOC_CQUI_CITYVIEW_SMARTBANNER_DISTRICTS_TOOLTIP" Language="de_DE">
+      <Text>Zeige die gebauten Bezirke als Symbole im Banner an.</Text>
     </Row>
-  	<Row Tag="LOC_CQUI_CITYVIEW_SMARTBANNER_CULTURAL_TOOLTIP" Language="de_DE">
-      <Text>Zeigt die Rundenzahl bis zur Grenzausdehnung an.</Text>
+	<Row Tag="LOC_CQUI_CITYVIEW_SMARTBANNER_POPULATION_TOOLTIP" Language="de_DE">
+      <Text>Zeige die Rundenzahl bis zum Bevölkerungswachstum[NEWLINE]und die Wohnraumbelegung an.</Text>
+    </Row>
+	<Row Tag="LOC_CQUI_CITYVIEW_SMARTBANNER_CULTURAL_TOOLTIP" Language="de_DE">
+      <Text>Zeige die Rundenzahl bis zur Grenzausdehnung an.</Text>
     </Row>
     <Row Tag="LOC_CQUI_GENERAL" Language="de_DE">
       <Text>Allgemein</Text>
