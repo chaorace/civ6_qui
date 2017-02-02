@@ -171,7 +171,6 @@
       <Text>Superposition de ville 6</Text>
     </Replace>
     <Replace Tag="LOC_HUD_CITYOVERLAP6_LENS_TOOLTIP" Language="fr_FR">
-      <Text>Shows how many cities (in range of 6 hexes) a hex overlaps with</Text>
       <Text>Montrer le nombre de villes (dans un rayon de 6 cases) une case superpose</Text>
     </Replace>
 
