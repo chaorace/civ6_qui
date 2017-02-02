@@ -600,7 +600,7 @@
     <Row Tag="LOC_CQUI_UNITS_SHOWUNITPATHS" Language="pl_PL">
       <Text>Wyświetlaj drogę jednostki po najechaniu myszką bądź wybraniu</Text>
     </Row>
-    
+
     <!-- GERMAN -->
 
     <Row Tag="LOC_CQUI_BINDINGS" Language="de_DE">
@@ -642,25 +642,25 @@
     <Row Tag="LOC_CQUI_CITYVIEW_SHOWYIELDSONCITYHOVER_TOOLTIP" Language="de_DE">
       <Text>Zeige BürgerIcons, Erträge pro Feld und Grenzausdehnung beim Hovern.</Text>
     </Row>
-	<Row Tag="LOC_CQUI_CITYVIEW_SMARTBANNER_HEADER" Language="de_DE">
+    <Row Tag="LOC_CQUI_CITYVIEW_SMARTBANNER_HEADER" Language="de_DE">
       <Text>Smartbanner</Text>
-	</Row>  
+    </Row>
     <Row Tag="LOC_CQUI_CITYVIEW_SMARTBANNER" Language="de_DE">
       <Text>Aktiviere Smartbanner</Text>
     </Row>
     <Row Tag="LOC_CQUI_CITYVIEW_SMARTBANNER_TOOLTIP" Language="de_DE">
       <Text>Zeige neue Symbole und Informationen im Stadtbanner an.</Text>
     </Row>
-	<Row Tag="LOC_CQUI_CITYVIEW_SMARTBANNER_UNLOCKEDCITIZEN_TOOLTIP" Language="de_DE">
+    <Row Tag="LOC_CQUI_CITYVIEW_SMARTBANNER_UNLOCKEDCITIZEN_TOOLTIP" Language="de_DE">
       <Text>Zeige ein [ICON_EXCLAMATION] , immer wenn ein frei verfügbarer Bürger automatisch von der StadtverwaltungsAI zugewiesen wurde.</Text>
     </Row>
-	<Row Tag="LOC_CQUI_CITYVIEW_SMARTBANNER_DISTRICTS_TOOLTIP" Language="de_DE">
+    <Row Tag="LOC_CQUI_CITYVIEW_SMARTBANNER_DISTRICTS_TOOLTIP" Language="de_DE">
       <Text>Zeige die gebauten Bezirke als Symbole im Banner an.</Text>
     </Row>
-	<Row Tag="LOC_CQUI_CITYVIEW_SMARTBANNER_POPULATION_TOOLTIP" Language="de_DE">
+    <Row Tag="LOC_CQUI_CITYVIEW_SMARTBANNER_POPULATION_TOOLTIP" Language="de_DE">
       <Text>Zeige die Rundenzahl bis zum Bevölkerungswachstum[NEWLINE]und die Wohnraumbelegung an.</Text>
     </Row>
-	<Row Tag="LOC_CQUI_CITYVIEW_SMARTBANNER_CULTURAL_TOOLTIP" Language="de_DE">
+    <Row Tag="LOC_CQUI_CITYVIEW_SMARTBANNER_CULTURAL_TOOLTIP" Language="de_DE">
       <Text>Zeige die Rundenzahl bis zur Grenzausdehnung an.</Text>
     </Row>
     <Row Tag="LOC_CQUI_GENERAL" Language="de_DE">

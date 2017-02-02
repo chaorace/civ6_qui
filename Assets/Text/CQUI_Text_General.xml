@@ -29,7 +29,7 @@
     </Row>
 
 
-	<!-- SIMPLIFY-CHINESE -->
+  <!-- SIMPLIFY-CHINESE -->
 
     <!-- MESSAGES -->
     <Replace Tag="LOC_CQUI_NAME" Language="zh_Hans_CN">
@@ -128,8 +128,8 @@
     <Replace Tag="LOC_CQUI_CITY_ENTERTAINMENT" Language="pl_PL">
       <Text>Rozrywka</Text>
     </Replace>
-	  
-	<!-- GERMAN -->
+
+  <!-- GERMAN -->
     <!-- MESSAGES -->
     <Replace Tag="LOC_CQUI_NAME" Language="de_DE">
       <Text>CQUI</Text>
@@ -146,12 +146,13 @@
     <Replace Tag="LOC_CQUI_FINISH_MESSAGE_E" Language="de_DE">
       <Text>" ist abgeschlossen.</Text>
     </Replace>
-    <!-- CITY PANEL AMENITY -->	
+    <!-- CITY PANEL AMENITY -->
     <Replace Tag="LOC_CQUI_CITY_ENTERTAINMENT" Language="de_DE">
       <Text>Entertainment</Text>
-	<!-- POPUPS -->
+    </Replace>
+  <!-- POPUPS -->
     <Replace Tag="LOC_CQUI_GREAT_PERSON_PROGRESS" Language="de_DE">
-      <Text>Fortschritt:</Text>  
+      <Text>Fortschritt:</Text>
     </Replace>
   </LocalizedText>
 </GameData>
