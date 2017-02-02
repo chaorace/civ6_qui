@@ -1010,7 +1010,7 @@ function CityBanner.UpdateStats( self : CityBanner)
           self.m_Instance.CityPopulation:SetToolTipString(popTooltip);
           local housingLeft = pCityGrowth:GetHousing() - currentPopulation;
           local housingLeftText = housingLeft;
-          local housingLeftColor = "Error"
+          local housingLeftColor = "Error";
           if housingLeft > 1 then
             housingLeftColor = "StatGoodCS";
             housingLeftText = "+"..housingLeft;
