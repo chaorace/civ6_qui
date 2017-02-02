@@ -128,8 +128,12 @@
     <Replace Tag="LOC_CQUI_CITY_ENTERTAINMENT" Language="pl_PL">
       <Text>Rozrywka</Text>
     </Replace>
+    <!-- POPUPS -->
+    <Row Tag="LOC_CQUI_GREAT_PERSON_PROGRESS" Language="pl_PL">
+      <Text>Postęp:</Text>
+    </Row>
 
-  <!-- GERMAN -->
+    <!-- GERMAN -->
     <!-- MESSAGES -->
     <Replace Tag="LOC_CQUI_NAME" Language="de_DE">
       <Text>CQUI</Text>
@@ -150,7 +154,7 @@
     <Replace Tag="LOC_CQUI_CITY_ENTERTAINMENT" Language="de_DE">
       <Text>Entertainment</Text>
     </Replace>
-  <!-- POPUPS -->
+    <!-- POPUPS -->
     <Replace Tag="LOC_CQUI_GREAT_PERSON_PROGRESS" Language="de_DE">
       <Text>Fortschritt:</Text>
     </Replace>
