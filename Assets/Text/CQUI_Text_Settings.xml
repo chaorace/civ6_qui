@@ -738,8 +738,11 @@
     <Row Tag="LOC_CQUI_POPUPS" Language="de_DE">
       <Text>Popups</Text>
     </Row>
+    <Row Tag="LOC_CQUI_POPUPS_ALWAYSOPENTECHTREES" Language="de_DE">
+      <Text>Zeige immer ganze Bäume statt Popups</Text>
+    </Row>
     <Row Tag="LOC_CQUI_POPUPS_TECHVISUAL" Language="de_DE">
-      <Text>Tech/Ausrichtung Popups Anzeige</Text>
+      <Text>Tech/Ausrichtung Popup Anzeige</Text>
     </Row>
     <Row Tag="LOC_CQUI_POPUPS_TECHVISUAL_TOOLTIP" Language="de_DE">
       <Text>Zeige das Popup an, das erscheint, wenn eine neue Tech oder Ausrichtung abgeschlossen wurde</Text>
