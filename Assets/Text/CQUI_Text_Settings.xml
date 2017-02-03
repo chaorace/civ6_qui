@@ -696,6 +696,9 @@
     <Row Tag="LOC_CQUI_GENERAL_HIDDEN" Language="de_DE">
       <Text>Versteckt</Text>
     </Row>
+    <Row Tag="LOC_CQUI_GENERAL_MINIMAPSIZE" Language="de_DE">
+      <Text>Minimapgröße</Text>
+    </Row>
     <Row Tag="LOC_CQUI_GENERAL_RESOURCEDIMMINGSTYLE" Language="de_DE">
       <Text>Verbesserte Ressourcensymbole</Text>
     </Row>
