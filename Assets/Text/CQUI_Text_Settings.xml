@@ -652,7 +652,7 @@
       <Text>Stadtansicht</Text>
     </Row>
     <Row Tag="LOC_CQUI_CITYVIEW_ITEMHEIGHT" Language="de_DE">
-      <Text>Produktionsrang</Text>
+      <Text>Zeilenhöhe i.d. Produktwahlliste</Text>
     </Row>
     <Row Tag="LOC_CQUI_CITYVIEW_PRODUCTIONQUEUE" Language="de_DE">
       <Text>Produktionsliste einschalten</Text>
