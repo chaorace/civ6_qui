@@ -30,6 +30,7 @@
         </Row>
     </BaseGameText>
     <LocalizedText>
+        
         <!-- SIMPLIFY-CHINESE -->
 
         <!-- HUD Common Text -->
@@ -63,21 +64,122 @@
         <!-- ITALIAN -->
 
         <!-- HUD Common Text -->
+        <Replace Tag="LOC_HUD_REPORTS_TAB_CURRENT_DEALS" Language="it_IT">
+            <Text>Scambi correnti</Text>
+        </Replace>
+        <Replace Tag="LOC_HUD_REPORTS_TAB_HIDE_CITY_BUILDINGS" Language="it_IT">
+            <Text>Nascondi edifici cittadini</Text>
+        </Replace>
         <!-- Current Deals -->
+        <Replace Tag="LOC_CURRENT_DEALS_OUTGOING" Language="it_IT">
+            <Text>In uscita</Text>
+        </Replace>
+        <Replace Tag="LOC_CURRENT_DEALS_INCOMING" Language="it_IT">
+            <Text>In entrata</Text>
+        </Replace>
         <!-- Units Overview -->
+        <Replace Tag="LOC_UNITS_MILITARY_LAND" Language="it_IT">
+            <Text>Militari (terrestri)</Text>
+        </Replace>
+        <Replace Tag="LOC_UNITS_MILITARY_AIR" Language="it_IT">
+            <Text>Militari (aeree)</Text>
+        </Replace>
+        <Replace Tag="LOC_UNITS_MILITARY_SEA" Language="it_IT">
+            <Text>Militari (navali)</Text>
+        </Replace>
+        <Replace Tag="LOC_UNITS_VIEW_ON_THE_MAP" Language="it_IT">
+            <Text>Trova l'unità sulla mappa.</Text>
+        </Replace>
 
         <!-- RUSSIAN -->
 
         <!-- HUD Common Text -->
+        <Row Tag="LOC_HUD_REPORTS_TAB_CURRENT_DEALS" Language="ru_RU">
+            <Text>Текущие Сделки</Text>
+        </Row>
+        <Row Tag="LOC_HUD_REPORTS_TAB_HIDE_CITY_BUILDINGS" Language="ru_RU">
+            <Text>Скрыть городские постройки</Text>
+        </Row>
         <!-- Current Deals -->
+        <Row Tag="LOC_CURRENT_DEALS_OUTGOING" Language="ru_RU">
+            <Text>Исходящие</Text>
+        </Row>
+        <Row Tag="LOC_CURRENT_DEALS_INCOMING" Language="ru_RU">
+            <Text>Входящие</Text>
+        </Row>
         <!-- Units Overview -->
+        <Row Tag="LOC_UNITS_MILITARY_LAND" Language="ru_RU">
+            <Text>Военный (Наземный)</Text>
+        </Row>
+        <Row Tag="LOC_UNITS_MILITARY_AIR" Language="ru_RU">
+            <Text>Военный (Воздушный)</Text>
+        </Row>
+        <Row Tag="LOC_UNITS_MILITARY_SEA" Language="ru_RU">
+            <Text>Военный (Морской)</Text>
+        </Row>
+        <Row Tag="LOC_UNITS_VIEW_ON_THE_MAP" Language="ru_RU">
+            <Text>Показать юнит на карте.</Text>
+        </Row>
 
         <!-- POLISH -->
 
         <!-- HUD Common Text -->
+        <Replace Tag="LOC_HUD_REPORTS_TAB_CURRENT_DEALS" Language="pl_PL">
+            <Text>Aktualne umowy handlowe</Text>
+        </Replace>
+        <Replace Tag="LOC_HUD_REPORTS_TAB_HIDE_CITY_BUILDINGS" Language="pl_PL">
+            <Text>Ukryj budynki miejskie</Text>
+        </Replace>
         <!-- Current Deals -->
+        <Replace Tag="LOC_CURRENT_DEALS_OUTGOING" Language="pl_PL">
+            <Text>Wychodzące</Text>
+        </Replace>
+        <Replace Tag="LOC_CURRENT_DEALS_INCOMING" Language="pl_PL">
+            <Text>Przychodzące</Text>
+        </Replace>
         <!-- Units Overview -->
+        <Replace Tag="LOC_UNITS_MILITARY_LAND" Language="pl_PL">
+            <Text>Jednoski militarne (Lądowe)</Text>
+        </Replace>
+        <Replace Tag="LOC_UNITS_MILITARY_AIR" Language="pl_PL">
+            <Text>Jednoski militarne (Powietrzne)</Text>
+        </Replace>
+        <Replace Tag="LOC_UNITS_MILITARY_SEA" Language="pl_PL">
+            <Text>Jednoski militarne (Morskie)</Text>
+        </Replace>
+        <Replace Tag="LOC_UNITS_VIEW_ON_THE_MAP" Language="pl_PL">
+            <Text>Znajdź tę jednostkę na mapie.</Text>
+        </Replace>
 
+        
+        <!-- GERMAN -->
 
+        <!-- HUD Common Text -->
+        <Replace Tag="LOC_HUD_REPORTS_TAB_CURRENT_DEALS" Language="de_DE">
+            <Text>Handelsübersicht</Text>
+        </Replace>
+        <Replace Tag="LOC_HUD_REPORTS_TAB_HIDE_CITY_BUILDINGS" Language="de_DE">
+            <Text>Verstecke Stadtgebäude</Text>
+        </Replace>
+        <!-- Current Deals -->
+        <Replace Tag="LOC_CURRENT_DEALS_OUTGOING" Language="de_DE">
+            <Text>Ausgaben</Text>
+        </Replace>
+        <Replace Tag="LOC_CURRENT_DEALS_INCOMING" Language="de_DE">
+            <Text>Einnahmen</Text>
+        </Replace>
+        <!-- Units Overview -->
+        <Replace Tag="LOC_UNITS_MILITARY_LAND" Language="de_DE">
+            <Text>Miliär (Heer)</Text>
+        </Replace>
+        <Replace Tag="LOC_UNITS_MILITARY_AIR" Language="de_DE">
+            <Text>Militär (Luftwaffe)</Text>
+        </Replace>
+        <Replace Tag="LOC_UNITS_MILITARY_SEA" Language="de_DE">
+            <Text>Militär (Marine)</Text>
+        </Replace>
+        <Replace Tag="LOC_UNITS_VIEW_ON_THE_MAP" Language="de_DE">
+            <Text>Zeige Einheit auf der Karte.</Text>
+        </Replace>
     </LocalizedText>
 </GameData>
