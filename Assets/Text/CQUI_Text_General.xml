@@ -41,7 +41,7 @@
       <Text>La Technologie actuelle, </Text>
     </Replace>
     <Replace Tag="LOC_CQUI_HALF_MESSAGE_E" Language="fr_FR">
-      <Text>, n'est plus qu'à un tour de l'Inspiration maximal potentiel.</Text>
+      <Text>, n'est plus qu'à un tour du maximum potentiel d'Inspiration.</Text>
     </Replace>
     <Replace Tag="LOC_CQUI_FINISH_MESSAGE_E" Language="fr_FR">
       <Text>, est terminée.</Text>
