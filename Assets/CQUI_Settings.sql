@@ -15,12 +15,13 @@
     │                                    Checkbox settings                                       │
     ├────────────────────────────────────────────────────────────────────────────────────────────┤
     │These settings control the default state of the CQUI configuration checkboxes.              │
-    │Valid values are 0 (disabled) or 1 (unabled). Don't change the names or the first line!     │
+    │Valid values are 0 (disabled) or 1 (enabled). Don't change the names or the first line!     │
     └────────────────────────────────────────────────────────────────────────────────────────────┘
 */
 
 INSERT INTO CQUI_Settings -- Don't touch this line!
-  VALUES  ("CQUI_AutoapplyArchaeologistLens", 1), -- Automatically activates the archaeologist lens when selecting a archaeologist
+  VALUES  ("CQUI_AlwaysOpenTechTrees", 0), -- Always opens the full tech trees instead of the civic/research picker panels
+      ("CQUI_AutoapplyArchaeologistLens", 1), -- Automatically activates the archaeologist lens when selecting a archaeologist
       ("CQUI_AutoapplyBuilderLens", 1), -- Automatically activates the builder lens when selecting a builder
       ("CQUI_AutoapplyScoutLens", 1), -- Automatically activates the scout lens when selecting a scout
       ("CQUI_AutoExpandUnitActions", 1), -- Automatically reveals the secondary unit actions normally hidden inside an expando
@@ -30,6 +31,10 @@ INSERT INTO CQUI_Settings -- Don't touch this line!
       ("CQUI_ShowUnitPaths", 1), -- Shows unit paths on hover and selection
       ("CQUI_ShowYieldsOnCityHover", 1), -- Shows city management info like citizens, tile yields, and tile growth on hover
       ("CQUI_Smartbanner", 1), -- Additional informations such as districts will show in the city banner
+      ("CQUI_Smartbanner_UnlockedCitizen", 1), -- Shows if city have Unmanaged citizens in the banner
+      ("CQUI_Smartbanner_Districts", 1), -- Shows city districts in the banner
+      ("CQUI_Smartbanner_Population", 1), -- Shows turns to city population growth in the banner
+      ("CQUI_Smartbanner_Cultural", 1), -- Shows turns to city cultural growth in the banner
       ("CQUI_TechPopupVisual", 0), -- Popups will be displayed when you discover a new tech or civic (this is the normal behavior for the unmoded game)
       ("CQUI_TechPopupAudio", 1), -- Play the voiceovers when you discover a new tech or civic (this is the normal behavior for the unmoded game)
       ("CQUI_ToggleYieldsOnLoad", 1); -- Toggles yields immediately on load
@@ -59,7 +64,8 @@ INSERT INTO CQUI_Settings -- Don't touch this line!
 */
 
 INSERT INTO CQUI_Settings -- Don't touch this line!
-  VALUES  ("CQUI_ProductionItemHeight", 32); -- Height used for individual items in the production queue. Recommended values fall between 24 and 128, though any positive could work
+  VALUES  ("CQUI_MinimapSize", 512), -- Factor used for setting minimap size (ex: 512 = 512x256). Recommended values fall between 224 and 768, though any positive could work
+  ("CQUI_ProductionItemHeight", 32); -- Height used for individual items in the production queue. Recommended values fall between 24 and 128, though any positive could work
 
 /*
     ┌────────────────────────────────────────────────────────────────────────────────────────────┐
