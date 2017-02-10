@@ -860,6 +860,7 @@ function PopulateList(data, listIM)
           QueueUnitCorps(data.City, item, not CQUI_ProductionQueue);
         end);
 
+        unitListing.TrainCorpsButton:RegisterCallback( Mouse.eMClick, function()
           QueueUnitCorps(data.City, item, true);
           RecenterCameraToSelectedCity();
         end)
