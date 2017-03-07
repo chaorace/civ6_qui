@@ -953,6 +953,7 @@ function ViewYieldsPage()
 	local instance:table = nil;
 	instance = NewCollapsibleGroupInstance();
 	instance.RowHeaderButton:SetText( Locale.Lookup("LOC_HUD_REPORTS_ROW_CITY_INCOME") );
+	instance.RowHeaderLabel:SetHide( true )
 
 	local pHeaderInstance:table = {}
 	ContextPtr:BuildInstanceForControl( "CityIncomeHeaderInstance", pHeaderInstance, instance.ContentStack ) ;
@@ -1170,22 +1171,28 @@ function ViewYieldsPage()
 		-- Tooltip shows districts have a -1 gpt cost, not sure if this goes up or if its different for other districts or
 		-- later eras
 
+		local iNumDistricts : number = 0
+
 		-- Can't find/figure out how to find district type, so i'll do it myself
 		-- this goes through the districts and adds the maintenance if not pillaged/being built
 		for _,kBuilding in ipairs(kCityData.BuildingsAndDistricts) do
 			if kBuilding.isBuilt then
 				for i = 1, #GameInfo.Districts do
-					if kBuilding.Name == Locale.Lookup( GameInfo.Districts[i].Name ) and GameInfo.Districts[i].Maintenance > 0 then
-						local pBuildingInstance:table = {};
-						ContextPtr:BuildInstanceForControl( "BuildingExpensesEntryInstance", pBuildingInstance, instance.ContentStack );
-						pBuildingInstance.CityName:SetText( Locale.Lookup(cityName) );
-						pBuildingInstance.BuildingName:SetText( Locale.Lookup( GameInfo.Districts[i].Name ) );
-						pBuildingInstance.Gold:SetText( "-" .. tostring( GameInfo.Districts[i].Maintenance ) );
-						iTotalBuildingMaintenance = iTotalBuildingMaintenance - GameInfo.Districts[i].Maintenance;
-						break;
+					if kBuilding.Name == Locale.Lookup( GameInfo.Districts[i].Name ) then
+						iNumDistricts = iNumDistricts + GameInfo.Districts[i].Maintenance
+						break
 					end
 				end
 			end
+		end
+
+		if ( iNumDistricts > 0 ) then
+			local pBuildingInstance:table = {}
+			ContextPtr:BuildInstanceForControl( "BuildingExpensesEntryInstance", pBuildingInstance, instance.ContentStack )
+			pBuildingInstance.CityName:SetText( Locale.Lookup(cityName) )
+			pBuildingInstance.BuildingName:SetText( "Districts" )
+			pBuildingInstance.Gold:SetText( "-" .. tostring( iNumDistricts ) )
+			iTotalBuildingMaintenance = iTotalBuildingMaintenance - iNumDistricts
 		end
 
 		for i,kBuilding in ipairs(kCityData.Buildings) do
@@ -1204,37 +1211,6 @@ function ViewYieldsPage()
 	pBuildingFooterInstance.Gold:SetText("[ICON_Gold]"..tostring(iTotalBuildingMaintenance) );
 
 	SetGroupCollapsePadding(instance, pBuildingFooterInstance.Top:GetSizeY() );
-	RealizeGroup( instance );
-
-	-- ========== Diplomatic Deals Expenses ==========
-
-	instance = NewCollapsibleGroupInstance();
-	instance.RowHeaderButton:SetText( Locale.Lookup("LOC_HUD_REPORTS_ROW_DIPLOMATIC_DEALS") );
-
-	local pHeader:table = {};
-	ContextPtr:BuildInstanceForControl( "DealHeaderInstance", pHeader, instance.ContentStack ) ;
-
-	local iTotalDealGold :number = 0;
-
-	for i,kDeal in ipairs(m_kDealData) do
-		local pDealInstance:table = {};
-		ContextPtr:BuildInstanceForControl( "DealEntryInstance", pDealInstance, instance.ContentStack ) ;
-
-		pDealInstance.Civilization:SetText( kDeal.Name );
-		pDealInstance.Duration:SetText( kDeal.Duration );
-		if kDeal.IsOutgoing then
-			pDealInstance.Gold:SetText( "-"..tostring(kDeal.Amount) );
-			iTotalDealGold = iTotalDealGold - kDeal.Amount;
-		else
-			pDealInstance.Gold:SetText( "+"..tostring(kDeal.Amount) );
-			iTotalDealGold = iTotalDealGold + kDeal.Amount;
-		end
-	end
-	local pDealFooterInstance:table = {};
-	ContextPtr:BuildInstanceForControl( "GoldFooterInstance", pDealFooterInstance, instance.ContentStack ) ;
-	pDealFooterInstance.Gold:SetText("[ICON_Gold]"..tostring(iTotalDealGold) );
-
-	SetGroupCollapsePadding(instance, pDealFooterInstance.Top:GetSizeY() );
 	RealizeGroup( instance );
 
 	-- ========== !! Unit Expenses ==========
@@ -1363,6 +1339,7 @@ function ViewResourcesPage()
 
 		local kResource :table = GameInfo.Resources[eResourceType];
 		instance.RowHeaderButton:SetText(  kSingleResourceData.Icon..Locale.Lookup( kResource.Name ) );
+		instance.RowHeaderLabel:SetHide( true )
 
 		local pHeaderInstance:table = {};
 		ContextPtr:BuildInstanceForControl( "ResourcesHeaderInstance", pHeaderInstance, instance.ContentStack ) ;
@@ -1731,14 +1708,12 @@ function group_military( unit, unitInstance, group, parent, type )
 	end
 
 	unitInstance.UnitHealth:SetText( tostring( unit:GetMaxDamage() - unit:GetDamage() ) .. "/" .. tostring( unit:GetMaxDamage() ) )
-
-	local bCanStart, tResults = UnitManager.CanStartOperation( unit, UnitOperationTypes.UPGRADE, nil, true );
+			
+	local bCanStart, tResults = UnitManager.CanStartCommand( unit, UnitCommandTypes.UPGRADE, false, true);
 
 	if ( bCanStart ) then
-		local bCanStart, tResults = UnitManager.CanStartOperation( unit, UnitOperationTypes.UPGRADE, nil, false, true )
-
 		unitInstance.Upgrade:SetHide( false )
-		unitInstance.Upgrade:RegisterCallback( Mouse.eLClick, function() bUnits.group = group; bUnits.parent = parent; bUnits.type = type; UnitManager.RequestOperation( unit, UnitOperationTypes.UPGRADE ); end )
+		unitInstance.Upgrade:RegisterCallback( Mouse.eLClick, function() bUnits.group = group; bUnits.parent = parent; bUnits.type = type; UnitManager.RequestCommand( unit, UnitCommandTypes.UPGRADE ); end )
 		local upgradeUnitName = GameInfo.Units[tResults[UnitOperationResults.UNIT_TYPE]].Name;
 		local toolTipString	= Locale.Lookup( "LOC_UNITOPERATION_UPGRADE_DESCRIPTION" );
 		toolTipString = toolTipString .. " " .. Locale.Lookup(upgradeUnitName);
@@ -1870,7 +1845,7 @@ function ViewDealsPage()
 		local instance : table = NewCollapsibleGroupInstance()
 
 		instance.RowHeaderButton:SetText( Locale.Lookup("LOC_HUD_REPORTS_TRADE_DEAL_WITH", pDeal.WithCivilization) )
-		instance.RowHeaderLabel:SetText(  Locale.Lookup("LOC_ESPIONAGEPANEL_PANEL_TURNS") .. ending .. "[ICON_Turn]" .. " (" .. pDeal.EndTurn .. ")" )
+		instance.RowHeaderLabel:SetText(  Locale.Lookup("LOC_ESPIONAGEPANEL_PANEL_TURNS") .. ": " .. ending .. "[ICON_Turn]" .. " (" .. pDeal.EndTurn .. ")" )
 		instance.RowHeaderLabel:SetHide( false )
 
 		local dealHeaderInstance : table = {}
@@ -1931,6 +1906,7 @@ function ViewUnitsPage()
 		local instance : table = NewCollapsibleGroupInstance()
 
 		instance.RowHeaderButton:SetText( kUnitGroup.Name )
+		instance.RowHeaderLabel:SetHide( true )
 
 		local pHeaderInstance:table = {}
 		ContextPtr:BuildInstanceForControl( kUnitGroup.Header, pHeaderInstance, instance.ContentStack )
@@ -2098,3 +2074,4 @@ function Initialize()
 	LuaEvents.TopPanel_CloseReportsScreen.Add( OnTopCloseReportsScreen );
 end
 Initialize();
+
