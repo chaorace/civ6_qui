@@ -244,6 +244,7 @@ function Refresh()
 		ToggleAll(true);
 		return;
 	else
+    -- Fix for the Checkbox bug by ARISTOS
 		ToggleAll(m_hideAll);
 	end
 
