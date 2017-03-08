@@ -1165,6 +1165,7 @@ function ViewYieldsPage()
 
 	instance = NewCollapsibleGroupInstance();
 	instance.RowHeaderButton:SetText( Locale.Lookup("LOC_HUD_REPORTS_ROW_BUILDING_EXPENSES") );
+	instance.RowHeaderLabel:SetHide( true )
 
 	local pHeader:table = {};
 	ContextPtr:BuildInstanceForControl( "BuildingExpensesHeaderInstance", pHeader, instance.ContentStack ) ;
@@ -1225,7 +1226,8 @@ function ViewYieldsPage()
 
 	instance = NewCollapsibleGroupInstance();
 	instance.RowHeaderButton:SetText( Locale.Lookup( Locale.Lookup("LOC_HUD_REPORTS_ROW_UNIT_EXPENSES") ) );
-
+	instance.RowHeaderLabel:SetHide( true )
+	
 	local pHeader:table = {};
 	ContextPtr:BuildInstanceForControl( "UnitExpensesHeaderInstance", pHeader, instance.ContentStack ) ;
 
@@ -1270,6 +1272,7 @@ function ViewYieldsPage()
 
 	instance = NewCollapsibleGroupInstance();
 	instance.RowHeaderButton:SetText( Locale.Lookup("LOC_HUD_REPORTS_ROW_DIPLOMATIC_DEALS") );
+	instance.RowHeaderLabel:SetHide( true )
 
 	local pHeader:table = {};
 	ContextPtr:BuildInstanceForControl( "DealHeaderInstance", pHeader, instance.ContentStack ) ;
