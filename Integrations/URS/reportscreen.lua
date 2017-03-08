@@ -84,6 +84,10 @@ local m_kCultureData	:table = nil;
 local m_kCurrentDeals	:table = nil;
 -- !!
 
+-- Remember last tab variable: ARISTOS
+local m_kCurrentTab = 1
+-- !!
+
 -- ===========================================================================
 --	Single exit point for display
 -- ===========================================================================
@@ -113,7 +117,8 @@ function Open()
 	-- m_kCityData, m_kCityTotalData, m_kResourceData, m_kUnitData, m_kDealData = GetData();
 	m_kCityData, m_kCityTotalData, m_kResourceData, m_kUnitData, m_kDealData, m_kCultureData, m_kCurrentDeals = GetData();
 
-	m_tabs.SelectTab( 1 );
+	-- To remember the last opened tab when the report is re-opened: ARISTOS
+	m_tabs.SelectTab( m_kCurrentTab );
 end
 
 -- ===========================================================================
@@ -946,6 +951,9 @@ end
 function ViewYieldsPage()
 
 	ResetTabForNewPageContent();
+	
+	-- Remember this tab when report is next opened: ARISTOS
+	m_kCurrentTab = 1;
 
 	Controls.CityBuildingsCheckbox:SetHide( false )
 	local pPlayer:table = Players[Game.GetLocalPlayer()];
@@ -1325,6 +1333,9 @@ end
 function ViewResourcesPage()
 
 	ResetTabForNewPageContent();
+	
+	-- Remember this tab when report is next opened: ARISTOS
+	m_kCurrentTab = 2;
 
 	local strategicResources:string = "";
 	local luxuryResources	:string = "";
@@ -1464,6 +1475,9 @@ end
 function ViewCityStatusPage()
 
 	ResetTabForNewPageContent()
+	
+	-- Remember this tab when report is next opened: ARISTOS
+	m_kCurrentTab = 3;
 
 	local instance:table = m_simpleIM:GetInstance()
 	instance.Top:DestroyAllChildren()
@@ -1836,6 +1850,9 @@ end
 function ViewDealsPage()
 
 	ResetTabForNewPageContent();
+	
+	-- Remember this tab when report is next opened: ARISTOS
+	m_kCurrentTab = 4;
 
 	for j, pDeal in spairs( m_kCurrentDeals, function( t, a, b ) return t[b].EndTurn > t[a].EndTurn end ) do
 		local ending = pDeal.EndTurn - Game.GetCurrentGameTurn()
@@ -1901,6 +1918,9 @@ end
 function ViewUnitsPage()
 
 	ResetTabForNewPageContent();
+	
+	-- Remember this tab when report is next opened: ARISTOS
+	m_kCurrentTab = 5;
 
 	for iUnitGroup, kUnitGroup in spairs( m_kUnitData["Unit_Report"], function( t, a, b ) return t[b].ID > t[a].ID end ) do
 		local instance : table = NewCollapsibleGroupInstance()
