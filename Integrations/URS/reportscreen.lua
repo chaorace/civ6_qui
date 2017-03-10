@@ -398,6 +398,9 @@ function GetData()
 							elseif pReceivingName == "Gold" then
 								deal.Name = deal.Amount .. Locale.Lookup("LOC_DIPLOMACY_DEAL_GOLD_PER_TURN")
 								deal.Icon = "[ICON_GOLD]"
+								--!! ARISTOS: To add Diplo Deal Amounts to the total tally of Gold!
+								kCityTotalData.Income[YieldTypes.GOLD] = kCityTotalData.Income[YieldTypes.GOLD] + deal.Amount;
+								kCityTotalData.Net[YieldTypes.GOLD] = kCityTotalData.Net[YieldTypes.GOLD] + deal.Amount;
 							else
 								if deal.Amount > 1 then
 									deal.Name = pDealItem:GetValueTypeNameID() .. "(" .. deal.Amount .. ")"
@@ -428,6 +431,9 @@ function GetData()
 							elseif pSendingName == "Gold" then
 								deal.Name = deal.Amount .. Locale.Lookup("LOC_DIPLOMACY_DEAL_GOLD_PER_TURN")
 								deal.Icon = "[ICON_GOLD]"
+								--!! ARISTOS: To add Diplo Deal Amounts to the total tally of Gold!
+								--!! Diplo deal expenses are already calculated in total maintenance!! Gotta love Firaxis... :]
+								-- kCityTotalData.Net[YieldTypes.GOLD] = kCityTotalData.Net[YieldTypes.GOLD] - deal.Amount;
 							else
 								if deal.Amount > 1 then
 									deal.Name = pDealItem:GetValueTypeNameID() .. "(" .. deal.Amount .. ")"
@@ -1267,9 +1273,12 @@ function ViewYieldsPage()
 	RealizeGroup( instance );
 
 	-- Unit Expense END!!
-
-	-- ========== Diplomatic Deals Expenses ==========
-
+	
+	
+	-- ========== Diplomatic Deals Income and Expenses ==========
+	-- ARISTOS: A precise Diplomatic Deals Gold Yields report
+	
+	
 	instance = NewCollapsibleGroupInstance();
 	instance.RowHeaderButton:SetText( Locale.Lookup("LOC_HUD_REPORTS_ROW_DIPLOMATIC_DEALS") );
 	instance.RowHeaderLabel:SetHide( true )
@@ -1278,28 +1287,43 @@ function ViewYieldsPage()
 	ContextPtr:BuildInstanceForControl( "DealHeaderInstance", pHeader, instance.ContentStack ) ;
 
 	local iTotalDealGold :number = 0;
-	for i,kDeal in ipairs(m_kDealData) do
-		if kDeal.Type == DealItemTypes.GOLD then
-			local pDealInstance:table = {};
-			ContextPtr:BuildInstanceForControl( "DealEntryInstance", pDealInstance, instance.ContentStack ) ;
+	for i,kDeal in ipairs(m_kCurrentDeals) do
+		local ending = kDeal.EndTurn - Game.GetCurrentGameTurn()
+		
+		for i, pDealItem in pairs( kDeal.Sending ) do
+			if pDealItem.Icon == "[ICON_GOLD]" then
+				local pDealInstance:table = {};
+				ContextPtr:BuildInstanceForControl( "DealEntryInstance", pDealInstance, instance.ContentStack ) ;
 
-			pDealInstance.Civilization:SetText( kDeal.Name );
-			pDealInstance.Duration:SetText( kDeal.Duration );
-			if kDeal.IsOutgoing then
-				pDealInstance.Gold:SetText( "-"..tostring(kDeal.Amount) );
-				iTotalDealGold = iTotalDealGold - kDeal.Amount;
-			else
-				pDealInstance.Gold:SetText( "+"..tostring(kDeal.Amount) );
-				iTotalDealGold = iTotalDealGold + kDeal.Amount;
+				pDealInstance.Civilization:SetText( kDeal.WithCivilization );
+				pDealInstance.Duration:SetText( tostring(ending) .. "[ICON_Turn]" );
+				pDealInstance.Gold:SetText( "-"..tostring(pDealItem.Amount) );
+				iTotalDealGold = iTotalDealGold - pDealItem.Amount;
 			end
 		end
+		
+		for i, pDealItem in pairs( kDeal.Receiving ) do
+			if pDealItem.Icon == "[ICON_GOLD]" then
+				local pDealInstance:table = {};
+				ContextPtr:BuildInstanceForControl( "DealEntryInstance", pDealInstance, instance.ContentStack ) ;
+
+				pDealInstance.Civilization:SetText( kDeal.WithCivilization );
+				pDealInstance.Duration:SetText( tostring(ending) .. "[ICON_Turn]" );
+				pDealInstance.Gold:SetText( "+"..tostring(pDealItem.Amount) );
+				iTotalDealGold = iTotalDealGold + pDealItem.Amount;
+			end
+		end
+		
 	end
+	
 	local pDealFooterInstance:table = {};
 	ContextPtr:BuildInstanceForControl( "GoldFooterInstance", pDealFooterInstance, instance.ContentStack ) ;
 	pDealFooterInstance.Gold:SetText("[ICON_Gold]"..tostring(iTotalDealGold) );
 
 	SetGroupCollapsePadding(instance, pDealFooterInstance.Top:GetSizeY() );
 	RealizeGroup( instance );
+	
+	-- END ARISTOS Diplomatic Deals
 
 
 	-- ========== TOTALS ==========
