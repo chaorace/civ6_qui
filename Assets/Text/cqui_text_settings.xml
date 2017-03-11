@@ -387,7 +387,7 @@
       <Text>工作中的市民头像</Text>
     </Row>
     <Row Tag="LOC_CQUI_CITYVIEW_SMARTWORKICON_TOOLTIP" Language="zh_Hans_CN">
-      <Text>调节已分配的头像大小/透明度</Text>
+      <Text>使工作中的市民头像有不同的大小/透明度</Text>
     </Row>
     <Row Tag="LOC_CQUI_CITYVIEW_SMARTWORKICONALPHA" Language="zh_Hans_CN">
       <Text>头像透明度</Text>
