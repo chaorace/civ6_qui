@@ -2,7 +2,6 @@
 --	Leader container list on top of the HUD
 -- ===========================================================================
 include("InstanceManager");
-include("TeamSupport");
 
 -- ===========================================================================
 --	CONSTANTS
@@ -18,9 +17,6 @@ local MIN_LEFT_HOOKS		:number	= 260;
 local MINIMUM_BG_SIZE		:number = 100;
 local WORLD_TRACKER_OFFSET	:number	= 40;
 local BAR_PADDING			:number	= 50;
-
-local TEAM_RIBBON_SIZE		:number = 53;
-local TEAM_RIBBON_PREFIX	:string = "ICON_TEAM_RIBBON_";
 
 local VALID_RELATIONSHIPS	:table = {
 	"DIPLO_STATE_ALLIED",
@@ -62,23 +58,6 @@ function OnLeaderClicked(playerID : number )
 	end
 end
 
--- ===========================================================================
-function OnLeaderRightClicked(ms_SelectedPlayerID : number )
-
-	local ms_LocalPlayerID:number = Game.GetLocalPlayer();
-	local pPlayer = Players[ms_LocalPlayerID];
-	local iPlayerDiploState = pPlayer:GetDiplomaticAI():GetDiplomaticStateIndex(ms_SelectedPlayerID);
-	local relationshipHash = GameInfo.DiplomaticStates[iPlayerDiploState].Hash;
-	if (not (relationshipHash == DiplomaticStates.WAR)) then
-		if (not DealManager.HasPendingDeal(ms_LocalPlayerID, ms_SelectedPlayerID)) then
-			DealManager.ClearWorkingDeal(DealDirection.OUTGOING, ms_LocalPlayerID, ms_SelectedPlayerID);
-		end
-		DiplomacyManager.RequestSession(ms_LocalPlayerID, ms_SelectedPlayerID, "MAKE_DEAL");
-	end
-	LuaEvents.QuickDealModeActivate();
-end
-
--- ===========================================================================
 function IsValidRelationship(relationshipType:string)
 	for _:number, tmpType:string in ipairs(VALID_RELATIONSHIPS) do
 		if relationshipType == tmpType then
@@ -101,7 +80,7 @@ function AddLeader(iconName : string, playerID : number, isUniqueLeader: boolean
 	-- Create a new leader instance
 	local instance:table = m_kLeaderIM:GetInstance();
 	m_uiLeadersByID[playerID] = instance;
-
+	
 	-- Display the civ colors/icon for duplicate civs
 	if(isUniqueLeader == false) then
 		local backColor, frontColor  = UI.GetPlayerColors( playerID );
@@ -115,7 +94,6 @@ function AddLeader(iconName : string, playerID : number, isUniqueLeader: boolean
 	instance.Portrait:SetIcon(iconName);
 	-- Register the click handler
 	instance.Button:RegisterCallback( Mouse.eLClick, function() OnLeaderClicked(playerID); end );
-	instance.Button:RegisterCallback( Mouse.eRClick, function() OnLeaderRightClicked(playerID); end );
 
 	local bShowRelationshipIcon:boolean = false;
 	local localPlayerID:number = Game.GetLocalPlayer();
@@ -138,11 +116,6 @@ function AddLeader(iconName : string, playerID : number, isUniqueLeader: boolean
 		end
 	end
 
-  -- CQUI: Set score values for DRS display
-  instance.CQUI_ScoreOverall:SetText("[ICON_Capital]"..Players[playerID]:GetScore());
-  instance.CQUI_ScienceRate:SetText("[ICON_Science]"..Round(Players[playerID]:GetTechs():GetScienceYield(),0));
-  instance.CQUI_MilitaryStrength:SetText("[ICON_Strength]"..Players[playerID]:GetStats():GetMilitaryStrength());
-
 	instance.Relationship:SetHide(not bShowRelationshipIcon);
 
 	-- Set the tooltip
@@ -151,7 +124,7 @@ function AddLeader(iconName : string, playerID : number, isUniqueLeader: boolean
 		if(leaderTypeName ~= nil) then
 			local leaderDesc:string = pPlayerConfig:GetLeaderName();
 			local civDesc:string = pPlayerConfig:GetCivilizationDescription();
-
+			
 			if GameConfiguration.IsAnyMultiplayer() and isHuman then
 				if(playerID ~= localPlayerID and not Players[localPlayerID]:GetDiplomacy():HasMet(playerID)) then
 					instance.Portrait:SetToolTipString(Locale.Lookup("LOC_DIPLOPANEL_UNMET_PLAYER") .. " (" .. pPlayerConfig:GetPlayerName() .. ")");
@@ -163,26 +136,7 @@ function AddLeader(iconName : string, playerID : number, isUniqueLeader: boolean
 			end
 		end
 	end
-
-	-- Team Ribbon
-	if(playerID == localPlayerID or Players[localPlayerID]:GetDiplomacy():HasMet(playerID)) then
-		-- Show team ribbon for ourselves and civs we've met
-		local teamID:number = pPlayerConfig:GetTeam();
-		if #Teams[teamID] > 1 then
-			local teamRibbonName:string = TEAM_RIBBON_PREFIX .. tostring(teamID);
-			instance.TeamRibbon:SetIcon(teamRibbonName, TEAM_RIBBON_SIZE);
-			instance.TeamRibbon:SetHide(false);
-			instance.TeamRibbon:SetColor(GetTeamColor(teamID));
-		else
-			-- Hide team ribbon if team only contains one player
-			instance.TeamRibbon:SetHide(true);
-		end
-	else
-		-- Hide team ribbon for civs we haven't met
-		instance.TeamRibbon:SetHide(true);
-	end
 end
-
 
 -- ===========================================================================
 --	Clears leaders and re-adds them to the stack
@@ -217,7 +171,7 @@ function UpdateLeaders()
 						isUniqueLeader[leaderName] = true;
 					else
 						isUniqueLeader[leaderName] = false;
-					end
+					end	
 				end
 				metPlayers[playerID] = playerMet;
 			end
@@ -256,7 +210,7 @@ function RealizeSize( barWidth:number )
 
 	m_PartialScreenHookBar	= ContextPtr:LookUpControl( "/InGame/PartialScreenHooks/ButtonStack" );
 	m_LaunchBar				= ContextPtr:LookUpControl( "/InGame/LaunchBar/ButtonStack" );
-
+	
 	if (m_LaunchBar ~= nil) then
 		launchBarWidth = math.max(m_LaunchBar:GetSizeX() + WORLD_TRACKER_OFFSET + BG_TILE_PADDING, MIN_LEFT_HOOKS);
 	end
@@ -266,10 +220,10 @@ function RealizeSize( barWidth:number )
 	end
 
 	local screenWidth:number, screenHeight:number = UIManager:GetScreenSizeVal(); -- Cache screen dimensions
-
+	
 	local maxSize:number = screenWidth - launchBarWidth - partialScreenBarWidth;
 	m_maxNumLeaders = math.floor(maxSize / (SIZE_LEADER + PADDING_LEADER));
-
+	
 	local size:number = maxSize;
 	if(m_leadersMet == 0) then
 		Controls.LeaderBG:SetHide(true);
@@ -318,7 +272,7 @@ end
 --	Initialize scroll animation in a particular direction
 -- ===========================================================================
 function Scroll(direction : number)
-
+ 
 	m_scrollPercent = 0;
 	m_scrollIndex = m_scrollIndex + direction;
 
@@ -336,7 +290,7 @@ end
 --	Update scroll animation (only called while animating)
 -- ===========================================================================
 function UpdateScroll(deltaTime : number)
-
+	
 	local start:number = Controls.LeaderScroll:GetScrollValue();
 	local destination:number = 1.0 - (m_scrollIndex / (m_leadersMet - m_maxNumLeaders));
 
@@ -371,7 +325,7 @@ end
 --	Diplomacy Callback
 -- ===========================================================================
 function OnDiplomacyMeet(player1ID:number, player2ID:number)
-
+	
 	local localPlayerID:number = Game.GetLocalPlayer();
 	-- Have a local player?
 	if(localPlayerID ~= -1) then
@@ -386,7 +340,7 @@ end
 --	Diplomacy Callback
 -- ===========================================================================
 function OnDiplomacyWarStateChange(player1ID:number, player2ID:number)
-
+	
 	local localPlayerID:number = Game.GetLocalPlayer();
 	-- Have a local player?
 	if(localPlayerID ~= -1) then
@@ -443,7 +397,6 @@ function OnTurnEnd(playerID:number)
 		if(leader ~= nil) then
 			leader.LeaderContainer:Reverse();
 		end
-    UpdateLeaders();
 	end
 end
 
@@ -460,16 +413,6 @@ end
 function OnScrollRight()
 	if CanScroll(1) then Scroll(1); end
 end
-
--- ===========================================================================
---	DRS Mod Functions
--- ===========================================================================
-function Round(num, numDecimalPlaces)
-    local mult = 10^(numDecimalPlaces or 0)
-    if num >= 0 then return math.floor(num * mult + 0.5) / mult
-    else return math.ceil(num * mult - 0.5) / mult end
-end
-
 
 -- ===========================================================================
 --	Debug Helper
@@ -496,7 +439,7 @@ function OnChatReceived(fromPlayer:number, stayOnScreen:boolean)
 	else
 		Controls.ChatIndicatorWaitTimer:Stop();
 
-		instance.ChatIndicatorFade:RegisterEndCallback(function()
+		instance.ChatIndicatorFade:RegisterEndCallback(function() 
 			Controls.ChatIndicatorWaitTimer:RegisterEndCallback(function()
 				instance.ChatIndicatorFade:RegisterEndCallback(function() instance.ChatIndicatorFade:SetToBeginning(); end);
 				instance.ChatIndicatorFade:Reverse();
@@ -527,9 +470,9 @@ function Initialize()
 	Events.SystemUpdateUI.Add( OnUpdateUI );
 	Events.DiplomacyMeet.Add( OnDiplomacyMeet );
 	Events.DiplomacySessionClosed.Add( OnDiplomacySessionClosed );
-	Events.DiplomacyDeclareWar.Add( OnDiplomacyWarStateChange );
-	Events.DiplomacyMakePeace.Add( OnDiplomacyWarStateChange );
-	Events.DiplomacyRelationshipChanged.Add( UpdateLeaders );
+	Events.DiplomacyDeclareWar.Add( OnDiplomacyWarStateChange ); 
+	Events.DiplomacyMakePeace.Add( OnDiplomacyWarStateChange ); 
+	Events.DiplomacyRelationshipChanged.Add( UpdateLeaders ); 
 	Events.InterfaceModeChanged.Add( OnInterfaceModeChanged );
 	Events.RemotePlayerTurnBegin.Add( OnTurnBegin );
 	Events.RemotePlayerTurnEnd.Add( OnTurnEnd );
