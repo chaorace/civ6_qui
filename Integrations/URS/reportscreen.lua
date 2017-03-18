@@ -1361,7 +1361,7 @@ function ViewResourcesPage()
 	m_kCurrentTab = 2;
 	
 	-- ARISTOS: Hide the checkbox if not in Yields tab
-	Controls.CityBuildingsCheckbox:SetHide( true )
+	Controls.CityBuildingsCheckbox:SetHide( true );
 
 	local strategicResources:string = "";
 	local luxuryResources	:string = "";
@@ -1506,7 +1506,7 @@ function ViewCityStatusPage()
 	m_kCurrentTab = 3;
 	
 	-- ARISTOS: Hide the checkbox if not in Yields tab
-	Controls.CityBuildingsCheckbox:SetHide( true )
+	Controls.CityBuildingsCheckbox:SetHide( true );
 
 	local instance:table = m_simpleIM:GetInstance()
 	instance.Top:DestroyAllChildren()
@@ -1884,7 +1884,7 @@ function ViewDealsPage()
 	m_kCurrentTab = 4;
 	
 	-- ARISTOS: Hide the checkbox if not in Yields tab
-	Controls.CityBuildingsCheckbox:SetHide( true )
+	Controls.CityBuildingsCheckbox:SetHide( true );
 
 	for j, pDeal in spairs( m_kCurrentDeals, function( t, a, b ) return t[b].EndTurn > t[a].EndTurn end ) do
 		local ending = pDeal.EndTurn - Game.GetCurrentGameTurn()
@@ -1955,7 +1955,7 @@ function ViewUnitsPage()
 	m_kCurrentTab = 5;
 	
 	-- ARISTOS: Hide the checkbox if not in Yields tab
-	Controls.CityBuildingsCheckbox:SetHide( true )
+	Controls.CityBuildingsCheckbox:SetHide( true );
 
 	for iUnitGroup, kUnitGroup in spairs( m_kUnitData["Unit_Report"], function( t, a, b ) return t[b].ID > t[a].ID end ) do
 		local instance : table = NewCollapsibleGroupInstance()
