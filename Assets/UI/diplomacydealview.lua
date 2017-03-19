@@ -1539,9 +1539,33 @@ function getImportedResources(playerID)
 									ClassType = pClassType;
 									-- ARISTOS: Show the deal's other civ's identity only if it is the local player.
 									ImportString = "[COLOR_Red]Trade[ENDCOLOR] with " .. ((otherID == Game.GetLocalPlayer() or playerID == Game.GetLocalPlayer())
-										and Locale.Lookup(PlayerConfigurations[otherID]:GetPlayerName()) or "another civ.");
+										and Locale.Lookup(PlayerConfigurations[otherID]:GetPlayerName()) or "another civ") .. " : " .. pDealResource:GetAmount();
 								};
-								table.insert(importedResources, convertedResources);
+								-- !!ARISTOS: To group resources imported from different sources into a single icon!!!
+								local isIncluded:boolean = false;
+								local isIndex:number = 0;
+								for k,impResource in ipairs(importedResources) do
+									if (impResource.Name == convertedResources.Name) then
+										isIncluded = true;
+										isIndex = k;
+										break;
+									end
+								end
+								if (isIncluded) then
+									local existingResource = importedResources[isIndex];
+									local newResource = {
+										Name = existingResource.Name;
+										ForType = existingResource.ForType;
+										MaxAmount  = existingResource.MaxAmount + convertedResources.MaxAmount;
+										ClassType = existingResource.ClassType;
+										ImportString = existingResource.ImportString .. "[NEWLINE]" .. convertedResources.ImportString;
+									};
+									importedResources[isIndex] = newResource;
+								else
+									table.insert(importedResources, convertedResources);
+								end
+								-- END ARISTOS grouping of imported resources
+								--table.insert(importedResources, convertedResources);
 							end
 						end
 					--end
@@ -1563,13 +1587,37 @@ function getImportedResources(playerID)
 					if resourceAmount > 0 then
 						local kResource :table = GameInfo.Resources[row.Index];
 						local cityStateResources = {
-							Name = tostring(kResource.ResourceType);
+							Name = tostring(row.Index);--kResource.ResourceType);
 							ForType = kResource.ResourceType;
 							MaxAmount = resourceAmount;
 							ClassType = kResource.ResourceClassType;
-							ImportString = "[COLOR_Civ6Blue]Suzerain[ENDCOLOR] of " .. Locale.Lookup(PlayerConfigurations[pMinorPlayer:GetID()]:GetPlayerName())
+							ImportString = "[COLOR_Civ6Blue]Suzerain[ENDCOLOR] of " .. Locale.Lookup(PlayerConfigurations[pMinorPlayer:GetID()]:GetPlayerName()) .. " : " .. resourceAmount;
 							};
-						table.insert(importedResources, cityStateResources);
+						-- !!ARISTOS: To group resources imported from different sources into a single icon!!!
+						local isIncluded:boolean = false;
+						local isIndex:number = 0;
+						for k,impResource in ipairs(importedResources) do
+							if (impResource.Name == cityStateResources.Name) then
+								isIncluded = true;
+								isIndex = k;
+								break;
+							end
+						end
+						if isIncluded then
+							local existingResource = importedResources[isIndex];
+							local newResource = {
+								Name = existingResource.Name;
+								ForType = existingResource.ForType;
+								MaxAmount  = existingResource.MaxAmount + cityStateResources.MaxAmount;
+								ClassType = existingResource.ClassType;
+								ImportString = existingResource.ImportString .. "[NEWLINE]" .. cityStateResources.ImportString;
+							};
+							importedResources[isIndex] = newResource;
+						else
+							table.insert(importedResources, cityStateResources);
+						end
+						-- END ARISTOS grouping of imported resources
+						--table.insert(importedResources, cityStateResources);
 					end
 				end
 			end
