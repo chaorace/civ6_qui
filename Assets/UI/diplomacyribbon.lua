@@ -188,6 +188,7 @@ function AddLeader(iconName : string, playerID : number, isUniqueLeader: boolean
 	end
 end
 
+--ARISTOS: To display key information in leader tooltip inside Diplo Ribbon
 function GetExtendedTooltip(playerID:number)
 	local govType:string = "";
 	local eSelectePlayerGovernment :number = Players[playerID]:GetCulture():GetCurrentGovernment();
