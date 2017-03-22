@@ -43,6 +43,21 @@ local m_kLeaderIM			:table = InstanceManager:new("LeaderInstance", "LeaderContai
 local m_PartialScreenHookBar: table;	-- = ContextPtr:LookUpControl( "/InGame/PartialScreenHooks/LaunchBacking" );
 local m_LaunchBar			: table;	-- = ContextPtr:LookUpControl( "/InGame/LaunchBar/LaunchBacking" );
 
+--CQUI Members
+local CQUI_DefaultHiddenBanners = false;
+local CQUI_LeaderBannerToggle = {}; --Contains a value determining if the given leader ID should have it's diplo banner expanded or not (nil is the default state, which is off)
+
+function CQUI_ExpandBanner(instance)
+	instance.CQUI_BannerRollupAnim:SetToBeginning();
+	instance.CQUI_BannerRollupAnim:Play();
+end
+function CQUI_CollapseBanner(instance)
+	if(not instance.CQUI_BannerRollupAnim:IsReversing()) then
+		instance.CQUI_BannerRollupAnim:Stop();
+		instance.CQUI_BannerRollupAnim:Reverse();
+	end
+end
+
 -- ===========================================================================
 --	Cleanup leaders
 -- ===========================================================================
@@ -116,6 +131,22 @@ function AddLeader(iconName : string, playerID : number, isUniqueLeader: boolean
 	-- Register the click handler
 	instance.Button:RegisterCallback( Mouse.eLClick, function() OnLeaderClicked(playerID); end );
 	instance.Button:RegisterCallback( Mouse.eRClick, function() OnLeaderRightClicked(playerID); end );
+	--CQUI banner rollup anims
+	instance.Button:RegisterCallback( Mouse.eMouseEnter, function()
+		if(not CQUI_LeaderBannerToggle[playerID]) then
+			CQUI_ExpandBanner(instance);
+		end
+	end);
+	instance.CQUI_ScoreDisplayToggle:RegisterCallback( Mouse.eMouseExit, function()
+		if(not CQUI_LeaderBannerToggle[playerID]) then
+			CQUI_CollapseBanner(instance);
+		end
+	end);
+	instance.CQUI_ScoreDisplayToggle:RegisterCallback(Mouse.eLClick, function()
+		if(CQUI_LeaderBannerToggle[playerID] == nil) then
+			CQUI_LeaderBannerToggle[playerID] = true;
+		else CQUI_LeaderBannerToggle[playerID] = not CQUI_LeaderBannerToggle[playerID]; end
+	end);
 
 	local bShowRelationshipIcon:boolean = false;
 	local localPlayerID:number = Game.GetLocalPlayer();
