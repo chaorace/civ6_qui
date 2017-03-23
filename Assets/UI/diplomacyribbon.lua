@@ -159,6 +159,7 @@ function AddLeader(iconName : string, playerID : number, isUniqueLeader: boolean
 	instance.Button:RegisterCallback( Mouse.eLClick, function() OnLeaderClicked(playerID); end );
 	instance.Button:RegisterCallback( Mouse.eRClick, function() OnLeaderRightClicked(playerID); end );
 	instance.Button:RegisterCallback( Mouse.eMouseEnter, function() OnLeaderMouseOver(playerID); end ); --ARISTOS
+	instance.Button:RegisterCallback( Mouse.eMClick, function() OnLeaderMouseOver(playerID); end ); --ARISTOS
 	
 	local bShowRelationshipIcon:boolean = false;
 	local localPlayerID:number = Game.GetLocalPlayer();
@@ -663,6 +664,19 @@ function OnInputHandler( pInputStruct:table )
 			end
 		end
 	end
+	if uiMsg == MouseEvents.MButtonDown then
+		if m_isCTRLDown == false then
+			m_isCTRLDown = true;
+		end
+		return true;
+	end
+	if uiMsg == MouseEvents.MButtonUp then
+		if m_isCTRLDown == true then
+			m_isCTRLDown = false;
+		end
+		return true;
+	end
+	
 end
 ContextPtr:SetInputHandler( OnInputHandler, true );
 --ARISTOS: End
