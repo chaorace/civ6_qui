@@ -1841,17 +1841,18 @@ end
 -- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 function MakeCityToolTip(pCity : table)
 	local cityData = GetCityData(pCity);
-
+	local isLocalPlayerCity = pCity:GetOwner() == Game.GetLocalPlayer();
 	if (pCity ~= nil) then	
 		local szToolTip = Locale.ToUpper( Locale.Lookup(cityData.CityName)) .. "[NEWLINE]";
-		szToolTip = szToolTip .. Locale.Lookup("LOC_DEAL_CITY_POPULATION_TOOLTIP", pCity:GetPopulation()) .. "[NEWLINE]";		
-		szToolTip = szToolTip .. "[ICON_Food]" .. toPlusMinusString(cityData.FoodPerTurn) .. " ";
-		szToolTip = szToolTip .. "[ICON_Production]" .. toPlusMinusString(cityData.ProductionPerTurn) .. " ";
-		szToolTip = szToolTip .. "[ICON_Science]" .. toPlusMinusString(cityData.SciencePerTurn) .. " ";
-		szToolTip = szToolTip .. "[ICON_Culture]" .. toPlusMinusString(cityData.CulturePerTurn) .. " ";
-		szToolTip = szToolTip .. "[ICON_Faith]" .. toPlusMinusString(cityData.FaithPerTurn) .. " ";
-		szToolTip = szToolTip .. "[ICON_Gold]" .. toPlusMinusString(cityData.GoldPerTurn);
-
+		szToolTip = szToolTip .. Locale.Lookup("LOC_DEAL_CITY_POPULATION_TOOLTIP", pCity:GetPopulation()) .. "[NEWLINE]";
+		if isLocalPlayerCity then --ARISTOS: only show detailed info for cities owned or occupied by local player! CQUI non-cheat policy
+			szToolTip = szToolTip .. "[ICON_Food]" .. toPlusMinusString(cityData.FoodPerTurn) .. " ";
+			szToolTip = szToolTip .. "[ICON_Production]" .. toPlusMinusString(cityData.ProductionPerTurn) .. " ";
+			szToolTip = szToolTip .. "[ICON_Science]" .. toPlusMinusString(cityData.SciencePerTurn) .. " ";
+			szToolTip = szToolTip .. "[ICON_Culture]" .. toPlusMinusString(cityData.CulturePerTurn) .. " ";
+			szToolTip = szToolTip .. "[ICON_Faith]" .. toPlusMinusString(cityData.FaithPerTurn) .. " ";
+			szToolTip = szToolTip .. "[ICON_Gold]" .. toPlusMinusString(cityData.GoldPerTurn);
+		end
 		local districtNames = {};
 		local pCityDistricts = pCity:GetDistricts();
 		if (pCityDistricts ~= nil) then
@@ -1907,10 +1908,16 @@ function renderCity(pCity : table, player : table, targetContainer : table)
 	end
 	
 	button.PopulationLabel:SetText(tostring(cityData.Population));
-	button.FoodLabel:SetText("[ICON_FOOD]" .. toPlusMinusString(cityData.FoodPerTurn));
-	button.ProductionLabel:SetText("[ICON_PRODUCTION]" .. toPlusMinusString(cityData.ProductionPerTurn));
-	button.ScienceLabel:SetText("[ICON_SCIENCE]" .. toPlusMinusString(cityData.SciencePerTurn));
-
+	--ARISTOS: only show detailed info for cities owned or occupied by local player! CQUI non-cheat policy
+	if pCity:GetOwner() == Game.GetLocalPlayer() then
+		button.FoodLabel:SetText("[ICON_FOOD]" .. toPlusMinusString(cityData.FoodPerTurn));
+		button.ProductionLabel:SetText("[ICON_PRODUCTION]" .. toPlusMinusString(cityData.ProductionPerTurn));
+		button.ScienceLabel:SetText("[ICON_SCIENCE]" .. toPlusMinusString(cityData.SciencePerTurn));
+	else
+		button.FoodLabel:SetText("");
+		button.ProductionLabel:SetText("");
+		button.ScienceLabel:SetText("");
+	end
 	button.SelectButton:SetToolTipString( MakeCityToolTip(pCity) );
 
 	return button;
