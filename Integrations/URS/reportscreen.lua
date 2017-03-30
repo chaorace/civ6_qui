@@ -84,6 +84,10 @@ local m_kCultureData	:table = nil;
 local m_kCurrentDeals	:table = nil;
 -- !!
 
+-- Remember last tab variable: ARISTOS
+local m_kCurrentTab = 1
+-- !!
+
 -- ===========================================================================
 --	Single exit point for display
 -- ===========================================================================
@@ -113,7 +117,8 @@ function Open()
 	-- m_kCityData, m_kCityTotalData, m_kResourceData, m_kUnitData, m_kDealData = GetData();
 	m_kCityData, m_kCityTotalData, m_kResourceData, m_kUnitData, m_kDealData, m_kCultureData, m_kCurrentDeals = GetData();
 
-	m_tabs.SelectTab( 1 );
+	-- To remember the last opened tab when the report is re-opened: ARISTOS
+	m_tabs.SelectTab( m_kCurrentTab );
 end
 
 -- ===========================================================================
@@ -393,6 +398,9 @@ function GetData()
 							elseif pReceivingName == "Gold" then
 								deal.Name = deal.Amount .. Locale.Lookup("LOC_DIPLOMACY_DEAL_GOLD_PER_TURN")
 								deal.Icon = "[ICON_GOLD]"
+								--!! ARISTOS: To add Diplo Deal Amounts to the total tally of Gold!
+								kCityTotalData.Income[YieldTypes.GOLD] = kCityTotalData.Income[YieldTypes.GOLD] + deal.Amount;
+								kCityTotalData.Net[YieldTypes.GOLD] = kCityTotalData.Net[YieldTypes.GOLD] + deal.Amount;
 							else
 								if deal.Amount > 1 then
 									deal.Name = pDealItem:GetValueTypeNameID() .. "(" .. deal.Amount .. ")"
@@ -423,6 +431,9 @@ function GetData()
 							elseif pSendingName == "Gold" then
 								deal.Name = deal.Amount .. Locale.Lookup("LOC_DIPLOMACY_DEAL_GOLD_PER_TURN")
 								deal.Icon = "[ICON_GOLD]"
+								--!! ARISTOS: To add Diplo Deal Amounts to the total tally of Gold!
+								--!! Diplo deal expenses are already calculated in total maintenance!! Gotta love Firaxis... :]
+								-- kCityTotalData.Net[YieldTypes.GOLD] = kCityTotalData.Net[YieldTypes.GOLD] - deal.Amount;
 							else
 								if deal.Amount > 1 then
 									deal.Name = pDealItem:GetValueTypeNameID() .. "(" .. deal.Amount .. ")"
@@ -453,7 +464,7 @@ function GetData()
 
 			if pDeals ~= nil then
 				for i,pDeal in ipairs(pDeals) do
-					if pDeal:IsValid() then
+					--if pDeal:IsValid() then --!! ARISTOS: Bug??? deal:IsValid() not always returns true even if the deal IS valid!!!
 						-- Add outgoing gold deals
 						local pOutgoingDeal :table	= pDeal:FindItemsByType(DealItemTypes.GOLD, DealItemSubTypes.NONE, playerID);
 						if pOutgoingDeal ~= nil then
@@ -539,7 +550,7 @@ function GetData()
 								end
 							end
 						end
-					end
+					--end --!! ARISTOS: Bug??? deal:IsValid() not always returns true even if the deal IS valid!!!
 				end
 			end
 
@@ -947,12 +958,16 @@ function ViewYieldsPage()
 
 	ResetTabForNewPageContent();
 
+	-- Remember this tab when report is next opened: ARISTOS
+	m_kCurrentTab = 1;
+
 	Controls.CityBuildingsCheckbox:SetHide( false )
 	local pPlayer:table = Players[Game.GetLocalPlayer()];
 
 	local instance:table = nil;
 	instance = NewCollapsibleGroupInstance();
 	instance.RowHeaderButton:SetText( Locale.Lookup("LOC_HUD_REPORTS_ROW_CITY_INCOME") );
+	instance.RowHeaderLabel:SetHide( true )
 
 	local pHeaderInstance:table = {}
 	ContextPtr:BuildInstanceForControl( "CityIncomeHeaderInstance", pHeaderInstance, instance.ContentStack ) ;
@@ -1156,6 +1171,7 @@ function ViewYieldsPage()
 
 	instance = NewCollapsibleGroupInstance();
 	instance.RowHeaderButton:SetText( Locale.Lookup("LOC_HUD_REPORTS_ROW_BUILDING_EXPENSES") );
+	instance.RowHeaderLabel:SetHide( true )
 
 	local pHeader:table = {};
 	ContextPtr:BuildInstanceForControl( "BuildingExpensesHeaderInstance", pHeader, instance.ContentStack ) ;
@@ -1170,18 +1186,20 @@ function ViewYieldsPage()
 		-- Tooltip shows districts have a -1 gpt cost, not sure if this goes up or if its different for other districts or
 		-- later eras
 
+		local iNumDistricts : number = 0
+
 		-- Can't find/figure out how to find district type, so i'll do it myself
 		-- this goes through the districts and adds the maintenance if not pillaged/being built
 		for _,kBuilding in ipairs(kCityData.BuildingsAndDistricts) do
 			if kBuilding.isBuilt then
 				for i = 1, #GameInfo.Districts do
-					if kBuilding.Name == Locale.Lookup( GameInfo.Districts[i].Name ) and GameInfo.Districts[i].Maintenance > 0 then
-						local pBuildingInstance:table = {};
-						ContextPtr:BuildInstanceForControl( "BuildingExpensesEntryInstance", pBuildingInstance, instance.ContentStack );
-						pBuildingInstance.CityName:SetText( Locale.Lookup(cityName) );
-						pBuildingInstance.BuildingName:SetText( Locale.Lookup( GameInfo.Districts[i].Name ) );
-						pBuildingInstance.Gold:SetText( "-" .. tostring( GameInfo.Districts[i].Maintenance ) );
-						iTotalBuildingMaintenance = iTotalBuildingMaintenance - GameInfo.Districts[i].Maintenance;
+          if kBuilding.Name == Locale.Lookup( GameInfo.Districts[i].Name ) and GameInfo.Districts[i].Maintenance > 0 then
+            local pBuildingInstance:table = {};
+            ContextPtr:BuildInstanceForControl( "BuildingExpensesEntryInstance", pBuildingInstance, instance.ContentStack );
+            pBuildingInstance.CityName:SetText( Locale.Lookup(cityName) );
+            pBuildingInstance.BuildingName:SetText( Locale.Lookup( GameInfo.Districts[i].Name ) );
+            pBuildingInstance.Gold:SetText( "-" .. tostring( GameInfo.Districts[i].Maintenance ) );
+            iTotalBuildingMaintenance = iTotalBuildingMaintenance - GameInfo.Districts[i].Maintenance;
 						break;
 					end
 				end
@@ -1206,41 +1224,11 @@ function ViewYieldsPage()
 	SetGroupCollapsePadding(instance, pBuildingFooterInstance.Top:GetSizeY() );
 	RealizeGroup( instance );
 
-	-- ========== Diplomatic Deals Expenses ==========
-
-	instance = NewCollapsibleGroupInstance();
-	instance.RowHeaderButton:SetText( Locale.Lookup("LOC_HUD_REPORTS_ROW_DIPLOMATIC_DEALS") );
-
-	local pHeader:table = {};
-	ContextPtr:BuildInstanceForControl( "DealHeaderInstance", pHeader, instance.ContentStack ) ;
-
-	local iTotalDealGold :number = 0;
-
-	for i,kDeal in ipairs(m_kDealData) do
-		local pDealInstance:table = {};
-		ContextPtr:BuildInstanceForControl( "DealEntryInstance", pDealInstance, instance.ContentStack ) ;
-
-		pDealInstance.Civilization:SetText( kDeal.Name );
-		pDealInstance.Duration:SetText( kDeal.Duration );
-		if kDeal.IsOutgoing then
-			pDealInstance.Gold:SetText( "-"..tostring(kDeal.Amount) );
-			iTotalDealGold = iTotalDealGold - kDeal.Amount;
-		else
-			pDealInstance.Gold:SetText( "+"..tostring(kDeal.Amount) );
-			iTotalDealGold = iTotalDealGold + kDeal.Amount;
-		end
-	end
-	local pDealFooterInstance:table = {};
-	ContextPtr:BuildInstanceForControl( "GoldFooterInstance", pDealFooterInstance, instance.ContentStack ) ;
-	pDealFooterInstance.Gold:SetText("[ICON_Gold]"..tostring(iTotalDealGold) );
-
-	SetGroupCollapsePadding(instance, pDealFooterInstance.Top:GetSizeY() );
-	RealizeGroup( instance );
-
 	-- ========== !! Unit Expenses ==========
 
 	instance = NewCollapsibleGroupInstance();
 	instance.RowHeaderButton:SetText( Locale.Lookup( Locale.Lookup("LOC_HUD_REPORTS_ROW_UNIT_EXPENSES") ) );
+	instance.RowHeaderLabel:SetHide( true )
 
 	local pHeader:table = {};
 	ContextPtr:BuildInstanceForControl( "UnitExpensesHeaderInstance", pHeader, instance.ContentStack ) ;
@@ -1282,37 +1270,56 @@ function ViewYieldsPage()
 
 	-- Unit Expense END!!
 
-	-- ========== Diplomatic Deals Expenses ==========
+
+	-- ========== Diplomatic Deals Income and Expenses ==========
+	-- ARISTOS: A precise Diplomatic Deals Gold Yields report
+
 
 	instance = NewCollapsibleGroupInstance();
 	instance.RowHeaderButton:SetText( Locale.Lookup("LOC_HUD_REPORTS_ROW_DIPLOMATIC_DEALS") );
+	instance.RowHeaderLabel:SetHide( true )
 
 	local pHeader:table = {};
 	ContextPtr:BuildInstanceForControl( "DealHeaderInstance", pHeader, instance.ContentStack ) ;
 
 	local iTotalDealGold :number = 0;
-	for i,kDeal in ipairs(m_kDealData) do
-		if kDeal.Type == DealItemTypes.GOLD then
-			local pDealInstance:table = {};
-			ContextPtr:BuildInstanceForControl( "DealEntryInstance", pDealInstance, instance.ContentStack ) ;
+	for i,kDeal in ipairs(m_kCurrentDeals) do
+		local ending = kDeal.EndTurn - Game.GetCurrentGameTurn()
 
-			pDealInstance.Civilization:SetText( kDeal.Name );
-			pDealInstance.Duration:SetText( kDeal.Duration );
-			if kDeal.IsOutgoing then
-				pDealInstance.Gold:SetText( "-"..tostring(kDeal.Amount) );
-				iTotalDealGold = iTotalDealGold - kDeal.Amount;
-			else
-				pDealInstance.Gold:SetText( "+"..tostring(kDeal.Amount) );
-				iTotalDealGold = iTotalDealGold + kDeal.Amount;
+		for i, pDealItem in pairs( kDeal.Sending ) do
+			if pDealItem.Icon == "[ICON_GOLD]" then
+				local pDealInstance:table = {};
+				ContextPtr:BuildInstanceForControl( "DealEntryInstance", pDealInstance, instance.ContentStack ) ;
+
+				pDealInstance.Civilization:SetText( kDeal.WithCivilization );
+				pDealInstance.Duration:SetText( tostring(ending) .. "[ICON_Turn]" );
+				pDealInstance.Gold:SetText( "-"..tostring(pDealItem.Amount) );
+				iTotalDealGold = iTotalDealGold - pDealItem.Amount;
 			end
 		end
+
+		for i, pDealItem in pairs( kDeal.Receiving ) do
+			if pDealItem.Icon == "[ICON_GOLD]" then
+				local pDealInstance:table = {};
+				ContextPtr:BuildInstanceForControl( "DealEntryInstance", pDealInstance, instance.ContentStack ) ;
+
+				pDealInstance.Civilization:SetText( kDeal.WithCivilization );
+				pDealInstance.Duration:SetText( tostring(ending) .. "[ICON_Turn]" );
+				pDealInstance.Gold:SetText( "+"..tostring(pDealItem.Amount) );
+				iTotalDealGold = iTotalDealGold + pDealItem.Amount;
+			end
+		end
+
 	end
+
 	local pDealFooterInstance:table = {};
 	ContextPtr:BuildInstanceForControl( "GoldFooterInstance", pDealFooterInstance, instance.ContentStack ) ;
 	pDealFooterInstance.Gold:SetText("[ICON_Gold]"..tostring(iTotalDealGold) );
 
 	SetGroupCollapsePadding(instance, pDealFooterInstance.Top:GetSizeY() );
 	RealizeGroup( instance );
+
+	-- END ARISTOS Diplomatic Deals
 
 
 	-- ========== TOTALS ==========
@@ -1350,6 +1357,12 @@ function ViewResourcesPage()
 
 	ResetTabForNewPageContent();
 
+	-- Remember this tab when report is next opened: ARISTOS
+	m_kCurrentTab = 2;
+	
+	-- ARISTOS: Hide the checkbox if not in Yields tab
+	Controls.CityBuildingsCheckbox:SetHide( true );
+
 	local strategicResources:string = "";
 	local luxuryResources	:string = "";
 	local kBonuses			:table	= {};
@@ -1359,47 +1372,56 @@ function ViewResourcesPage()
 
 	for eResourceType,kSingleResourceData in pairs(m_kResourceData) do
 
-		local instance:table = NewCollapsibleGroupInstance();
+		--!!ARISTOS: Only display list of selected resource types, according to checkboxes
+		if (kSingleResourceData.IsStrategic and Controls.StrategicCheckbox:IsSelected()) or
+			(kSingleResourceData.IsLuxury and Controls.LuxuryCheckbox:IsSelected()) or
+			(kSingleResourceData.IsBonus and Controls.BonusCheckbox:IsSelected()) then
+		
+			local instance:table = NewCollapsibleGroupInstance();
 
-		local kResource :table = GameInfo.Resources[eResourceType];
-		instance.RowHeaderButton:SetText(  kSingleResourceData.Icon..Locale.Lookup( kResource.Name ) );
+			local kResource :table = GameInfo.Resources[eResourceType];
+			instance.RowHeaderButton:SetText(  kSingleResourceData.Icon..Locale.Lookup( kResource.Name ) );
+			instance.RowHeaderLabel:SetHide( true )
 
-		local pHeaderInstance:table = {};
-		ContextPtr:BuildInstanceForControl( "ResourcesHeaderInstance", pHeaderInstance, instance.ContentStack ) ;
+			local pHeaderInstance:table = {};
+			ContextPtr:BuildInstanceForControl( "ResourcesHeaderInstance", pHeaderInstance, instance.ContentStack ) ;
 
-		local kResourceEntries:table = kSingleResourceData.EntryList;
-		for i,kEntry in ipairs(kResourceEntries) do
-			local pEntryInstance:table = {};
-			ContextPtr:BuildInstanceForControl( "ResourcesEntryInstance", pEntryInstance, instance.ContentStack ) ;
-			pEntryInstance.CityName:SetText( Locale.Lookup(kEntry.EntryText) );
-			pEntryInstance.Control:SetText( Locale.Lookup(kEntry.ControlText) );
-			pEntryInstance.Amount:SetText( (kEntry.Amount<=0) and tostring(kEntry.Amount) or "+"..tostring(kEntry.Amount) );
-		end
-
-		local pFooterInstance:table = {};
-		ContextPtr:BuildInstanceForControl( "ResourcesFooterInstance", pFooterInstance, instance.ContentStack ) ;
-		pFooterInstance.Amount:SetText( tostring(kSingleResourceData.Total) );
-
-		-- Show how many of this resource are being allocated to what cities
-		local localPlayerID = Game.GetLocalPlayer();
-		local localPlayer = Players[localPlayerID];
-		local citiesProvidedTo: table = localPlayer:GetResources():GetResourceAllocationCities(GameInfo.Resources[kResource.ResourceType].Index);
-		local numCitiesProvidingTo: number = table.count(citiesProvidedTo);
-		if (numCitiesProvidingTo > 0) then
-			pFooterInstance.AmenitiesContainer:SetHide(false);
-			pFooterInstance.Amenities:SetText("[ICON_Amenities][ICON_GoingTo]"..numCitiesProvidingTo.." "..Locale.Lookup("LOC_PEDIA_CONCEPTS_PAGEGROUP_CITIES_NAME"));
-			local amenitiesTooltip: string = "";
-			local playerCities = localPlayer:GetCities();
-			for i,city in ipairs(citiesProvidedTo) do
-				local cityName = Locale.Lookup(playerCities:FindID(city.CityID):GetName());
-				if i ~=1 then
-					amenitiesTooltip = amenitiesTooltip.. "[NEWLINE]";
-				end
-				amenitiesTooltip = amenitiesTooltip.. city.AllocationAmount.." [ICON_".. kResource.ResourceType.."] [Icon_GoingTo] " ..cityName;
+			local kResourceEntries:table = kSingleResourceData.EntryList;
+			for i,kEntry in ipairs(kResourceEntries) do
+				local pEntryInstance:table = {};
+				ContextPtr:BuildInstanceForControl( "ResourcesEntryInstance", pEntryInstance, instance.ContentStack ) ;
+				pEntryInstance.CityName:SetText( Locale.Lookup(kEntry.EntryText) );
+				pEntryInstance.Control:SetText( Locale.Lookup(kEntry.ControlText) );
+				pEntryInstance.Amount:SetText( (kEntry.Amount<=0) and tostring(kEntry.Amount) or "+"..tostring(kEntry.Amount) );
 			end
-			pFooterInstance.Amenities:SetToolTipString(amenitiesTooltip);
-		else
-			pFooterInstance.AmenitiesContainer:SetHide(true);
+
+			local pFooterInstance:table = {};
+			ContextPtr:BuildInstanceForControl( "ResourcesFooterInstance", pFooterInstance, instance.ContentStack ) ;
+			pFooterInstance.Amount:SetText( tostring(kSingleResourceData.Total) );
+
+			-- Show how many of this resource are being allocated to what cities
+			local localPlayerID = Game.GetLocalPlayer();
+			local localPlayer = Players[localPlayerID];
+			local citiesProvidedTo: table = localPlayer:GetResources():GetResourceAllocationCities(GameInfo.Resources[kResource.ResourceType].Index);
+			local numCitiesProvidingTo: number = table.count(citiesProvidedTo);
+			if (numCitiesProvidingTo > 0) then
+				pFooterInstance.AmenitiesContainer:SetHide(false);
+				pFooterInstance.Amenities:SetText("[ICON_Amenities][ICON_GoingTo]"..numCitiesProvidingTo.." "..Locale.Lookup("LOC_PEDIA_CONCEPTS_PAGEGROUP_CITIES_NAME"));
+				local amenitiesTooltip: string = "";
+				local playerCities = localPlayer:GetCities();
+				for i,city in ipairs(citiesProvidedTo) do
+					local cityName = Locale.Lookup(playerCities:FindID(city.CityID):GetName());
+					if i ~=1 then
+						amenitiesTooltip = amenitiesTooltip.. "[NEWLINE]";
+					end
+					amenitiesTooltip = amenitiesTooltip.. city.AllocationAmount.." [ICON_".. kResource.ResourceType.."] [Icon_GoingTo] " ..cityName;
+				end
+				pFooterInstance.Amenities:SetToolTipString(amenitiesTooltip);
+			else
+				pFooterInstance.AmenitiesContainer:SetHide(true);
+			end
+			SetGroupCollapsePadding(instance, pFooterInstance.Top:GetSizeY() );
+			RealizeGroup( instance );
 		end
 
 		if kSingleResourceData.IsStrategic then
@@ -1412,8 +1434,8 @@ function ViewResourcesPage()
 			table.insert(kBonuses, kSingleResourceData.Icon .. tostring( kSingleResourceData.Total ) );
 		end
 
-		SetGroupCollapsePadding(instance, pFooterInstance.Top:GetSizeY() );
-		RealizeGroup( instance );
+		--SetGroupCollapsePadding(instance, pFooterInstance.Top:GetSizeY() );
+		--RealizeGroup( instance );
 	end
 
 	m_strategicResourcesIM:ResetInstances();
@@ -1487,6 +1509,12 @@ end
 function ViewCityStatusPage()
 
 	ResetTabForNewPageContent()
+
+	-- Remember this tab when report is next opened: ARISTOS
+	m_kCurrentTab = 3;
+	
+	-- ARISTOS: Hide the checkbox if not in Yields tab
+	Controls.CityBuildingsCheckbox:SetHide( true );
 
 	local instance:table = m_simpleIM:GetInstance()
 	instance.Top:DestroyAllChildren()
@@ -1732,13 +1760,11 @@ function group_military( unit, unitInstance, group, parent, type )
 
 	unitInstance.UnitHealth:SetText( tostring( unit:GetMaxDamage() - unit:GetDamage() ) .. "/" .. tostring( unit:GetMaxDamage() ) )
 
-	local bCanStart, tResults = UnitManager.CanStartOperation( unit, UnitOperationTypes.UPGRADE, nil, true );
+	local bCanStart, tResults = UnitManager.CanStartCommand( unit, UnitCommandTypes.UPGRADE, false, true);
 
 	if ( bCanStart ) then
-		local bCanStart, tResults = UnitManager.CanStartOperation( unit, UnitOperationTypes.UPGRADE, nil, false, true )
-
 		unitInstance.Upgrade:SetHide( false )
-		unitInstance.Upgrade:RegisterCallback( Mouse.eLClick, function() bUnits.group = group; bUnits.parent = parent; bUnits.type = type; UnitManager.RequestOperation( unit, UnitOperationTypes.UPGRADE ); end )
+		unitInstance.Upgrade:RegisterCallback( Mouse.eLClick, function() bUnits.group = group; bUnits.parent = parent; bUnits.type = type; UnitManager.RequestCommand( unit, UnitCommandTypes.UPGRADE ); end )
 		local upgradeUnitName = GameInfo.Units[tResults[UnitOperationResults.UNIT_TYPE]].Name;
 		local toolTipString	= Locale.Lookup( "LOC_UNITOPERATION_UPGRADE_DESCRIPTION" );
 		toolTipString = toolTipString .. " " .. Locale.Lookup(upgradeUnitName);
@@ -1862,6 +1888,12 @@ function ViewDealsPage()
 
 	ResetTabForNewPageContent();
 
+	-- Remember this tab when report is next opened: ARISTOS
+	m_kCurrentTab = 4;
+	
+	-- ARISTOS: Hide the checkbox if not in Yields tab
+	Controls.CityBuildingsCheckbox:SetHide( true );
+
 	for j, pDeal in spairs( m_kCurrentDeals, function( t, a, b ) return t[b].EndTurn > t[a].EndTurn end ) do
 		local ending = pDeal.EndTurn - Game.GetCurrentGameTurn()
 		local turns = "turns"
@@ -1870,7 +1902,7 @@ function ViewDealsPage()
 		local instance : table = NewCollapsibleGroupInstance()
 
 		instance.RowHeaderButton:SetText( Locale.Lookup("LOC_HUD_REPORTS_TRADE_DEAL_WITH", pDeal.WithCivilization) )
-		instance.RowHeaderLabel:SetText(  Locale.Lookup("LOC_ESPIONAGEPANEL_PANEL_TURNS") .. ending .. "[ICON_Turn]" .. " (" .. pDeal.EndTurn .. ")" )
+		instance.RowHeaderLabel:SetText(  Locale.Lookup("LOC_ESPIONAGEPANEL_PANEL_TURNS") .. ": " .. ending .. "[ICON_Turn]" .. " (" .. pDeal.EndTurn .. ")" )
 		instance.RowHeaderLabel:SetHide( false )
 
 		local dealHeaderInstance : table = {}
@@ -1927,10 +1959,17 @@ function ViewUnitsPage()
 
 	ResetTabForNewPageContent();
 
+	-- Remember this tab when report is next opened: ARISTOS
+	m_kCurrentTab = 5;
+	
+	-- ARISTOS: Hide the checkbox if not in Yields tab
+	Controls.CityBuildingsCheckbox:SetHide( true );
+
 	for iUnitGroup, kUnitGroup in spairs( m_kUnitData["Unit_Report"], function( t, a, b ) return t[b].ID > t[a].ID end ) do
 		local instance : table = NewCollapsibleGroupInstance()
 
 		instance.RowHeaderButton:SetText( kUnitGroup.Name )
+		instance.RowHeaderLabel:SetHide( true )
 
 		local pHeaderInstance:table = {}
 		ContextPtr:BuildInstanceForControl( kUnitGroup.Header, pHeaderInstance, instance.ContentStack )
@@ -2058,8 +2097,29 @@ end
 function OnToggleCityBuildings()
 	local isChecked = Controls.CityBuildingsCheckbox:IsSelected();
 	Controls.CityBuildingsCheckbox:SetSelected( not isChecked );
-	ViewYieldsPage()
+	ViewYieldsPage();
 end
+
+-- ===========================================================================
+--ARISTOS: Toggles for different resources in Resources tab
+function OnToggleStrategic()
+	local isChecked = Controls.StrategicCheckbox:IsSelected();
+	Controls.StrategicCheckbox:SetSelected( not isChecked );
+	ViewResourcesPage();
+end
+
+function OnToggleLuxury()
+	local isChecked = Controls.LuxuryCheckbox:IsSelected();
+	Controls.LuxuryCheckbox:SetSelected( not isChecked );
+	ViewResourcesPage();
+end
+
+function OnToggleBonus()
+	local isChecked = Controls.BonusCheckbox:IsSelected();
+	Controls.BonusCheckbox:SetSelected( not isChecked );
+	ViewResourcesPage();
+end
+--ARISTOS: End resources toggle
 
 function Initialize()
 
@@ -2074,7 +2134,7 @@ function Initialize()
 	AddTabSection( "LOC_HUD_REPORTS_TAB_CURRENT_DEALS", ViewDealsPage );
 	AddTabSection( "LOC_UNIT_NAME",						ViewUnitsPage );
 
-	m_tabs.SameSizedTabs(50);
+	m_tabs.SameSizedTabs(0);
 	m_tabs.CenterAlignTabs(-10);
 
 	-- UI Callbacks
@@ -2092,9 +2152,23 @@ function Initialize()
 
 	Controls.CityBuildingsCheckbox:RegisterCallback( Mouse.eLClick, OnToggleCityBuildings )
 	Controls.CityBuildingsCheckbox:RegisterCallback( Mouse.eMouseEnter, function() UI.PlaySound("Main_Menu_Mouse_Over"); end )
+	
+	--ARISTOS: Resources toggle
+	Controls.LuxuryCheckbox:RegisterCallback( Mouse.eLClick, OnToggleLuxury );
+	Controls.LuxuryCheckbox:RegisterCallback( Mouse.eMouseEnter, function() UI.PlaySound("Main_Menu_Mouse_Over"); end );
+	Controls.LuxuryCheckbox:SetSelected( true );
+	
+	Controls.StrategicCheckbox:RegisterCallback( Mouse.eLClick, OnToggleStrategic );
+	Controls.StrategicCheckbox:RegisterCallback( Mouse.eMouseEnter, function() UI.PlaySound("Main_Menu_Mouse_Over"); end );
+	Controls.StrategicCheckbox:SetSelected( true );
+	
+	Controls.BonusCheckbox:RegisterCallback( Mouse.eLClick, OnToggleBonus );
+	Controls.BonusCheckbox:RegisterCallback( Mouse.eMouseEnter, function() UI.PlaySound("Main_Menu_Mouse_Over"); end );
+	Controls.BonusCheckbox:SetSelected( true );
 
 	-- Events
 	LuaEvents.TopPanel_OpenReportsScreen.Add( OnTopOpenReportsScreen );
 	LuaEvents.TopPanel_CloseReportsScreen.Add( OnTopCloseReportsScreen );
 end
 Initialize();
+

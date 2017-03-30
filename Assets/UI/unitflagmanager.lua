@@ -519,7 +519,7 @@ function UnitFlag.SetColor( self )
 	local ownerPlayer = pUnit:GetOwner();
 
 	local isAtWar = localPlayer:GetDiplomacy():IsAtWarWith( ownerPlayer );
-  local CQUI_isBarb = pUnit:GetBarbarianTribeIndex() ~= -1
+	local CQUI_isBarb = Players[ownerPlayer]:IsBarbarian(); --pUnit:GetBarbarianTribeIndex() ~= -1
 
 	if(isAtWar and (not CQUI_isBarb)) then
 		self.m_Instance.FlagBaseDarken:SetColor( RGBAValuesToABGRHex(255,0,0,255) );
@@ -794,6 +794,7 @@ end
 function UnitFlag.UpdatePromotions( self )
 	self.m_Instance.Promotion_Flag:SetHide(true);
 	local pUnit : table = self:GetUnit();
+	local isLocalPlayerUnit: boolean = pUnit:GetOwner() == Game:GetLocalPlayer(); --ARISTOS: hide promotion/charge info if not local player's unit!
 	if pUnit ~= nil then
 		-- If this unit is levied (ie. from a city-state), showing that takes precedence
 		local iLevyTurnsRemaining = GetLevyTurnsRemaining(pUnit);
@@ -801,7 +802,7 @@ function UnitFlag.UpdatePromotions( self )
 			self.m_Instance.UnitNumPromotions:SetText("[ICON_Turn]");
 			self.m_Instance.Promotion_Flag:SetHide(false);
 		-- Otherwise, show the experience level
-		elseif (GameInfo.Units[pUnit:GetUnitType()].UnitType == "UNIT_BUILDER") or (GameInfo.Units[pUnit:GetUnitType()].UnitType == "UNIT_MILITARY_ENGINEER") then
+		elseif ((GameInfo.Units[pUnit:GetUnitType()].UnitType == "UNIT_BUILDER") or (GameInfo.Units[pUnit:GetUnitType()].UnitType == "UNIT_MILITARY_ENGINEER")) and isLocalPlayerUnit then
 			local uCharges = pUnit:GetBuildCharges();
 			self.m_Instance.New_Promotion_Flag:SetHide(true);
 			self.m_Instance.UnitNumPromotions:SetText(uCharges);
@@ -812,16 +813,16 @@ function UnitFlag.UpdatePromotions( self )
 			local unitExperience = pUnit:GetExperience();
 			if (unitExperience ~= nil) then
 				local promotionList :table = unitExperience:GetPromotions();
-				local UnitXP = unitExperience:GetExperiencePoints();
-				local UnitMaxXP = unitExperience:GetExperienceForNextLevel();
 				self.m_Instance.New_Promotion_Flag:SetHide(true);
-				if (UnitXP/UnitMaxXP) == 1 then
+				--ARISTOS: to test for available promotions! Previous test using XPs was faulty (Firaxis... :rolleyes:)
+				local bCanStart, tResults = UnitManager.CanStartCommand( pUnit, UnitCommandTypes.PROMOTE, true, true);
+				if bCanStart and isLocalPlayerUnit then
 					self.m_Instance.New_Promotion_Flag:SetHide(false);
 					self.m_Instance.UnitNumPromotions:SetText("[COLOR:StatBadCS]+[ENDCOLOR]");
 					self.m_Instance.Promotion_Flag:SetHide(false);
-				end
-
-				if (#promotionList > 0) then
+				--end
+				--ARISTOS: if already promoted, or no promotion available, show # of proms
+				elseif (#promotionList > 0) then
 					--[[
 					local tooltipString :string = "";
 					for i, promotion in ipairs(promotionList) do

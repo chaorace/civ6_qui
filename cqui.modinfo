@@ -5,8 +5,8 @@
     <Name>Chao's Quick UI</Name>
     <Teaser>CQUI_TEASER</Teaser>
     <Description>CQUI_TEASER</Description>
-    <Authors>vans163, chaorace, zgavin, olegbl, jacks0n, OfekA, [NEWLINE]Proustldee, RatchetJ, kblease, benjaminjackman, LordYanaek, [NEWLINE]zeyangl, velit, the-m4a, Frozen-In-Ice, Remolten, bestekov, [NEWLINE]bolbass, SpaceOgre, cpinter</Authors>
-    <SpecialThanks>vans163 for his original qui mod. [NEWLINE]astog for his Better Trade Screen mod + More Lenses mod. [NEWLINE]Ace for his Next City Plot mod. [NEWLINE]Divine Yuri for his Custom City Panel mod. [NEWLINE]Greg Miller for his Unit Report Screen mod. [NEWLINE]Lozenged/kblease for his Production Queue mod. [NEWLINE]ZhouYzzz for providing the Chinese translation of CQUI. [NEWLINE]Simone1974 for providing the Italian translation of CQUI. [NEWLINE]e1ectron for providing the Russian translation of CQUI. [NEWLINE]sejbr for providing the Polish translation of CQUI. [NEWLINE]frytom for providing the German translation of CQUI. [NEWLINE]lctrs for providing a partial French translation of CQUI. [NEWLINE]wbqd for providing the Korean translation of CQUI.</SpecialThanks>
+    <Authors>vans163, chaorace, zgavin, olegbl, jacks0n, OfekA, [NEWLINE]Proustldee, RatchetJ, kblease, benjaminjackman, LordYanaek, [NEWLINE]zeyangl, velit, the-m4a, Frozen-In-Ice, Remolten, bestekov, [NEWLINE]bolbass, SpaceOgre, cpinter, JHCD, paavohuhtala, [NEWLINE]Aristos</Authors>
+    <SpecialThanks>vans163 for his original qui mod. [NEWLINE]astog for his Better Trade Screen mod + More Lenses mod. [NEWLINE]Ace for his Next City Plot mod. [NEWLINE]Divine Yuri for his Custom City Panel mod. [NEWLINE]Greg Miller for his Unit Report Screen mod. [NEWLINE]Lozenged/kblease for his Production Queue mod. [NEWLINE]mironos for his Improved Deal Screen mod. [NEWLINE]ZhouYzzz for providing the Chinese translation of CQUI. [NEWLINE]Simone1974 for providing the Italian translation of CQUI. [NEWLINE]e1ectron for providing the Russian translation of CQUI. [NEWLINE]sejbr for providing the Polish translation of CQUI. [NEWLINE]frytom/maxap/JHCD for providing the German translation of CQUI. [NEWLINE]lctrs for providing a partial French translation of CQUI. [NEWLINE]wbqd for providing the Korean translation of CQUI.</SpecialThanks>
     <Stability>CQUI_STABILITY_NIGHTLY</Stability>
   </Properties>
   <Dependencies />
@@ -94,6 +94,7 @@
   <Files>
     <File>Assets/cqui_databaseschema.sql</File>
     <File>Assets/cqui_settings.sql</File>
+    <File>Assets/cqui_settings_my.sql</File>
     <File>Assets/cqui_settingselement.lua</File>
     <File>Assets/cqui_settingselement.xml</File>
     <File>Assets/cqui_main.lua</File>
@@ -104,8 +105,8 @@
     <File>Assets/UI/actionpanel.lua</File>
     <File>Assets/UI/citysupport.lua</File>
     <File>Assets/UI/civ6common.lua</File>
+    <File>Assets/UI/diplomacyactionview.lua</File>
     <File>Assets/UI/diplomacyactionview.xml</File>
-    <File>Assets/UI/diplomacydealview.lua</File>
     <File>Assets/UI/diplomacyribbon.lua</File>
     <File>Assets/UI/diplomacyribbon.xml</File>
     <File>Assets/UI/ingame.lua</File>
@@ -121,6 +122,7 @@
     <File>Assets/UI/unitflagmanager.xml</File>
     <File>Assets/UI/worldinput.lua</File>
     <File>Assets/UI/worldviewiconsmanager.lua</File>
+    <File>Assets/UI/worldtracker.lua</File>
     <File>Assets/UI/Choosers/civicschooser.lua</File>
     <File>Assets/UI/Choosers/researchchooser.lua</File>
     <File>Assets/UI/Civilopedia/civilopediasupport.lua</File>
@@ -164,6 +166,9 @@
     <File>Integrations/URS/reportscreen.xml</File>
     <File>Integrations/URS/unitpromotionpopup.lua</File>
     <File>Integrations/URS/Text/urs_text.xml</File>
+    <File>Integrations/IDS/diplomacydealview.lua</File>
+    <File>Integrations/IDS/diplomacydealview.xml</File>
+    <File>Integrations/IDS/Text/ids_text.xml</File>
     <File>Integrations/ML/UI/minimappanel.lua</File>
     <File>Integrations/ML/UI/minimappanel.xml</File>
     <File>Integrations/ML/UI/Panels/modallenspanel.lua</File>
@@ -181,8 +186,8 @@
         <File>Assets/UI/actionpanel.lua</File>
         <File>Assets/UI/citysupport.lua</File>
         <File>Assets/UI/civ6common.lua</File>
+        <File>Assets/UI/diplomacyactionview.lua</File>
         <File>Assets/UI/diplomacyactionview.xml</File>
-        <File>Assets/UI/diplomacydealview.lua</File>
         <File>Assets/UI/diplomacyribbon.lua</File>
         <File>Assets/UI/diplomacyribbon.xml</File>
         <File>Assets/UI/ingame.lua</File>
@@ -198,6 +203,7 @@
         <File>Assets/UI/unitflagmanager.xml</File>
         <File>Assets/UI/worldinput.lua</File>
         <File>Assets/UI/worldviewiconsmanager.lua</File>
+        <File>Assets/UI/worldtracker.lua</File>
         <File>Assets/UI/Choosers/civicschooser.lua</File>
         <File>Assets/UI/Choosers/researchchooser.lua</File>
         <File>Assets/UI/Civilopedia/civilopediasupport.lua</File>
@@ -246,6 +252,7 @@
       <Items>
         <File>Assets/cqui_databaseschema.sql</File>
         <File>Assets/cqui_settings.sql</File>
+        <File>Assets/cqui_settings_my.sql</File>
       </Items>
     </UpdateDatabase>
     <!-- CQUI specific UIs -->
@@ -295,6 +302,17 @@
         <File>Integrations/URS/unitpromotionpopup.lua</File>
       </Items>
     </ImportFiles>
+	<ImportFiles id="IDS_IMPORT_FILES">
+      <Items>
+        <File>Integrations/IDS/diplomacydealview.lua</File>
+        <File>Integrations/IDS/diplomacydealview.xml</File>
+      </Items>
+    </ImportFiles>
+	<LocalizedText id="IDS_TEXT">
+      <Items>
+        <File>Integrations/IDS/Text/ids_text.xml</File>
+      </Items>
+    </LocalizedText>
     <ImportFiles id="MORELENSES_IMPORT_FILES">
       <Items>
         <File>Integrations/ML/UI/minimappanel.lua</File>
