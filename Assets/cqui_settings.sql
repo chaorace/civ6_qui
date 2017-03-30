@@ -11,8 +11,8 @@
     ║ won't affect a new game!                                                                   ║
     ║                                                                                            ║
     ║ When you want to persist the settings between games, you should copy this file to          ║
-    ║ "cqui_settings_local.sql" and make your changes. Your local file could be the hole one or  ║
-    ║ only a subset of the values you want to change.                                            ║
+    ║ "cqui_settings_local.sql" and make your changes. Your local file could be the whole one    ║
+    ║ or only a subset of the values you want to change.                                         ║
     ║                                                                                            ║
     ║ CQUI will never overwrite this file.                                                       ║
     ╚════════════════════════════════════════════════════════════════════════════════════════════╝
