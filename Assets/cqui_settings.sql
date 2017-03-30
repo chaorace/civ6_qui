@@ -2,10 +2,19 @@
     ╔════════════════════════════════════════════════════════════════════════════════════════════╗
     ║                                   CQUI Default settings                                    ║
     ╠════════════════════════════════════════════════════════════════════════════════════════════╣
-    ║Created by LordYanaek for CQUI mod by chaorace.                                             ║
-    ║Those are the settings loaded by default by CQUI.                                           ║
-    ║You can change many of those from the in-game GUI but settings changed in this config file  ║
-    ║will persist between games (settings changed from the GUI won't affect a new game)          ║
+    ║ Created by LordYanaek for CQUI mod by chaorace.                                            ║
+    ║ Those are the settings loaded by DEFAULT by CQUI.                                          ║
+    ║                                                                                            ║
+    ║ ! Attention: This file could be overwritten each time you install a new version of CQUI !  ║
+    ║                                                                                            ║
+    ║ You can change many of those from the in-game GUI, but settings changed from the GUI       ║
+    ║ won't affect a new game!                                                                   ║
+    ║                                                                                            ║
+    ║ When you want to persist the settings between games, you should copy this file to          ║
+    ║ "cqui_settings_local.sql" and make your changes. Your local file could be the hole one or  ║
+    ║ only a subset of the values you want to change.                                            ║
+    ║                                                                                            ║
+    ║ CQUI will never overwrite this file.                                                       ║
     ╚════════════════════════════════════════════════════════════════════════════════════════════╝
 */
 
