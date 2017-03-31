@@ -1974,7 +1974,7 @@ function PopulateAvailableCities(player : table, iconList : table)
 			local subType = entry.SubType;
 			local pCity = player:GetCities():FindID( type );
 			-- Handle occupied cities
-			if entry.ForTypeName ~= GetCityData(pCity).CityName and not pCity:IsOccupied() then --ARISTOS --pCity == nil then
+			if pCity == nil or (entry.ForTypeName ~= GetCityData(pCity).CityName and not pCity:IsOccupied()) then --ARISTOS
 				pCity = otherPlayer:GetCities():FindID( type );
 			end
 
@@ -2427,7 +2427,7 @@ function PopulateDealCities(player : table, iconList : table)
 				if (type == DealItemTypes.CITIES) then
 					local pCity = player:GetCities():FindID(valueType);
 					-- Handle occupied cities
-					if valueName ~= GetCityData(pCity).CityName and not pCity:IsOccupied() then --ARISTOS
+					if pCity == nil or (valueName ~= GetCityData(pCity).CityName and not pCity:IsOccupied()) then --ARISTOS
 						pCity = otherPlayer:GetCities():FindID(valueType);
 					end
 
