@@ -4,7 +4,7 @@
     <!-- ENGLISH -->
 
     <!-- HUD Common Text -->
-    <Row Tag="LOC_HUD_REPORTS_TAB_CURRENT_DEALS">
+    <Row Tag="LOC_IDS_DUMMY_KEY">
       <Text>Current Deals</Text>
     </Row>
 

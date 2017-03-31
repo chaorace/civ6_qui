@@ -4,7 +4,7 @@
     <!-- FRENCH -->
 
     <!-- HUD Common Text -->
-    <Replace Tag="LOC_HUD_REPORTS_TAB_CURRENT_DEALS" Language="fr_FR">
+    <Replace Tag="LOC_IDS_DUMMY_KEY" Language="fr_FR">
       <Text>Transactions actuelles</Text>
     </Replace>
 

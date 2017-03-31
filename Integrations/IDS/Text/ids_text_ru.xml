@@ -4,7 +4,7 @@
     <!-- RUSSIAN -->
 
     <!-- HUD Common Text -->
-    <Replace Tag="LOC_HUD_REPORTS_TAB_CURRENT_DEALS" Language="ru_RU">
+    <Replace Tag="LOC_IDS_DUMMY_KEY" Language="ru_RU">
       <Text>Текущие Сделки</Text>
     </Replace>
 

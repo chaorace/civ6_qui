@@ -4,7 +4,7 @@
     <!-- POLISH -->
 
     <!-- HUD Common Text -->
-    <Replace Tag="LOC_HUD_REPORTS_TAB_CURRENT_DEALS" Language="pl_PL">
+    <Replace Tag="LOC_IDS_DUMMY_KEY" Language="pl_PL">
       <Text>Aktualne umowy handlowe</Text>
     </Replace>
 
