@@ -359,6 +359,13 @@
     <LocalizedText id="MORELENSES_TEXT">
       <Items>
         <File>Integrations/ML/Text/morelenses_text.xml</File>
+        <File>Integrations/ML/Text/morelenses_text_de.xml</File>
+        <File>Integrations/ML/Text/morelenses_text_fr.xml</File>
+        <File>Integrations/ML/Text/morelenses_text_it.xml</File>
+        <File>Integrations/ML/Text/morelenses_text_ko.xml</File>
+        <File>Integrations/ML/Text/morelenses_text_pl.xml</File>
+        <File>Integrations/ML/Text/morelenses_text_ru.xml</File>
+        <File>Integrations/ML/Text/morelenses_text_zh.xml</File>
       </Items>
     </LocalizedText>
     <UpdateDatabase id="MORELENSES_DATABASE">
