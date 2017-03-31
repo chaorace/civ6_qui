@@ -339,6 +339,13 @@
 	<LocalizedText id="IDS_TEXT">
       <Items>
         <File>Integrations/IDS/Text/ids_text.xml</File>
+        <File>Integrations/IDS/Text/ids_text_de.xml</File>
+        <File>Integrations/IDS/Text/ids_text_fr.xml</File>
+        <File>Integrations/IDS/Text/ids_text_it.xml</File>
+        <File>Integrations/IDS/Text/ids_text_ko.xml</File>
+        <File>Integrations/IDS/Text/ids_text_pl.xml</File>
+        <File>Integrations/IDS/Text/ids_text_ru.xml</File>
+        <File>Integrations/IDS/Text/ids_text_zh.xml</File>
       </Items>
     </LocalizedText>
     <ImportFiles id="MORELENSES_IMPORT_FILES">

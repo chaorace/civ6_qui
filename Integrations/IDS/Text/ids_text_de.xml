@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<GameData>
+  <LocalizedText>
+    <!-- GERMAN -->
+
+    <!-- HUD Common Text -->
+    <Replace Tag="LOC_HUD_REPORTS_TAB_CURRENT_DEALS" Language="de_DE">
+      <Text>Handelsübersicht</Text>
+    </Replace>
+
+  </LocalizedText>
+</GameData>
