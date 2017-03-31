@@ -328,6 +328,13 @@
     <LocalizedText id="UNITREPORT_TEXT">
       <Items>
         <File>Integrations/URS/Text/urs_text.xml</File>
+        <File>Integrations/URS/Text/urs_text_de.xml</File>
+        <File>Integrations/URS/Text/urs_text_fr.xml</File>
+        <File>Integrations/URS/Text/urs_text_it.xml</File>
+        <File>Integrations/URS/Text/urs_text_ko.xml</File>
+        <File>Integrations/URS/Text/urs_text_pl.xml</File>
+        <File>Integrations/URS/Text/urs_text_ru.xml</File>
+        <File>Integrations/URS/Text/urs_text_zh.xml</File>
       </Items>
     </LocalizedText>
     <ImportFiles id="UNITREPORT_IMPORT_FILES">
