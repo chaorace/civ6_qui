@@ -176,19 +176,47 @@
     <File>Integrations/BTS/UI/Choosers/tradeoriginchooser.xml</File>
     <File>Integrations/BTS/UI/Choosers/tradeoriginchooser.lua</File>
     <File>Integrations/BTS/Text/bts_text.xml</File>
+    <File>Integrations/BTS/Text/bts_text_de.xml</File>
+    <File>Integrations/BTS/Text/bts_text_fr.xml</File>
+    <File>Integrations/BTS/Text/bts_text_it.xml</File>
+    <File>Integrations/BTS/Text/bts_text_ko.xml</File>
+    <File>Integrations/BTS/Text/bts_text_pl.xml</File>
+    <File>Integrations/BTS/Text/bts_text_ru.xml</File>
+    <File>Integrations/BTS/Text/bts_text_zh.xml</File>
     <File>Integrations/URS/reportscreen.lua</File>
     <File>Integrations/URS/reportscreen.xml</File>
     <File>Integrations/URS/unitpromotionpopup.lua</File>
     <File>Integrations/URS/Text/urs_text.xml</File>
+    <File>Integrations/URS/Text/urs_text_de.xml</File>
+    <File>Integrations/URS/Text/urs_text_fr.xml</File>
+    <File>Integrations/URS/Text/urs_text_it.xml</File>
+    <File>Integrations/URS/Text/urs_text_ko.xml</File>
+    <File>Integrations/URS/Text/urs_text_pl.xml</File>
+    <File>Integrations/URS/Text/urs_text_ru.xml</File>
+    <File>Integrations/URS/Text/urs_text_zh.xml</File>
     <File>Integrations/IDS/diplomacydealview.lua</File>
     <File>Integrations/IDS/diplomacydealview.xml</File>
     <File>Integrations/IDS/Text/ids_text.xml</File>
+    <File>Integrations/IDS/Text/ids_text_de.xml</File>
+    <File>Integrations/IDS/Text/ids_text_fr.xml</File>
+    <File>Integrations/IDS/Text/ids_text_it.xml</File>
+    <File>Integrations/IDS/Text/ids_text_ko.xml</File>
+    <File>Integrations/IDS/Text/ids_text_pl.xml</File>
+    <File>Integrations/IDS/Text/ids_text_ru.xml</File>
+    <File>Integrations/IDS/Text/ids_text_zh.xml</File>
     <File>Integrations/ML/UI/minimappanel.lua</File>
     <File>Integrations/ML/UI/minimappanel.xml</File>
     <File>Integrations/ML/UI/Panels/modallenspanel.lua</File>
     <File>Integrations/ML/UI/Panels/modallenspanel.xml</File>
     <File>Integrations/ML/morelenses_colors.sql</File>
     <File>Integrations/ML/Text/morelenses_text.xml</File>
+    <File>Integrations/ML/Text/morelenses_text_de.xml</File>
+    <File>Integrations/ML/Text/morelenses_text_fr.xml</File>
+    <File>Integrations/ML/Text/morelenses_text_it.xml</File>
+    <File>Integrations/ML/Text/morelenses_text_ko.xml</File>
+    <File>Integrations/ML/Text/morelenses_text_pl.xml</File>
+    <File>Integrations/ML/Text/morelenses_text_ru.xml</File>
+    <File>Integrations/ML/Text/morelenses_text_zh.xml</File>
   </Files>
 
   <!-- Describes how each file is used -->
