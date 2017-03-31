@@ -8,11 +8,11 @@
     ║ !!! Attention: Don't write your custom settings in the original copy of this file !!!      ║
     ║                                                                                            ║
     ║ This file is where all default settings are stored, all changes to this file are lost      ║
-    ║ whenever Steam downloads a new CQUI patch (if using the Workshop version)                  ║
+    ║ whenever downloads a new CQUI version (particularly if using the Steam Workshop version)   ║
     ║                                                                                            ║
     ║ To change default settings permanently without the risk of losing them, create a           ║
-    ║ copy of this file named "cqui_settings_my.sql" and make your changes there.                ║
-    ║ The "cqui_settings_my.sql" file does not need to be a perfect copy and will work as        ║
+    ║ copy of this file named "cqui_settings_local.sql" and make your changes there.             ║
+    ║ The "cqui_settings_local.sql" file does not need to be a perfect copy and will work as     ║
     ║ long as it's valid SQL.                                                                    ║
     ║ If you discover a broken setting, please report it at the below URL:                       ║
     ║                     https://github.com/CQUI-Org/cqui/issues                                ║
