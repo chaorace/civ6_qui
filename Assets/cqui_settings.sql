@@ -3,18 +3,19 @@
     ║                                   CQUI Default settings                                    ║
     ╠════════════════════════════════════════════════════════════════════════════════════════════╣
     ║ Created by LordYanaek for CQUI mod by chaorace.                                            ║
-    ║ Those are the settings loaded by DEFAULT by CQUI.                                          ║
+    ║ These are the settings loaded by DEFAULT in CQUI.                                          ║
     ║                                                                                            ║
-    ║ ! Attention: This file could be overwritten each time you install a new version of CQUI !  ║
+    ║ !!! Attention: Don't write your custom settings in the original copy of this file !!!      ║
     ║                                                                                            ║
-    ║ You can change many of those from the in-game GUI, but settings changed from the GUI       ║
-    ║ won't affect a new game!                                                                   ║
+    ║ This file is where all default settings are stored, all changes to this file are lost      ║
+    ║ whenever Steam downloads a new CQUI patch (if using the Workshop version)                  ║
     ║                                                                                            ║
-    ║ When you want to persist the settings between games, you should copy this file to          ║
-    ║ "cqui_settings_local.sql" and make your changes. Your local file could be the whole one    ║
-    ║ or only a subset of the values you want to change.                                         ║
-    ║                                                                                            ║
-    ║ CQUI will never overwrite this file.                                                       ║
+    ║ To change default settings permanently without the risk of losing them, create a           ║
+    ║ copy of this file named "cqui_settings_my.sql" and make your changes there.                ║
+    ║ The "cqui_settings_my.sql" file does not need to be a perfect copy and will work as        ║
+    ║ long as it's valid SQL.                                                                    ║
+    ║ If you discover a broken setting, please report it at the below URL:                       ║
+    ║                     https://github.com/CQUI-Org/cqui/issues                                ║
     ╚════════════════════════════════════════════════════════════════════════════════════════════╝
 */
 
