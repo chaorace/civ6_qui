@@ -303,7 +303,7 @@ function RefreshResources()
     local overflowString = "";
     local plusInstance:table;
     
-    -- CQUI/jhcd: split into two iterations to sort strategic before luxury
+    -- CQUI/jhcd: split into two iterations to sort STRATEGIC before LUXURY
     -- RESOURCECLASS_STRATEGIC (original code)
     for resource in GameInfo.Resources() do
       if (resource.ResourceClassType ~= nil and resource.ResourceClassType ~= "RESOURCECLASS_BONUS" and resource.ResourceClassType ~="RESOURCECLASS_LUXURY") then
@@ -338,7 +338,7 @@ function RefreshResources()
       end
     end
     
-    -- CQUI: show RESOURCECLASS_LUXURY too, if it is enabled in CQUI settings
+    -- CQUI/jhcd: show RESOURCECLASS_LUXURY too, if it is enabled in CQUI settings
     if (g_showluxury) then
       for resource in GameInfo.Resources() do
         if (resource.ResourceClassType ~= nil and resource.ResourceClassType ~= "RESOURCECLASS_BONUS" and resource.ResourceClassType ~= "RESOURCECLASS_STRATEGIC") then
