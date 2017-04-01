@@ -411,7 +411,7 @@ function RefreshTurnsRemaining()
   Controls.Turns:SetText(tostring(turn));
 
   local strDate = Calendar.MakeYearStr(turn);
-Controls.CurrentDate:SetText(strDate);
+  Controls.CurrentDate:SetText(strDate);
 end
 
 -- ===========================================================================
