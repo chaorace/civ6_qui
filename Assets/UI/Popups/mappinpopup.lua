@@ -1,18 +1,18 @@
-﻿----------------------------------------------------------------  
+﻿----------------------------------------------------------------
 -- MapPinPopup
 --
 -- Popup used for creating and editting map pins.
-----------------------------------------------------------------  
+----------------------------------------------------------------
 include( "PlayerTargetLogic" );
 include ("ToolTipHelper");
 
 
-----------------------------------------------------------------  
+----------------------------------------------------------------
 -- Globals
----------------------------------------------------------------- 
+----------------------------------------------------------------
 local COLOR_YELLOW        :number = 0xFF2DFFF8;
 local COLOR_WHITE       :number = 0xFFFFFFFF;
- 
+
 local g_editMapPin :table = nil;
 local g_iconOptionEntries = {};
 local g_visibilityTargetEntries = {};
@@ -43,8 +43,14 @@ local defaultIcons =
 
 local g_iconPulldownOptions = {};
 
+----------------------------------------------------------------
+-- CQUI - Globals
+----------------------------------------------------------------
+local g_cqui_hexX = nil;
+local g_cqui_hexY = nil;
+
 -------------------------------------------------------------------------------
--- 
+--
 -------------------------------------------------------------------------------
 function MapPinVisibilityToPlayerTarget(mapPinVisibility :number, playerTargetData :table)
   if(mapPinVisibility == ChatTargetTypes.CHATTARGET_ALL) then
@@ -82,7 +88,7 @@ end
 
 
 -------------------------------------------------------------------------------
--- 
+--
 -------------------------------------------------------------------------------
 function SetMapPinIcon(imageControl :table, mapPinIconName :string)
   if(imageControl ~= nil and mapPinIconName ~= nil) then
@@ -96,19 +102,19 @@ function PopulateIconOptions()
   Controls.IconOptionStackDefault:DestroyAllChildren();
   Controls.IconOptionStackDistricts:DestroyAllChildren();
   Controls.IconOptionStackWonders:DestroyAllChildren();
-  
+
   local controlTable = {};
   local newIconEntry = {};
-  
+
   local customName = "";
   local customTooltip = "";
   local playerId = Game.GetLocalPlayer();
   local count = 1;
-  
+
   local defaultStack = Controls.IconOptionStackDefault;
   local districtStack = Controls.IconOptionStackDistricts;
   local wonderStack = Controls.IconOptionStackWonders;
-  
+
   -- Add defaults
   for i, item in ipairs(defaultIcons) do
     CreateIconEntry(defaultStack, item.name, nil, count);
@@ -117,12 +123,11 @@ function PopulateIconOptions()
 
   -- Add districts
   for item in GameInfo.Districts() do
-    local replaces = GameInfo.DistrictReplaces[item.DistrictType]; 
+    local replaces = GameInfo.DistrictReplaces[item.DistrictType];
     if (not replaces) then
-    print(item.DistrictType);
       customName = "ICON_" .. item.DistrictType;
       customTooltip = ToolTipHelper.GetToolTip(item.DistrictType, playerId);
-      
+
       -- Invalid item in the GameInfo, for whatever reason
       if (item.DistrictType ~= "DISTRICT_WONDER") then
         CreateIconEntry(districtStack, customName, customTooltip, count);
@@ -130,18 +135,18 @@ function PopulateIconOptions()
       end
     end
   end
-  
+
   -- Add wonders
-  for item in GameInfo.Buildings() do 
-    local isWonder:boolean = item.MaxWorldInstances ~= -1; 
+  for item in GameInfo.Buildings() do
+    local isWonder:boolean = item.MaxWorldInstances ~= -1;
     if (isWonder == true) then
       customName = "ICON_" .. item.BuildingType;
       customTooltip = ToolTipHelper.GetToolTip(item.BuildingType, playerId);
-      CreateIconEntry(wonderStack, customName, customTooltip, count);  
+      CreateIconEntry(wonderStack, customName, customTooltip, count);
       count = count + 1;
     end
-  end 
-  
+  end
+
   Controls.IconOptionStackDefault:CalculateSize();
   Controls.IconOptionStackDefault:ReprocessAnchoring();
   Controls.IconOptionStackDistricts:CalculateSize();
@@ -164,11 +169,11 @@ function CreateIconEntry(stack, name, tooltip, index)
   SetMapPinIcon(controlTable.Icon, name);
   controlTable.IconOptionButton:RegisterCallback(Mouse.eLClick, OnIconOption);
   controlTable.IconOptionButton:SetVoids(index, -1);
-  
+
   if (tooltip ~= nil) then
-    controlTable.IconOptionButton:SetToolTipString(tooltip); 
-  end 
-  
+    controlTable.IconOptionButton:SetToolTipString(tooltip);
+  end
+
   table.insert(g_iconPulldownOptions, {name = name, tooltip = tooltip});
 
   newIconEntry.IconName = name;
@@ -205,6 +210,8 @@ function RequestMapPin(hexX :number, hexY :number)
   local pMapPin = pPlayerCfg:GetMapPin(hexX, hexY);
   if(pMapPin ~= nil) then
     g_editMapPin = pMapPin;
+    g_cqui_hexX = hexX;
+    g_cqui_hexY = hexY;
 
     g_desiredIconName = g_editMapPin:GetIconName();
     if GameConfiguration.IsAnyMultiplayer() then
@@ -273,8 +280,8 @@ end
 
 -- ===========================================================================
 function OnOk()
-  if( not ContextPtr:IsHidden() ) then
     if(g_editMapPin ~= nil) then
+      g_editMapPin = CQUI_GetMapPinAt();
       g_editMapPin:SetName(Controls.PinName:GetText());
       g_editMapPin:SetIconName(g_desiredIconName);
 
@@ -286,13 +293,13 @@ function OnOk()
     end
 
     UIManager:DequeuePopup( ContextPtr );
-  end
 end
 
 
 -- ===========================================================================
 function OnSendToChatButton()
   if(g_editMapPin ~= nil) then
+    g_editMapPin = CQUI_GetMapPinAt();
     g_editMapPin:SetName(Controls.PinName:GetText());
     LuaEvents.MapPinPopup_SendPinToChat(g_editMapPin:GetPlayerID(), g_editMapPin:GetID());
   end
@@ -301,12 +308,13 @@ end
 -- ===========================================================================
 function OnDelete()
   if(g_editMapPin ~= nil) then
+    g_editMapPin = CQUI_GetMapPinAt();
     local activePlayerID = Game.GetLocalPlayer();
     local pPlayerCfg = PlayerConfigurations[activePlayerID];
     local deletePinID = g_editMapPin:GetID();
     pPlayerCfg:DeleteMapPin(deletePinID);
     Network.BroadcastPlayerInfo();
-        UI.PlaySound("Map_Pin_Remove");
+    UI.PlaySound("Map_Pin_Remove");
   end
   UIManager:DequeuePopup( ContextPtr );
 end
@@ -314,9 +322,16 @@ end
 function OnCancel()
   UIManager:DequeuePopup( ContextPtr );
 end
-----------------------------------------------------------------  
+
+-- ===========================================================================
+function CQUI_GetMapPinAt()
+  local activePlayerID = Game.GetLocalPlayer();
+  local pPlayerCfg = PlayerConfigurations[activePlayerID];
+  return pPlayerCfg:GetMapPin(g_cqui_hexX, g_cqui_hexY);
+end
+----------------------------------------------------------------
 -- Event Handlers
----------------------------------------------------------------- 
+----------------------------------------------------------------
 function OnMapPinPlayerInfoChanged( playerID :number )
   PlayerTarget_OnPlayerInfoChanged( playerID, Controls.VisibilityPull, nil, g_visibilityTargetEntries, g_playerTarget, true);
 end
@@ -334,10 +349,10 @@ end
 --  Keyboard INPUT Handler
 -- ===========================================================================
 function KeyHandler( key:number )
-  if (key == Keys.VK_ESCAPE) then 
+  if (key == Keys.VK_ESCAPE) then
     -- Cancel on escape
-    OnCancel(); 
-    return true; 
+    OnCancel();
+    return true;
   elseif (key == Keys.VK_RETURN) then
     -- Immediately create pin on return, even when textfield is not focused
     OnOk();
@@ -377,5 +392,3 @@ function Initialize()
   Events.LocalPlayerChanged.Add(OnLocalPlayerChanged);
 end
 Initialize();
-
-
