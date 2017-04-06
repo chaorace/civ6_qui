@@ -1,7 +1,48 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <!-- This context is as high up on the z-axis as possible, which means it is excellent for handling mouse inputs globally and for elements that always need to appear above other things -->
 <Context Name="CQUI_TopLayer">
-  <Container ID="Frame" Size="Full,Full">
+  <!-- Add an element as child of this container to place it free-floating -->
 
+  <!-- Add an element as child of this container to place it relative to where the vanilla controls reside -->
+  <Container ID="Frame" Size="Full,Full">
+    <!-- Positional mockup of the top half of the UI-->
+    <Stack ID="StandinStackTop" Anchor="C,T" StackGrowth="Down">
+      <!-- Standin for the topbar area -->
+      <Box Anchor="C,T" Size="Full, 30" Color="Green" Alpha="0"/>
+      <Container ID="UnderTopBarArea" Anchor="C,T" Size="Full, 0" AutoSize="V">
+        <!-- Standin for the worldtracker -->
+        <Box Anchor="L,T" Size="300,270" Color="Red" Alpha="0"/>
+        <!-- Standin for the right button panel and diplo ribbon (when considerably full)-->
+        <Box Anchor="R,T" Size="650,140" Color="Beige" Alpha="0"/>
+      </Container>
+    </Stack>
+    <!-- Positional mockup of the bottom half of the UI -->
+    <Stack ID="StandinStackBottom" Anchor="C,B" StackGrowth="Up">
+      <Container ID="BottomArea" Anchor="C,B" Size="Full,0" AutoSize="V">
+        <!-- Standin for the minimap at maximum size -->
+        <Box Anchor="L,B" Size="780, 420" Color="Green" Alpha="0"/>
+        <Stack ID="StandinStackRight" Anchor="R,B" StackGrowth="Up">
+          <!-- Standin for the actionpanel/unitpanel area -->
+          <Box Anchor="R,B" Size="560, 220" Color="Red" Alpha="0"/>
+          <!-- Standin for the notification area -->
+          <Box Anchor="R,B" Size="500,parent-400" Color="Gold" Alpha="0"/>
+        </Stack>
+      </Container>
+    </Stack>
+    <Stack ID="ParadoxBarStack" Anchor="C,T" StackGrowth="Right">
+    </Stack>
   </Container>
+
+  <Instance Name="ParadoxBarInstance">
+    <Container ID="Top" AutoSize="1">
+      <SlideAnim ID="SlideAnimation" Size="60,120" Offset="0,0" Begin="0,0" EndOffset="0,20" Cycle="Once" Stopped="1">
+        <Button ID="Button" Size="parent,52">
+          <Image Texture="Controls_CircleBacking45" Size="51,51" Anchor="C,C" Offset="0,1"/>
+          <Image ID="Icon" Anchor="C,C" Size="45,45" Texture="Leaders45" />
+          <Label ID="Text" Anchor="C,C" Style="FontNormalBold14"/>
+        </Button>
+        <Image Anchor="R,T" Texture="CircleBacking22" Size="22,22" Offset="-5,-2" />
+      </SlideAnim>
+    </Container>
+  </Instance>
 </Context>
