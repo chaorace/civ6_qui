@@ -104,7 +104,6 @@
       <Stack ID="ResourceStack" StackGrowth="Right" StackPadding="4" Anchor="L,C" Offset="0,-5"/>
     </Grid>
 
-		<GridButton ID="ViewReports" Style="RoundedButton" String="LOC_HUD_REPORTS_VIEW_REPORTS" Size="50,24" />
 	</Stack>
 
 	<Tutorial ID="TechYieldPointer" Style="TutorialContainer" Anchor="L,T" Offset="46, 70" TriggerBy="TutorialTechYieldPointer">

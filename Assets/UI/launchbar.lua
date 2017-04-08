@@ -18,7 +18,7 @@ local m_isGreatWorksUnlocked	:boolean = false;
 local m_isReligionUnlocked		:boolean = false;
 local m_isGovernmentUnlocked	:boolean = false;
 
-local isDebug			:boolean = false;			-- Set to true to force all hook buttons to show on game start	
+local isDebug			:boolean = false;			-- Set to true to force all hook buttons to show on game start
 
 -- ===========================================================================
 --	Callbacks
@@ -39,9 +39,9 @@ function OnGovernmentClick()
 	else
 		CloseAllPopups();
 		if (kCulture:CivicCompletedThisTurn() and kCulture:CivicUnlocksGovernment(kCulture:GetCivicCompletedThisTurn()) and not kCulture:GovernmentChangeConsidered()) then
-			-- Blocking notification that NEW GOVERNMENT is available, make sure player takes a look	
+			-- Blocking notification that NEW GOVERNMENT is available, make sure player takes a look
 			LuaEvents.LaunchBar_GovernmentOpenGovernments();
-		else 
+		else
 			-- Normal entry to my Government
 			LuaEvents.LaunchBar_GovernmentOpenMyGovernment();
 		end
@@ -66,7 +66,7 @@ function OnOpenGreatPeople()
 		LuaEvents.LaunchBar_CloseGreatPeoplePopup();
 	else
 		CloseAllPopups();
-		LuaEvents.LaunchBar_OpenGreatPeoplePopup();	
+		LuaEvents.LaunchBar_OpenGreatPeoplePopup();
 	end
 end
 
@@ -76,7 +76,7 @@ function OnOpenGreatWorks()
 		LuaEvents.LaunchBar_CloseGreatWorksOverview();
 	else
 		CloseAllPopups();
-		LuaEvents.LaunchBar_OpenGreatWorksOverview();	
+		LuaEvents.LaunchBar_OpenGreatWorksOverview();
 	end
 end
 
@@ -86,7 +86,7 @@ function OnOpenReligion()
 		LuaEvents.LaunchBar_CloseReligionPanel();
 	else
 		CloseAllPopups();
-		LuaEvents.LaunchBar_OpenReligionPanel();	
+		LuaEvents.LaunchBar_OpenReligionPanel();
 	end
 end
 
@@ -96,7 +96,7 @@ function OnOpenResearch()
 		LuaEvents.LaunchBar_CloseTechTree();
 	else
 		CloseAllPopups();
-		LuaEvents.LaunchBar_RaiseTechTree();	
+		LuaEvents.LaunchBar_RaiseTechTree();
 	end
 end
 
@@ -106,8 +106,23 @@ function OnOpenCulture()
 		LuaEvents.LaunchBar_CloseCivicsTree();
 	else
 		CloseAllPopups();
-		LuaEvents.LaunchBar_RaiseCivicsTree();	
+		LuaEvents.LaunchBar_RaiseCivicsTree();
 	end
+end
+
+-- ===========================================================================
+-- CQUI: Moved here from toppanel.lua since we moved the reports button here
+function OnToggleReportsScreen()
+  local pReportsScreen :table = ContextPtr:LookUpControl( "/InGame/ReportScreen" );
+  if pReportsScreen == nil then
+    UI.DataError("Unable to toggle Reports Screen.  Not found in '/InGame/ReportScreen'.");
+    return;
+  end
+  if pReportsScreen:IsHidden() then
+    LuaEvents.TopPanel_OpenReportsScreen();
+  else
+    LuaEvents.TopPanel_CloseReportsScreen();
+  end
 end
 
 -- ===========================================================================
@@ -240,7 +255,7 @@ function RealizeHookVisibility()
 			Controls.ReligionBolt:SetHide(true);
 		end
 	end
-	
+
 	if (m_isGreatWorksUnlocked and HasCapability("CAPABILITY_GREAT_WORKS_VIEW")) then
 		Controls.GreatWorksButton:SetHide(false);
 		Controls.GreatWorksBolt:SetHide(false);
@@ -272,7 +287,7 @@ end
 --	2/2) A function to check gamestate OnTurnBegin
 
 -- *****************************************************************************
---	Religion Hook 
+--	Religion Hook
 --	1/2) OnFaithChanged - triggered off of the FaithChanged game event
 function OnFaithChanged()
 	if (m_isReligionUnlocked) then
@@ -302,7 +317,7 @@ function RefreshReligion()
 end
 
 -- *****************************************************************************
---	Great Works Hook 
+--	Great Works Hook
 --	1/2) OnGreatWorkCreated - triggered off of the GreatWorkCreated game event
 --	*Note - a great work can be added and then traded away/ moved.  I think we should still allow the hook to stay
 --	open in this case.  I think it would be strange behavior to have the hook be made available and then removed.
@@ -331,8 +346,8 @@ function RefreshGreatWorks()
 	if m_isGreatWorksUnlocked then
 		return;
 	end
-	
-	localPlayer = Players[ePlayer];  
+
+	localPlayer = Players[ePlayer];
 	local pCities:table = localPlayer:GetCities();
 	for i, pCity in pCities:Members() do
 		if pCity ~= nil and pCity:GetOwner() == ePlayer then
@@ -376,7 +391,7 @@ function RefreshGreatPeople()
 end
 
 -- *****************************************************************************
---	Government Hook 
+--	Government Hook
 --	1/2) OnCivicCompleted - triggered off of the CivicCompleted event - check to see if the unlocked civic unlocked our first policy
 function OnCivicCompleted(player:number, civic:number, isCanceled:boolean)
 	local ePlayer:number = Game.GetLocalPlayer();
@@ -438,7 +453,7 @@ end
 
 -- ===========================================================================
 function RefreshView()
-	-- The Launch Bar width should accomodate how many hooks are currently in the stack.  
+	-- The Launch Bar width should accomodate how many hooks are currently in the stack.
 	Controls.ButtonStack:CalculateSize();
 	Controls.ButtonStack:ReprocessAnchoring();
 	Controls.LaunchBacking:SetSizeX(Controls.ButtonStack:GetSizeX()+116);
@@ -460,7 +475,7 @@ function OnTurnBegin()
 	if(currentTechID >= 0) then
 		local progress			:number = playerTechs:GetResearchProgress(currentTechID);
 		local cost				:number	= playerTechs:GetResearchCost(currentTechID);
-	
+
 		Controls.ScienceMeter:SetPercent(progress/cost);
 	else
 		Controls.ScienceMeter:SetPercent(0);
@@ -481,7 +496,7 @@ function OnTurnBegin()
 	if(currentCivicID >= 0) then
 		local civicProgress			:number = playerCivics:GetCulturalProgress(currentCivicID);
 		local civicCost				:number	= playerCivics:GetCultureCost(currentCivicID);
-	
+
 		Controls.CultureMeter:SetPercent(civicProgress/civicCost);
 	else
 		Controls.CultureMeter:SetPercent(0);
@@ -535,10 +550,10 @@ function OnToggleCivicPanel(hideResearch)
 end
 
 -- Reset the hooks when the player changes for hotseat.
-function OnLocalPlayerChanged()	
+function OnLocalPlayerChanged()
 	m_isGreatPeopleUnlocked	= false;
 	m_isGreatWorksUnlocked	= false;
-	m_isReligionUnlocked	= false;	
+	m_isReligionUnlocked	= false;
 	m_isGovernmentUnlocked	= false;
 	RefreshGovernment();
 	RefreshGreatPeople();
@@ -548,6 +563,13 @@ end
 
 -- ===========================================================================
 function Initialize()
+
+  local iconName = "ICON_CIVIC_FUTURE_CIVIC";
+  local textureOffsetX, textureOffsetY, textureSheet = IconManager:FindIconAtlas(iconName,38);
+  if (textureOffsetX ~= nil) then
+    Controls.ReportsImage:SetTexture( textureOffsetX, textureOffsetY, textureSheet );
+  end
+
 	Controls.CultureButton:RegisterCallback(Mouse.eLClick, OnOpenCulture);
 	Controls.CultureButton:RegisterCallback( Mouse.eMouseEnter, function() UI.PlaySound("Main_Menu_Mouse_Over"); end);
 	Controls.CultureMeterButton:RegisterCallback(Mouse.eLClick, OnOpenCulture);
@@ -562,6 +584,11 @@ function Initialize()
 	Controls.ScienceButton:RegisterCallback(Mouse.eLClick, OnOpenResearch);
 	Controls.ScienceButton:RegisterCallback( Mouse.eMouseEnter, function() UI.PlaySound("Main_Menu_Mouse_Over"); end);
 	Controls.ScienceMeterButton:RegisterCallback(Mouse.eLClick, OnOpenResearch);
+
+  -- CQUI --
+  Controls.ReportsButton:RegisterCallback(Mouse.eLClick, OnToggleReportsScreen);
+  Controls.ReportsButton:RegisterCallback( Mouse.eMouseEnter, function() UI.PlaySound("Main_Menu_Mouse_Over"); end);
+  -- CQUI --
 
 	Events.TurnBegin.Add( OnTurnBegin );
 	Events.VisualStateRestored.Add( OnTurnBegin );
@@ -581,15 +608,15 @@ function Initialize()
 	Events.DiplomacyDealEnacted.Add( OnDiplomacyDealEnacted );
 
 	LuaEvents.CivicsTree_CloseCivicsTree.Add(SetCivicsTreeClosed);
-	LuaEvents.CivicsTree_OpenCivicsTree.Add( SetCivicsTreeOpen );	
+	LuaEvents.CivicsTree_OpenCivicsTree.Add( SetCivicsTreeOpen );
 	LuaEvents.Government_CloseGovernment.Add( SetGovernmentClosed );
-	LuaEvents.Government_OpenGovernment.Add( SetGovernmentOpen );	
+	LuaEvents.Government_OpenGovernment.Add( SetGovernmentOpen );
 	LuaEvents.GreatPeople_CloseGreatPeople.Add( SetGreatPeopleClosed );
 	LuaEvents.GreatPeople_OpenGreatPeople.Add( SetGreatPeopleOpen );
 	LuaEvents.GreatWorks_CloseGreatWorks.Add( SetGreatWorksClosed );
 	LuaEvents.GreatWorks_OpenGreatWorks.Add( SetGreatWorksOpen );
 	LuaEvents.Religion_CloseReligion.Add( SetReligionClosed );
-	LuaEvents.Religion_OpenReligion.Add( SetReligionOpen );	
+	LuaEvents.Religion_OpenReligion.Add( SetReligionOpen );
 	LuaEvents.TechTree_CloseTechTree.Add(SetTechTreeClosed);
 	LuaEvents.TechTree_OpenTechTree.Add( SetTechTreeOpen );
 	LuaEvents.Tutorial_CloseAllLaunchBarScreens.Add( OnTutorialCloseAll );
@@ -601,6 +628,6 @@ function Initialize()
 		LuaEvents.WorldTracker_ToggleCivicPanel.Add(OnToggleCivicPanel);
 	end
 
-	OnTurnBegin();	
+	OnTurnBegin();
 end
 Initialize();
