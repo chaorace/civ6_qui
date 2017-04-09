@@ -49,7 +49,8 @@ INSERT OR REPLACE INTO CQUI_Settings -- Don't touch this line!
       ("CQUI_SmartWorkIcon", 1), -- Applies a different size/transparency to citizen icons if they're currently being worked
       ("CQUI_TechPopupVisual", 0), -- Popups will be displayed when you discover a new tech or civic (this is the normal behavior for the unmoded game)
       ("CQUI_TechPopupAudio", 1), -- Play the voiceovers when you discover a new tech or civic (this is the normal behavior for the unmoded game)
-      ("CQUI_ToggleYieldsOnLoad", 1); -- Toggles yields immediately on load
+      ("CQUI_ToggleYieldsOnLoad", 1), -- Toggles yields immediately on load
+      ("CQUI_BlockOnCityAttack", 1); -- Block turn from ending if you have a city that can attack
 
 /*
     ┌────────────────────────────────────────────────────────────────────────────────────────────┐

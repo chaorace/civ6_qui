@@ -108,6 +108,12 @@
     <Row Tag="LOC_CQUI_GENERAL_TOGGLEYIELDSONLOAD" Language="en_US">
       <Text>Toggles yields ON by default</Text>
     </Row>
+    <Row Tag="LOC_CQUI_GENERAL_BLOCKONCITYATTACK" Language="en_US">
+      <Text>Block end turn for city attack</Text>
+    </Row>
+    <Row Tag="LOC_CQUI_GENERAL_BLOCKONCITYATTACK_TOOLTIP" Language="en_US">
+      <Text>Enable this if you want "End Turn" to be block if a city can attack.</Text>
+    </Row>
     <Row Tag="LOC_CQUI_GENERAL_TRANSPARENT" Language="en_US">
       <Text>Transparent</Text>
     </Row>
