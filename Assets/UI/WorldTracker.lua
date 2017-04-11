@@ -141,7 +141,7 @@ function UpdateResearchPanel( isHideResearch:boolean )
 
 	m_researchInstance.MainPanel:SetHide( m_hideResearch );
 	Controls.ResearchCheck:SetCheck( not m_hideResearch );
-	LuaEvents.WorldTracker_ToggleResearchPanel( m_hideResearch );
+	LuaEvents.WorldTracker_ToggleResearchPanel( m_hideResearch or m_hideAll );
 	RealizeEmptyMessage();
 	RealizeStack();
 
@@ -185,7 +185,7 @@ function UpdateCivicsPanel(hideCivics:boolean)
 
 	m_civicsInstance.MainPanel:SetHide(m_hideCivics);
 	Controls.CivicsCheck:SetCheck(not m_hideCivics);
-	LuaEvents.WorldTracker_ToggleCivicPanel(m_hideCivics);
+	LuaEvents.WorldTracker_ToggleCivicPanel(m_hideCivics or m_hideAll);
 	RealizeEmptyMessage();
 	RealizeStack();
 
