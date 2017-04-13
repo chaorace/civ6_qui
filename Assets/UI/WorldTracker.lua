@@ -1,6 +1,8 @@
 include("InstanceManager");
 include("TechAndCivicSupport");
 include("SupportFunctions");
+include("GameCapabilities");
+
 --	Hotloading note: The World Tracker button check now positions based on how many hooks are showing.
 --	You'll need to save "LaunchBar" to see the tracker button appear.
 -- ===========================================================================
@@ -134,6 +136,11 @@ end
 
 -- ===========================================================================
 function UpdateResearchPanel( isHideResearch:boolean )
+  
+  if not HasCapability("CAPABILITY_TECH_CHOOSER") then
+		isHideResearch = true;
+		Controls.ResearchCheck:SetHide(true);
+	end
 
 	if isHideResearch ~= nil then
 		m_hideResearch = isHideResearch;
@@ -179,6 +186,11 @@ end
 -- ===========================================================================
 function UpdateCivicsPanel(hideCivics:boolean)
 
+  if not HasCapability("CAPABILITY_CIVICS_CHOOSER") then
+		hideCivics = true;
+		Controls.CivicsCheck:SetHide(true);
+	end
+  
 	if hideCivics ~= nil then
 		m_hideCivics = hideCivics;
 	end
@@ -274,6 +286,13 @@ function Refresh()
 	m_currentCivicID = pPlayerCulture:GetProgressingCivic();
 	m_lastCivicCompletedID = -1;
 	UpdateCivicsPanel();
+  
+  -- Hide world tracker by default if there are no tracker options enabled
+	if( Controls.ChatCheck:IsHidden() and 
+		Controls.CivicsCheck:IsHidden() and
+		Controls.ResearchCheck:IsHidden() ) then
+		ToggleAll(true);
+	end
 end
 
 -- ===========================================================================
