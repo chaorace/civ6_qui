@@ -323,7 +323,7 @@ function Initialize()
   LuaEvents.CQUI_SettingsUpdate.Add(ToggleSmartbannerCheckboxes);
   LuaEvents.CQUI_SettingsUpdate.Add(ToggleSmartWorkIconSettings);
 
-  LuaEvents.CQUI_SettingsInitialized(true); --Tell other elements that the settings have been initialized and it's safe to try accessing settings now
+  LuaEvents.CQUI_SettingsInitialized(); --Tell other elements that the settings have been initialized and it's safe to try accessing settings now
 end
 
 function ToggleSmartbannerCheckboxes()
