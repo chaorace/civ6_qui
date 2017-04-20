@@ -3220,6 +3220,7 @@ function Initialize()
 
   LuaEvents.GameDebug_Return.Add(OnGameDebugReturn);
 
+  LuaEvents.CQUI_SettingsInitialized.Add( CQUI_OnSettingsInitialized );
   Events.CitySelectionChanged.Add( CQUI_OnBannerMouseExit );
 end
 Initialize();
