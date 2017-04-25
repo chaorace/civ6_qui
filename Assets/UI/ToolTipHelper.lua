@@ -65,41 +65,55 @@ ToolTipHelper.GetAdjacencyBonuses = function(t, field, key)
 
 			local yield = GameInfo.Yields[row.YieldType];
 
-			if(object and yield) then
+			
+			if(object and yield) then	
+			
+				-- KORAD255 - Clean up adjacency bonus tooltip for Campus/Holy #233 
+				if(not(
+					(key == "DISTRICT_CAMPUS" or key == "DISTRICT_HOLY_SITE") 
+					and 
+					(object == "LOC_TERRAIN_GRASS_MOUNTAIN_NAME" or object == "LOC_TERRAIN_PLAINS_MOUNTAIN_NAME"
+						or object == "LOC_TERRAIN_DESERT_MOUNTAIN_NAME" or object == "LOC_TERRAIN_TUNDRA_MOUNTAIN_NAME"))) then
+					
+					local hideFlag = (key == "DISTRICT_CAMPUS" or key == "DISTRICT_HOLY_SITE") and object == "LOC_TERRAIN_SNOW_MOUNTAIN_NAME";		
+					local key = (row.TilesRequired > 1) and "LOC_TYPE_TRAIT_ADJACENT_BONUS_PER" or "LOC_TYPE_TRAIT_ADJACENT_BONUS";
+					local value = Locale.Lookup(key, row.YieldChange, yield.IconString, yield.Name, row.TilesRequired, object);
 
-				local key = (row.TilesRequired > 1) and "LOC_TYPE_TRAIT_ADJACENT_BONUS_PER" or "LOC_TYPE_TRAIT_ADJACENT_BONUS";
+					if(row.PrereqCivic or row.PrereqTech) then
+						local item;
+						if(row.PrereqCivic) then
+							item = GameInfo.Civics[row.PrereqCivic];
+						else
+							item = GameInfo.Technologies[row.PrereqTech];
+						end
 
-				local value = Locale.Lookup(key, row.YieldChange, yield.IconString, yield.Name, row.TilesRequired, object);
-
-				if(row.PrereqCivic or row.PrereqTech) then
-					local item;
-					if(row.PrereqCivic) then
-						item = GameInfo.Civics[row.PrereqCivic];
-					else
-						item = GameInfo.Technologies[row.PrereqTech];
+						if(item) then
+							local text = Locale.Lookup("LOC_TYPE_TRAIT_ADJACENT_BONUS_REQUIRES_TECH_OR_CIVIC", item.Name);
+							value = value .. "  " .. text;
+						end
 					end
 
-					if(item) then
-						local text = Locale.Lookup("LOC_TYPE_TRAIT_ADJACENT_BONUS_REQUIRES_TECH_OR_CIVIC", item.Name);
-						value = value .. "  " .. text;
-					end
-				end
-
-				if(row.ObsoleteCivic or row.ObsoleteTech) then
-					local item;
-					if(row.ObsoleteCivic) then
-						item = GameInfo.Civics[row.ObsoleteCivic];
-					else
-						item = GameInfo.Technologies[row.ObsoleteTech];
+					if(row.ObsoleteCivic or row.ObsoleteTech) then
+						local item;
+						if(row.ObsoleteCivic) then
+							item = GameInfo.Civics[row.ObsoleteCivic];
+						else
+							item = GameInfo.Technologies[row.ObsoleteTech];
+						end
+					
+						if(item) then
+							local text = Locale.Lookup("LOC_TYPE_TRAIT_ADJACENT_BONUS_OBSOLETE_WITH_TECH_OR_CIVIC", item.Name);
+							value = value .. "  " .. text;
+						end
 					end
 				
-					if(item) then
-						local text = Locale.Lookup("LOC_TYPE_TRAIT_ADJACENT_BONUS_OBSOLETE_WITH_TECH_OR_CIVIC", item.Name);
-						value = value .. "  " .. text;
+					if(hideFlag) then
+						local val = string.gsub(value, "Snow %(Mountain%)", "Mountain");
+						table.insert(bonuses, val);
+					else
+						table.insert(bonuses, value);
 					end
 				end
-
-				table.insert(bonuses, value);
 			end		
 		end
 	end
