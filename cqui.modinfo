@@ -134,7 +134,7 @@
     <File>Assets/UI/productionpanel.xml</File>
     <File>Assets/UI/strategicview_mapplacement.lua</File>
     <File>Assets/UI/supportfunctions.lua</File>
-    <File>Assets/UI/ToolTipHelper.lua</File>
+    <File>Assets/UI/tooltiphelper.lua</File>
     <File>Assets/UI/toppanel.lua</File>
     <File>Assets/UI/toppanel.xml</File>
     <File>Assets/UI/unitpanel.xml</File>
@@ -247,7 +247,7 @@
         <File>Assets/UI/productionpanel.xml</File>
         <File>Assets/UI/strategicview_mapplacement.lua</File>
         <File>Assets/UI/supportfunctions.lua</File>
-        <File>Assets/UI/ToolTipHelper.lua</File>
+        <File>Assets/UI/tooltiphelper.lua</File>
         <File>Assets/UI/toppanel.lua</File>
         <File>Assets/UI/toppanel.xml</File>
         <File>Assets/UI/unitpanel.xml</File>
