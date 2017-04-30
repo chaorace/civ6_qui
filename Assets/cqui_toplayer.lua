@@ -34,8 +34,12 @@ local paradoxBarBundles = {
 
 --Paradoxbar stock data
 local paradoxBarStock = {
-  ["debug"] = {"Debug", "Controls_Circle", "This is a debug tooltip", "Dbg", {paradoxBarFuncs["debugPrint"], paradoxBarBundles["standard"]}},
-  ["debug2"] = {"Debug2", "Controls_Circle", "This is a debug tooltip", "Dbg2", {paradoxBarFuncs["debugPrint"], paradoxBarBundles["standard"]}}
+  ["debug"] = {
+    ["group"] = "Debug", ["icon"] = "Controls_Circle", ["tooltip"] = "This is a debug tooltip", ["text"] = "Dbg", ["funcs"] = {paradoxBarFuncs["debugPrint"], paradoxBarBundles["standard"]}
+  },
+  ["debug2"] = {
+    ["group"] = "Debug2", ["icon"] = "Controls_Circle", ["tooltip"] = "This is a debug tooltip", ["text"] = "Dbg2", ["funcs"] = {paradoxBarFuncs["debugPrint"], paradoxBarBundles["standard"]}
+  }
 };
 
 -- This function handles adding new notifications to the paradox bar
@@ -47,7 +51,7 @@ function AddNotification(ID, group, icon, tooltip, text, funcs)
   local defaults = paradoxBarStock[ID];
   -- Group must be defined somehow or else we give up here
   if(not group) then
-    group = defaults[1];
+    group = defaults["group"];
     if(not group) then return; end
   end
 
@@ -60,17 +64,17 @@ function AddNotification(ID, group, icon, tooltip, text, funcs)
 
   --Applies defaults where appropriate
   if(defaults) then
-    if(defaults[2]) then
-      instance.Icon:SetTexture(defaults[2]);
+    if(defaults["icon"]) then
+      instance.Icon:SetTexture(defaults["icon"]);
     end
-    if(defaults[3]) then
-      instance.Button:LocalizeAndSetToolTip(defaults[3]);
+    if(defaults["tooltip"]) then
+      instance.Button:LocalizeAndSetToolTip(defaults["tooltip"]);
     end
-    if(defaults[4]) then
-      instance.Text:SetText(defaults[4]);
+    if(defaults["text"]) then
+      instance.Text:SetText(defaults["text"]);
     end
-    if(defaults[5] and not funcs) then
-      funcs = defaults[5]
+    if(defaults["funcs"] and not funcs) then
+      funcs = defaults["funcs"]
     end
   end
   if(icon) then
