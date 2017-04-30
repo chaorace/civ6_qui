@@ -64,13 +64,13 @@ function AddNotification(ID, group, icon, tooltip, text, funcs)
 
   --Applies defaults where appropriate
   if(defaults) then
-    if(defaults["icon"]) then
+    if(defaults["icon"] and not icon) then
       instance.Icon:SetTexture(defaults["icon"]);
     end
-    if(defaults["tooltip"]) then
+    if(defaults["tooltip"] and not tooltip) then
       instance.Button:LocalizeAndSetToolTip(defaults["tooltip"]);
     end
-    if(defaults["text"]) then
+    if(defaults["text"] and not text) then
       instance.Text:SetText(defaults["text"]);
     end
     if(defaults["funcs"] and not funcs) then
