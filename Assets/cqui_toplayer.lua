@@ -43,11 +43,15 @@ local paradoxBarStock = {
 };
 
 -- This function handles adding new notifications to the paradox bar
--- Group is used for the purposes of chunking notifications together and is mandatory
 -- If an ID is supplied, paradoxBarStock is checked for a matching ID and loads presets if available. If additional values are supplied, they are used to overwrite the default values
--- text is drawn directly on top of the icon and is meant to be used lightly. It will look ugly if you use any more than a few characters
--- funcs is an array of functions used for adding behavior to the notification. This is where closing behavior and other intricacies are defined
-function AddNotification(ID, group, icon, tooltip, text, funcs)
+-- group is used for the purposes of chunking notifications together and is mandatory
+-- props is a table containing properties for overriding the defaults supplied by the template selected using the ID
+  -- icon is the texture name of the image to be used. Not defining this will leave only a background portrait texture
+  -- tooltip is the string to be used describing the notification in detail. Please add an LOC string to cqui_text_notify if you need to employ a new string
+  -- ttprops is a table of additional values to be injected into the LOC string. Limit of 5 parameters. See cqui_text_notify for examples concerning working with inserting into LOCs
+  -- text is drawn directly on top of the icon and is meant to be used lightly. It will look ugly if you use any more than a few characters
+-- funcs is an array of functions used for adding behavior to the notification. This is where closing behavior and other intricacies, like sound, are defined
+function AddNotification(ID, group, props, funcs)
   local defaults = paradoxBarStock[ID];
   -- Group must be defined somehow or else we give up here
   if(not group) then
@@ -62,34 +66,47 @@ function AddNotification(ID, group, icon, tooltip, text, funcs)
   end
   instance = groupStacks[group]:GetInstance();
 
+  --If no property table was provided at all, create an empty one
+  if(not props) then
+    props = {};
+  end
+
   --Applies defaults where appropriate
   if(defaults) then
-    if(defaults["icon"] and not icon) then
-      instance.Icon:SetTexture(defaults["icon"]);
+    if(defaults["icon"] and not props["icon"]) then
+      props["icon"] = defaults["icon"];
     end
-    if(defaults["tooltip"] and not tooltip) then
-      instance.Button:LocalizeAndSetToolTip(defaults["tooltip"]);
+    if(defaults["ttprops"] and not props["ttprops"]) then
+      props["ttprops"] = defaults["ttprops"];
     end
-    if(defaults["text"] and not text) then
-      instance.Text:SetText(defaults["text"]);
+    if(defaults["tooltip"] and not props["tooltip"]) then
+      props["tooltip"] = defaults["tooltip"];
     end
-    if(defaults["funcs"] and not funcs) then
-      funcs = defaults["funcs"]
+    if(defaults["text"] and not props["text"]) then
+      props["text"] = defaults["text"];
+    end
+    if(defaults["funcs"] and not props["funcs"]) then
+      funcs = defaults["funcs"];
     end
   end
-  if(icon) then
-    instance.Icon:SetTexture(icon);
+
+  --Applies properties
+  if(props["icon"]) then
+    instance.Icon:SetTexture(props["icon"]);
   end
-  if(tooltip) then
-    instance.Button:LocalizeAndSetToolTip(tooltip);
+  if(props["tooltip"]) then
+    if(not props["ttprops"]) then
+      props["ttprops"] = {};
+    end
+    instance.Button:LocalizeAndSetToolTip(props["tooltip"], props["ttprops"][1] or "X", props["ttprops"][2] or "X", props["ttprops"][3] or "X", props["ttprops"][4] or "X", props["ttprops"][5] or "X");
   end
-  if(text) then
-    instance.Text:SetText(text);
+  if(props["text"]) then
+    instance.Text:LocalizeAndSetText(props["text"]);
   end
   --Invokes functions
   if(funcs) then
     for _,v in ipairs(funcs) do
-      v(instance, group, icon, tooltip, text);
+      v(instance, group, props);
     end
   end
   --Reveals completed notification
