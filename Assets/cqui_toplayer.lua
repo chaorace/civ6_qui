@@ -21,7 +21,7 @@ local paradoxBarFuncs = {
   ["deleteOnRMB"] = function(instance, group)
     instance.Button:RegisterCallback(Mouse.eRClick, function() RemoveNotification(instance, group); end);
   end,
-  ["debugPrint"] = function() print("Debug tooltip created"); end
+  ["debugPrint"] = function() print("Debug notification created"); end
 }
 
 --Paradoxbar behavior bundles
