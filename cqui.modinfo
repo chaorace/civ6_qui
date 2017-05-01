@@ -298,6 +298,7 @@
         <File>Assets/Text/cqui_text_general_pl.xml</File>
         <File>Assets/Text/cqui_text_general_ru.xml</File>
         <File>Assets/Text/cqui_text_general_zh.xml</File>
+        <File>Assets/Text/cqui_text_notify.xml</File>
         <File>Assets/Text/cqui_text_settings.xml</File>
         <File>Assets/Text/cqui_text_settings_de.xml</File>
         <File>Assets/Text/cqui_text_settings_fr.xml</File>

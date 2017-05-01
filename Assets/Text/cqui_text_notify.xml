@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<GameData>
+  <LocalizedText>
+    <!-- ENGLISH -->
+    <Row Tag="LOC_CQUI_CITYGROWTH" Language="en_US">
+      <Text>{1_cityname} has grown!</Text>
+    </Row>
+  </LocalizedText>
+</GameData>
