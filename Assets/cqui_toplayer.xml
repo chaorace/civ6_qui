@@ -12,7 +12,7 @@
       <Container ID="UnderTopBarArea" Anchor="C,T" Size="Full, 0" AutoSize="V">
         <Stack Anchor="L,T" StackGrowth="Right">
           <!-- Standin for the worldtracker -->
-          <Box Anchor="L,T" Size="370,270" Color="Red" Alpha="0"/>
+          <Box Anchor="L,T" Size="390,270" Color="Red" Alpha="0"/>
           <!-- CQUI paradox bar -->
           <Stack ID="ParadoxBarStack" Anchor="L,T" StackGrowth="Right" StackPadding="-4"/>
         </Stack>
@@ -37,7 +37,7 @@
 
   <Instance Name="ParadoxBarInstance">
     <Container ID="Top" AutoSize="1">
-      <SlideAnim ID="SlideAnimation" Size="35,35" Offset="0,0" Begin="0,-10" EndOffset="0,20" Cycle="Once" Function="OutQuad" Speed="7">
+      <AlphaAnim ID="AlphaAnimation" Size="35,35" Begin="0" End="1" Cycle="Once" Function="OutQuad" Speed="7">
         <Button ID="Button" Size="40,40" Tooltip="">
           <Image Texture="Controls_CircleBacking45" Size="35,35" Anchor="C,C" Offset="0,1" StretchMode="Fill" Sampler="Linear"/>
           <Image ID="Icon" Anchor="C,C" Size="35,35" Texture="" StretchMode="Fill" Sampler="Linear" />
@@ -48,8 +48,8 @@
   </Instance>
   <Instance Name="ParadoxBarGroupInstance">
     <Container ID="Top" AutoSize="1">
-      <Grid Style="EnhancedToolTip" Size="55,40" Color="255,200,100,255" InnerPadding="10,5" AutoSize="V">
-        <Stack ID="Stack" Offset="2,-7" Anchor="L,T" StackGrowth="Down" StackPadding="-7"/>
+      <Grid Style="EnhancedToolTip" Size="51,40" Color="255,200,100,255" InnerPadding="10,20" AutoSize="V">
+        <Stack ID="Stack" Anchor="L,C" Offset="0,-5" StackGrowth="Down" StackPadding="4"/>
       </Grid>
     </Container>
   </Instance>

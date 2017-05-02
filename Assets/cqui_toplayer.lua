@@ -45,7 +45,7 @@ local paradoxBarStock = {
 -- This function handles adding new notifications to the paradox bar
 -- If an ID is supplied, paradoxBarStock is checked for a matching ID and loads presets if available. If additional values are supplied, they are used to overwrite the default values
 -- group is used for the purposes of chunking notifications together and is mandatory
--- props is a table containing properties for overriding the defaults supplied by the template selected using the ID
+-- props is a table containing properties for overriding the defaults supplied by the template selected using the ID, you can also use this table for defining arbitrary parameters for use with attatched functions
   -- icon is the texture name of the image to be used. Not defining this will leave only a background portrait texture
   -- tooltip is the string to be used describing the notification in detail. Please add an LOC string to cqui_text_notify if you need to employ a new string
   -- ttprops is a table of additional values to be injected into the LOC string. Limit of 5 parameters. See cqui_text_notify for examples concerning working with inserting into LOCs
@@ -109,13 +109,19 @@ function AddNotification(ID, group, props, funcs)
       v(instance, group, props);
     end
   end
+  --Check if this asset has been used before and, if so, fix any mutable states that may have persisted
+  if(instance.Top:GetID() == "Exhausted") then
+    instance.Top:SetID("NotExhausted");
+    instance.AlphaAnimation:RegisterEndCallback(function() end);
+    instance.AlphaAnimation:SetToBeginning();
+  end
   --Reveals completed notification
   instance.Top:SetHide(false);
+  instance.AlphaAnimation:Play();
 end
 
 function RemoveNotification(instance, group)
-  instance.SlideAnimation:Reverse();
-  instance.SlideAnimation:RegisterEndCallback(function()
+  instance.AlphaAnimation:RegisterEndCallback(function()
     groupStacks[group]:ReleaseInstance(instance);
     --This is a hacky workaround since releasing an instance doesn't necessarily actually remove it from a given stack
     instance.Top:SetID("Exhausted");
@@ -126,6 +132,7 @@ function RemoveNotification(instance, group)
     Controls.ParadoxBarStack:ReleaseChild(groupStackInstances[group].Top);
     groupStackInstances[group] = nil;
   end)
+  instance.AlphaAnimation:Reverse();
 end
 
 function Initialize()
