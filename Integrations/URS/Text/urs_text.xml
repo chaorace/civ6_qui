@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<GameData>
+  <BaseGameText>
+    <!-- ENGLISH -->
+
+    <!-- HUD Common Text -->
+    <Row Tag="LOC_HUD_REPORTS_TAB_CURRENT_DEALS">
+      <Text>Current Deals</Text>
+    </Row>
+    <Row Tag="LOC_HUD_REPORTS_TAB_HIDE_CITY_BUILDINGS">
+      <Text>Hide city buildings</Text>
+    </Row>
+    <!-- Current Deals -->
+    <Row Tag="LOC_CURRENT_DEALS_OUTGOING">
+      <Text>Outgoing</Text>
+    </Row>
+    <Row Tag="LOC_CURRENT_DEALS_INCOMING">
+      <Text>Incoming</Text>
+    </Row>
+    <!-- Units Overview -->
+    <Row Tag="LOC_UNITS_MILITARY_LAND">
+      <Text>Military (Land)</Text>
+    </Row>
+    <Row Tag="LOC_UNITS_MILITARY_AIR">
+      <Text>Military (Air)</Text>
+    </Row>
+    <Row Tag="LOC_UNITS_MILITARY_SEA">
+      <Text>Military (Sea)</Text>
+    </Row>
+    <Row Tag="LOC_UNITS_VIEW_ON_THE_MAP">
+      <Text>View this unit on the map.</Text>
+    </Row>
+	<Row Tag="LOC_HUD_REPORTS_BONUSES_URS">
+		<Text>Bonuses</Text>
+	</Row>
+
+  </BaseGameText>
+</GameData>

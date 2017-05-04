@@ -4,6 +4,8 @@
 
 # Civilization 6 - Chao's Quick UI
 
+## The below featurelist and screenshots are outdated! Expect this page to get updated with the next release
+
 # Features:
 
 ### CQUI Features:
@@ -144,7 +146,7 @@ Contents/Assets/DLC
 
 * Visit https://github.com/chaorace/cqui occasionally or follow https://twitter.com/realchaorace to be the first to know about new releases and feature additions!
 
-* NOTE: Until this mod is in a less experimental state, the mod will not remember its "enabled" status after restarting the game. This means that every time you plan to start a new game using CQUI, you'll need to explicitly enable it in the "Additional Content" menu first. Once you've created the game using the mod, it will always load when you start the save, regardless of its current status in the "Additional Content Menu" 
+* NOTE: Until this mod is in a less experimental state, the mod will not remember its "enabled" status after restarting the game. This means that every time you plan to start a new game using CQUI, you'll need to explicitly enable it in the "Additional Content" menu first. Once you've created the game using the mod, it will always load when you start the save, regardless of its current status in the "Additional Content Menu"
 
 ### KNOWN ISSUES / SUPPORT:
 
@@ -164,6 +166,9 @@ Those looking to contribute to CQUI should visit [the CQUI repo](https://github.
 * @deggesim (Simone1974 on Civfanatics) for providing the Italian localization in #250
 * @e1ectron for providing the Russian localization in #251
 * @sejbr for providing the Polish localization in #253
+* @frytom/@maxap/@JHCD for providing the German localization in #283/#348
+* @lctrs for providing a partial French localization in #273/#339
+* @wbqd for providing a Korean translation in #309
 * @jacks0nX for:
   * localization in #20
   * map pin enhancements in PR #21 and #55
@@ -185,6 +190,32 @@ Those looking to contribute to CQUI should visit [the CQUI repo](https://github.
   * adding faster diplomacy fadeouts in #217
   * adding type/yields to the GW trade tooltip in #217
   * cleaning up the plot tooltip in #232
+* @JHCD for:
+  * fixing a runtime error in #338
+  * fixing missing gov info with upscaling enabled (#96) in #345
+  * fixing the mod's display in the in-game mod menu (#326) in #351 and again in #449
+  * updating URS to version 1.7.3 (#340) in #369
+  * fixing oversized URS tab buttons (#366) in #375
+  * porting some missing Australian patch changes in #402
+  * documenting and advising in the creation of the new default settings method (#430) in #447
+* Aristos / @ricanuck for:
+  * porting GPT + mutually-owned resource highlighting from HB UI in #374
+  * fixing doubled yield expenses in URS yield tab
+  * fixing duplicate row headers in multiple URS tabs
+  * fixing the vanilla civ bug where the World Tracker checkboxes could fail to persist their states
+  * changing URS so that it properly remembers the last-used tab
+  * adding detailed tooltips to the relationship icons in the diplomacy ribbon (in #391) and diplomatic view (in #393)
+  * fixing negative 0 values appearing in the happiness breakdown
+  * fixing an issue where URS tabs could desynchronise (#321) in #397
+  * adding detailed tooltips to the worldtracker science/civics items (#191) in #398
+  * integrating the Improved Deal Screen mod in #404
+  * fixing a deal miscategorization bug in $405
+  * considerably extending the leader portrait tooltips in the diplo ribbon in #414
+  * implementing previewing leader relationships (#269) using ctrl+mouseover in the diplo ribbon in #418
+  * fixing an issue with properly highlighting hostile units (#372) in #424
+  * fixing a vanilla bug that caused promotion indicators to not always be in sync with the XP meter in #442
+  * fixing a serious vanilla bug (!!) affecting the "Cede city" action (#439) in #443
+  * fixing deal view RMB shortcut not working if at war with target (#453) in #460
 * @zgavin for UI bugfixes in #1 and #2
 * @olegbl for the Amenities overview overhaul in #4 and multiple UI bugfixes ( #9 and #12 )
   * Additional kudos to /u/mateusarc from the Civilization subreddit for his original concept art
@@ -194,13 +225,28 @@ Those looking to contribute to CQUI should visit [the CQUI repo](https://github.
 * @kblease for:
   * fortify until healed hotkey bugfix in #73
   * unit purchasing fix in #80
+* @bolbass for:
+  * binding recentering functionality to the citypanel emblem in #279
+  * fixing governor not updating on tile changes in the same turn #257
+* @SpaceOgre for:
+  * adding toggles for each individual smartbanner component #280
+  * changing housing to show as a simple difference in the smartbanner #289
+  * fixing a bug that caused Corps to not queue correctly #302
+  * fixing a bug that broke the auto yield icon toggling setting
+  * fixing a bug causing custom map pins to be colored incorrectly (#154) in #428
+  * implementing a workshop-friendly method for creating custom default settings (#329) in #430
 * @OfekA for providing the improved resource dimming feature in #54
 * @zeyangl for adding new options to the resource dimming feature in #146
 * @Remolten for adding the 2nd highest envoy holder info to the main Citystate screen in #208
 * @bestekov for adding score displays to the diplomacy ribbon in #221
+* @cpinter for speeding up the diplomacy scene fadeout in #277
+* @paavohuhtala for a tooltip improvement in #357
 * @perseghini for providing the fix for issue #33
 * @benjaminjackman for fixing a hotkey conflict in #127
 * @velit for a UI bugfix in #138
 * @the-m4a for a patch incompatibility bugfix in #181
+* @MarkusKV for fixing a bug concerning district completion checkboxes
+* Firaxis for eventually delivering mod tools and steam workshop ;)
 * The lovely folks over at Civfanatics for their guides, knowledge, tools, and resources
 * The even lovelier folks over at /r/civ for their input and testing
+* The, arguably, lovely folks back at the Steam Workshop :p
