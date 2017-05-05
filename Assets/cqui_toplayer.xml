@@ -48,8 +48,8 @@
   </Instance>
   <Instance Name="ParadoxBarGroupInstance">
     <Container ID="Top" AutoSize="1">
-      <Grid Style="EnhancedToolTip" Size="51,40" Color="255,200,100,255" InnerPadding="10,20" AutoSize="V">
-        <Stack ID="Stack" Anchor="L,C" Offset="0,-5" StackGrowth="Down" StackPadding="4"/>
+      <Grid Style="EnhancedToolTip" Size="53,40" Color="255,200,100,255" InnerPadding="10,20" AutoSize="V">
+        <Stack ID="Stack" Anchor="L,C" Offset="1,-7" StackGrowth="Down" StackPadding="4"/>
       </Grid>
     </Container>
   </Instance>
