@@ -97,6 +97,8 @@ function AddNotification(ID, group, props, funcs)
     if(props["icon"][2] and props["icon"][3]) then
       instance.Icon:SetTexture(props["icon"][2], props["icon"][3], props["icon"][1]);
     else
+      --If we didn't provide an offset, there's no easy way to tell if the supplied string will refer to an icon or a texture. In this scenario, we just try both methods since it's a relatively cheap thing to fail at.
+      instance.Icon:SetIcon(props["icon"]);
       instance.Icon:SetTexture(props["icon"]);
     end
   end
