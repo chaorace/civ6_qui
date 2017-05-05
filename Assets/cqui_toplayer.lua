@@ -46,7 +46,7 @@ local paradoxBarStock = {
 -- If an ID is supplied, paradoxBarStock is checked for a matching ID and loads presets if available. If additional values are supplied, they are used to overwrite the default values
 -- group is used for the purposes of chunking notifications together and is mandatory
 -- props is a table containing properties for overriding the defaults supplied by the template selected using the ID, you can also use this table for defining arbitrary parameters for use with attatched functions
-  -- icon is the texture name of the image to be used. Not defining this will leave only a background portrait texture
+  -- icon is the name of the texture/icon to be used. Not defining this will leave only a background portrait texture. This can also be a table with the desired X/Y offset values
   -- tooltip is the string to be used describing the notification in detail. Please add an LOC string to cqui_text_notify if you need to employ a new string
   -- ttprops is a table of additional values to be injected into the LOC string. Limit of 5 parameters. See cqui_text_notify for examples concerning working with inserting into LOCs
   -- text is drawn directly on top of the icon and is meant to be used lightly. It will look ugly if you use any more than a few characters
@@ -90,10 +90,17 @@ function AddNotification(ID, group, props, funcs)
     end
   end
 
-  --Applies properties
+  --Applies properties.
+
+  --If a table is supplied instead of a string, treat the 2nd and 3rd values as texture offsets
   if(props["icon"]) then
-    instance.Icon:SetTexture(props["icon"]);
+    if(props["icon"][2] and props["icon"][3]) then
+      instance.Icon:SetTexture(props["icon"][2], props["icon"][3], props["icon"][1]);
+    else
+      instance.Icon:SetTexture(props["icon"]);
+    end
   end
+
   if(props["tooltip"]) then
     if(not props["ttprops"]) then
       props["ttprops"] = {};
