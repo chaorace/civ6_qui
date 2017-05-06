@@ -853,6 +853,7 @@ function AddCityStateRow( kCityState:table )
 end
 
 function CQUI_TruncateSuzerainName( name:string )
+  if(name:len() >= 12) then
     return string.sub(name, 0, 10) .. "...";
   else
     return name;
