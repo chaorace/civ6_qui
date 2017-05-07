@@ -1573,6 +1573,33 @@ function CityBanner.UpdateName( self : CityBanner )
         end
       end
 
+      -- CQUI: Show leader icon for the suzerain
+      local pPlayerConfig :table = PlayerConfigurations[owner];
+      local isMinorCiv :boolean = pPlayerConfig:GetCivilizationLevelTypeID() ~= CivilizationLevelTypes.CIVILIZATION_LEVEL_FULL_CIV;
+      if isMinorCiv then
+        local pPlayerInfluence :table  = pPlayer:GetInfluence();
+        if pPlayerInfluence ~= nil then
+          local suzerainID :number = pPlayerInfluence:GetSuzerain();
+          if suzerainID ~= -1 then
+            local leader:string = PlayerConfigurations[suzerainID]:GetLeaderTypeName();
+            if GameInfo.CivilizationLeaders[leader] == nil then
+              UI.DataError("Banners found a leader \""..leader.."\" which is not/no longer in the game; icon may be whack.");
+            else
+              if pPlayer:GetDiplomacy():HasMet(suzerainID) then
+                self.m_Instance.CQUI_CivSuzerainIcon:SetIcon("ICON_" .. leader);
+              else
+                self.m_Instance.CQUI_CivSuzerainIcon:SetIcon("ICON_" .. "LEADER_DEFAULT");
+              end
+              self:Resize();
+              self.m_Instance.CQUI_CivSuzerain:SetOffsetX(self.m_Instance.ContentStack:GetSizeX()/2 - 5);
+              self.m_Instance.CQUI_CivSuzerain:SetHide(false);
+            end
+          else
+            self.m_Instance.CQUI_CivSuzerain:SetHide(true);
+          end
+        end
+      end
+
       self.m_Instance.CityQuestIcon:SetToolTipString(questTooltip);
       self.m_Instance.CityQuestIcon:SetText(statusString);
       self.m_Instance.CityName:SetText( cityName );
