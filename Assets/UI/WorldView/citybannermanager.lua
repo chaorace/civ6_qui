@@ -3149,14 +3149,18 @@ function CQUI_UpdateSuzerainIcon( pPlayer:table, bannerInstance:CityBanner )
   local pPlayerInfluence :table  = pPlayer:GetInfluence();
   local suzerainID       :number = pPlayerInfluence:GetSuzerain();
   if suzerainID ~= -1 then
-    local leader:string = PlayerConfigurations[suzerainID]:GetLeaderTypeName();
+    local pPlayerConfig :table  = PlayerConfigurations[suzerainID];
+    local leader        :string = pPlayerConfig:GetLeaderTypeName();
     if GameInfo.CivilizationLeaders[leader] == nil then
       UI.DataError("Banners found a leader \""..leader.."\" which is not/no longer in the game; icon may be whack.");
     else
+      local suzerainTooltip = Locale.Lookup("LOC_CITY_STATES_SUZERAIN_LIST") .. " ";
       if pPlayer:GetDiplomacy():HasMet(suzerainID) then
         bannerInstance.m_Instance.CQUI_CivSuzerainIcon:SetIcon("ICON_" .. leader);
+        bannerInstance.m_Instance.CQUI_CivSuzerainIcon:SetToolTipString(suzerainTooltip .. Locale.Lookup(pPlayerConfig:GetPlayerName()));
       else
         bannerInstance.m_Instance.CQUI_CivSuzerainIcon:SetIcon("ICON_LEADER_DEFAULT");
+        bannerInstance.m_Instance.CQUI_CivSuzerainIcon:SetToolTipString(suzerainTooltip .. Locale.Lookup("LOC_DIPLOPANEL_UNMET_PLAYER"));
       end
       bannerInstance:Resize();
       bannerInstance.m_Instance.CQUI_CivSuzerain:SetOffsetX(bannerInstance.m_Instance.ContentStack:GetSizeX()/2 - 5);
