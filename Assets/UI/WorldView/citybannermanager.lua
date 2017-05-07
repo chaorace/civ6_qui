@@ -1577,27 +1577,7 @@ function CityBanner.UpdateName( self : CityBanner )
       local pPlayerConfig :table = PlayerConfigurations[owner];
       local isMinorCiv :boolean = pPlayerConfig:GetCivilizationLevelTypeID() ~= CivilizationLevelTypes.CIVILIZATION_LEVEL_FULL_CIV;
       if isMinorCiv then
-        local pPlayerInfluence :table  = pPlayer:GetInfluence();
-        if pPlayerInfluence ~= nil then
-          local suzerainID :number = pPlayerInfluence:GetSuzerain();
-          if suzerainID ~= -1 then
-            local leader:string = PlayerConfigurations[suzerainID]:GetLeaderTypeName();
-            if GameInfo.CivilizationLeaders[leader] == nil then
-              UI.DataError("Banners found a leader \""..leader.."\" which is not/no longer in the game; icon may be whack.");
-            else
-              if pPlayer:GetDiplomacy():HasMet(suzerainID) then
-                self.m_Instance.CQUI_CivSuzerainIcon:SetIcon("ICON_" .. leader);
-              else
-                self.m_Instance.CQUI_CivSuzerainIcon:SetIcon("ICON_" .. "LEADER_DEFAULT");
-              end
-              self:Resize();
-              self.m_Instance.CQUI_CivSuzerain:SetOffsetX(self.m_Instance.ContentStack:GetSizeX()/2 - 5);
-              self.m_Instance.CQUI_CivSuzerain:SetHide(false);
-            end
-          else
-            self.m_Instance.CQUI_CivSuzerain:SetHide(true);
-          end
-        end
+        CQUI_UpdateSuzerainIcon(pPlayer, self);
       end
 
       self.m_Instance.CityQuestIcon:SetToolTipString(questTooltip);
@@ -3152,6 +3132,42 @@ function OnCameraUpdate( vFocusX:number, vFocusY:number, fZoomLevel:number )
 end
 
 -- ===========================================================================
+function CQUI_OnInfluenceGiven()
+  for i, pPlayer in ipairs(PlayerManager.GetAliveMinors()) do
+    local iPlayer = pPlayer:GetID();
+    local iCapital = pPlayer:GetCities():GetCapitalCity():GetID();
+    local bannerInstance = GetCityBanner(iPlayer, iCapital);
+    CQUI_UpdateSuzerainIcon(pPlayer, bannerInstance);
+  end
+end
+
+function CQUI_UpdateSuzerainIcon( pPlayer:table, bannerInstance:CityBanner )
+  if bannerInstance == nil then
+    return;
+  end
+
+  local pPlayerInfluence :table  = pPlayer:GetInfluence();
+  local suzerainID       :number = pPlayerInfluence:GetSuzerain();
+  if suzerainID ~= -1 then
+    local leader:string = PlayerConfigurations[suzerainID]:GetLeaderTypeName();
+    if GameInfo.CivilizationLeaders[leader] == nil then
+      UI.DataError("Banners found a leader \""..leader.."\" which is not/no longer in the game; icon may be whack.");
+    else
+      if pPlayer:GetDiplomacy():HasMet(suzerainID) then
+        bannerInstance.m_Instance.CQUI_CivSuzerainIcon:SetIcon("ICON_" .. leader);
+      else
+        bannerInstance.m_Instance.CQUI_CivSuzerainIcon:SetIcon("ICON_LEADER_DEFAULT");
+      end
+      bannerInstance:Resize();
+      bannerInstance.m_Instance.CQUI_CivSuzerain:SetOffsetX(bannerInstance.m_Instance.ContentStack:GetSizeX()/2 - 5);
+      bannerInstance.m_Instance.CQUI_CivSuzerain:SetHide(false);
+    end
+  else
+    bannerInstance.m_Instance.CQUI_CivSuzerain:SetHide(true);
+  end
+end
+
+-- ===========================================================================
 function OnInterfaceModeChanged( oldMode:number, newMode:number )
   if newMode == InterfaceModeTypes.MAKE_TRADE_ROUTE then
     -- Show trading post icons on cities that contain a trading post with the local player
@@ -3266,6 +3282,7 @@ function Initialize()
 
   LuaEvents.CQUI_SettingsInitialized.Add( CQUI_OnSettingsInitialized );
   Events.CitySelectionChanged.Add( CQUI_OnBannerMouseExit );
+  Events.InfluenceGiven.Add( CQUI_OnInfluenceGiven );
 end
 Initialize();
 
