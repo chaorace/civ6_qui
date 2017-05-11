@@ -22,6 +22,13 @@ local paradoxBarFuncs = {
   ["deleteOnRMB"] = function(instance, group)
     instance.Button:RegisterCallback(Mouse.eRClick, function() RemoveNotification(instance, group); end);
   end,
+  ["goToCity"] = function(instance, _, props)
+    instance.Button:RegisterCallback(Mouse.eLClick, function()
+      local city = props["city"];
+      UI:SelectCityID(city:GetID());
+      UI.LookAtPlotScreenPosition( city:GetX(), city:GetY(), 0.5, 0.5 );
+    end);
+  end,
   ["debugPrint"] = function() print("Debug notification created"); end
 }
 
@@ -50,6 +57,12 @@ NewTemplate("debug", {
 NewTemplate("debug2", {
   ["group"] = "Debug2", ["text"] = "Dbg2"
 }, "debug");
+NewTemplate("cityGrowth", {
+  ["group"] = "CityGrowth", ["icon"] = "ICON_CITIZEN", ["iconColor"] = "Green", ["tooltip"] = "LOC_CQUI_CITYGROWTH", ["funcs"] = {paradoxBarBundles["standard"], paradoxBarFuncs["goToCity"]}
+});
+NewTemplate("cityShrink", {
+  ["iconColor"] = "Red", ["tooltip"] = "LOC_CQUI_CITYSHRINK"
+}, "cityGrowth");
 
 -- This function handles adding new notifications to the paradox bar
 -- If an ID is supplied, paradoxBarStock is checked for a matching ID and loads presets if available. If additional values are supplied, they are used to overwrite the default values
@@ -165,6 +178,22 @@ function Initialize()
   groupStackIM:ResetInstances();
   LuaEvents.CQUI_AddNotification.Add(AddNotification);
   ContextPtr:SetHide(false);
+
+  --Implementing city population change
+  Events.CityPopulationChanged.Add(
+    function(playerID : number, cityID : number, newPopulation : number)
+      if(not Game:GetLocalPlayer()) then return end
+      if(playerID == Game:GetLocalPlayer()) then
+        local city = Players[playerID]:GetCities():FindID(cityID);
+        print(city:GetGrowth():GetFoodSurplus());
+        if(city:GetGrowth():GetFoodSurplus() < 0) then --This isn't a perfect heuristic, but the game doesn't make it easy to tell between a city that just grew and a city that just shrunk
+          AddNotification("cityShrink", {["ttprops"] = {city:GetName()}, ["city"] = city});
+        else
+          AddNotification("cityGrowth", {["ttprops"] = {city:GetName()}, ["city"] = city});
+        end
+      end
+    end
+  )
 end
 
 Initialize();
