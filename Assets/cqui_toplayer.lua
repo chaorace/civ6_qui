@@ -1,6 +1,7 @@
 --This is a layer that lives at the very top of the UI. It's an excellent place for catching inputs globally or displaying a custom overlay
 -- This layer is the home of the paradox bar
 include("InstanceManager");
+include("supportfunctions");
 
 --Members
 local groupStackIM = InstanceManager:new("ParadoxBarGroupInstance", "Top", Controls.ParadoxBarStack); -- IM for the groups for the notifications
@@ -52,20 +53,36 @@ NewTemplate("debug2", {
 
 -- This function handles adding new notifications to the paradox bar
 -- If an ID is supplied, paradoxBarStock is checked for a matching ID and loads presets if available. If additional values are supplied, they are used to overwrite the default values
--- group is used for the purposes of chunking notifications together and is mandatory
 -- props is a table containing properties for overriding the defaults supplied by the template selected using the ID, you can also use this table for defining arbitrary parameters for use with attatched functions
+  -- group is used for the purposes of chunking notifications together and is mandatory, though, usually supplied by a preset, if employed
   -- icon is the name of the texture/icon to be used. Not defining this will leave only a background portrait texture. This can also be a table with the desired X/Y offset values
   -- tooltip is the string to be used describing the notification in detail. Please add an LOC string to cqui_text_notify if you need to employ a new string
   -- ttprops is a table of additional values to be injected into the LOC string. Limit of 5 parameters. See cqui_text_notify for examples concerning working with inserting into LOCs
   -- text is drawn directly on top of the icon and is meant to be used lightly. It will look ugly if you use any more than a few characters
 -- funcs is an array of functions used for adding behavior to the notification. This is where closing behavior and other intricacies, like sound, are defined
-function AddNotification(ID, group, props, funcs)
-  local defaults = paradoxBarStock[ID];
-  -- Group must be defined somehow or else we give up here
-  if(not group) then
-    group = defaults["group"];
-    if(not group) then return; end
+function AddNotification(ID, props, funcs)
+  local defaults = DeepCopy(paradoxBarStock[ID]); --Copy by value instead of by reference, so as not to mangle the real defaults table
+
+  --If no property table was provided at all, create an empty one
+  if(not props) then
+    props = {};
   end
+
+  --Merges defaults with overrides supplied via props
+  if(defaults) then
+    if(defaults["group"] and not props["group"]) then
+      group = defaults["group"];
+      defaults["group"] = nil;
+    end
+    if(defaults["funcs"] and not props["funcs"]) then
+      funcs = defaults["funcs"];
+      defaults["funcs"] = nil;
+    end
+    for k,v in pairs(defaults) do props[k] = v; end
+  end
+
+  -- Group must be defined somehow or else we give up here
+  if(not group) then return; end
 
   --Creates a group for a specific notification group if it does not exist
   if(groupStackInstances[group] == nil) then
@@ -74,29 +91,6 @@ function AddNotification(ID, group, props, funcs)
   end
   instance = groupStacks[group]:GetInstance();
 
-  --If no property table was provided at all, create an empty one
-  if(not props) then
-    props = {};
-  end
-
-  --Applies defaults where appropriate
-  if(defaults) then
-    if(defaults["icon"] and not props["icon"]) then
-      props["icon"] = defaults["icon"];
-    end
-    if(defaults["ttprops"] and not props["ttprops"]) then
-      props["ttprops"] = defaults["ttprops"];
-    end
-    if(defaults["tooltip"] and not props["tooltip"]) then
-      props["tooltip"] = defaults["tooltip"];
-    end
-    if(defaults["text"] and not props["text"]) then
-      props["text"] = defaults["text"];
-    end
-    if(defaults["funcs"] and not props["funcs"]) then
-      funcs = defaults["funcs"];
-    end
-  end
 
   --Applies properties.
 
