@@ -56,6 +56,8 @@ NewTemplate("debug2", {
 -- props is a table containing properties for overriding the defaults supplied by the template selected using the ID, you can also use this table for defining arbitrary parameters for use with attatched functions
   -- group is used for the purposes of chunking notifications together and is mandatory, though, usually supplied by a preset, if employed
   -- icon is the name of the texture/icon to be used. Not defining this will leave only a background portrait texture. This can also be a table with the desired X/Y offset values
+  -- noIconStretch is an optional true/false value which can be used to disable icon/texture scaling, forcing the given image to display in original size. Default behavior is as if this were set to false
+  -- iconColor is an optional value used to set the color hue of the icon element. See the in game use of ":SetColor" for examples of valid values
   -- tooltip is the string to be used describing the notification in detail. Please add an LOC string to cqui_text_notify if you need to employ a new string
   -- ttprops is a table of additional values to be injected into the LOC string. Limit of 5 parameters. See cqui_text_notify for examples concerning working with inserting into LOCs
   -- text is drawn directly on top of the icon and is meant to be used lightly. It will look ugly if you use any more than a few characters
@@ -96,12 +98,25 @@ function AddNotification(ID, props, funcs)
 
   --If a table is supplied instead of a string, treat the 2nd and 3rd values as texture offsets
   if(props["icon"]) then
+    local iconElement;
+    if(props["noIconStretch"]) then
+      iconElement = instance.IconNoStretch;
+    else
+      iconElement = instance.Icon;
+    end
     if(props["icon"][2] and props["icon"][3]) then
-      instance.Icon:SetTexture(props["icon"][2], props["icon"][3], props["icon"][1]);
+      iconElement:SetTexture(props["icon"][2], props["icon"][3], props["icon"][1]);
     else
       --If we didn't provide an offset, there's no easy way to tell if the supplied string will refer to an icon or a texture. In this scenario, we just try both methods since it's a relatively cheap thing to fail at.
-      instance.Icon:SetIcon(props["icon"]);
-      instance.Icon:SetTexture(props["icon"]);
+      iconElement:SetIcon(props["icon"]);
+      iconElement:SetTexture(props["icon"]);
+    end
+    if(props["iconColor"]) then
+      if(type(props["iconColor"]) == "string") then
+        iconElement:SetColorByName(props["iconColor"]);
+      else
+        iconElement:SetColor(props["iconColor"]);
+      end
     end
   end
 

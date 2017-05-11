@@ -41,6 +41,7 @@
         <Button ID="Button" Size="40,40" Tooltip="">
           <Image Texture="Controls_CircleBacking45" Size="35,35" Anchor="C,C" Offset="0,1" StretchMode="Fill" Sampler="Linear"/>
           <Image ID="Icon" Anchor="C,C" Size="35,35" Texture="" StretchMode="Fill" Sampler="Linear" />
+          <Image ID="IconNoStretch" Anchor="C,C" Size="35,35" Texture="" />
           <Label ID="Text" Anchor="C,C" Style="FontFlair14" Color="Green" FontStyle="Glow" String="" Offset="0,1"/>
         </Button>
       </SlideAnim>
