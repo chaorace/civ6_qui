@@ -33,14 +33,22 @@ local paradoxBarBundles = {
 --Feel free to add to this as necessary
 
 --Paradoxbar stock data
-local paradoxBarStock = {
-  ["debug"] = {
-    ["group"] = "Debug", ["icon"] = "Controls_Circle", ["tooltip"] = "This is a debug tooltip", ["text"] = "Dbg", ["funcs"] = {paradoxBarFuncs["debugPrint"], paradoxBarBundles["standard"]}
-  },
-  ["debug2"] = {
-    ["group"] = "Debug2", ["icon"] = "Controls_Circle", ["tooltip"] = "This is a debug tooltip", ["text"] = "Dbg2", ["funcs"] = {paradoxBarFuncs["debugPrint"], paradoxBarBundles["standard"]}
-  }
-};
+local paradoxBarStock = {};
+function NewTemplate(name, data, base)
+  local merged = {};
+  if(not data) then return end --There must be something here to differentiate from the base
+  if(paradoxBarStock[base]) then --If there's a base to work with, apply it first
+    merged = DeepCopy(paradoxBarStock[base]); --Copy the table instead of mangling the original
+  end
+  for k,v in pairs(data) do merged[k] = v; end --Overriding base values with given data table
+  paradoxBarStock[name] = merged; --Adding to stock table
+end
+NewTemplate("debug", {
+  ["group"] = "Debug", ["icon"] = "Controls_Circle", ["tooltip"] = "This is a debug tooltip", ["text"] = "Dbg", ["funcs"] = {paradoxBarFuncs["debugPrint"], paradoxBarBundles["standard"]}
+});
+NewTemplate("debug2", {
+  ["group"] = "Debug2", ["text"] = "Dbg2"
+}, "debug");
 
 -- This function handles adding new notifications to the paradox bar
 -- If an ID is supplied, paradoxBarStock is checked for a matching ID and loads presets if available. If additional values are supplied, they are used to overwrite the default values
