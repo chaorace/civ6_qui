@@ -195,9 +195,9 @@
         </Button>
 
         <!-- CQUI: Show Suzerain in CS banner -->
-        <Container ID="CQUI_CivSuzerain" Anchor="C,C" Offset="0,-10" Size="34,34" Hidden="1" >
-          <Image Size="26,26"  Offset="1,0" Anchor="C,C" Texture="Banner_ProductionCircle">
-            <Image ID="CQUI_CivSuzerainIcon" Size="25,25" Texture="Leaders45" Anchor="L,T" Offset="1,0" />
+        <Container ID="CQUI_CivSuzerain" Anchor="C,C" Offset="-8,-10" Size="34,34" Hidden="1" >
+          <Image Size="31,31"  Offset="1,0" Anchor="C,C" Texture="Banner_ProductionCircle">
+            <Image ID="CQUI_CivSuzerainIcon" Size="30,30" Texture="Leaders45" Anchor="L,T" Offset="1,0" />
           </Image>
         </Container>
 
