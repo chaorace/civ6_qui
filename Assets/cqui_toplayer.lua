@@ -185,7 +185,6 @@ function Initialize()
       if(not Game:GetLocalPlayer()) then return end
       if(playerID == Game:GetLocalPlayer()) then
         local city = Players[playerID]:GetCities():FindID(cityID);
-        print(city:GetGrowth():GetFoodSurplus());
         if(city:GetGrowth():GetFoodSurplus() < 0) then --This isn't a perfect heuristic, but the game doesn't make it easy to tell between a city that just grew and a city that just shrunk
           AddNotification("cityShrink", {["ttprops"] = {city:GetName()}, ["city"] = city});
         else
