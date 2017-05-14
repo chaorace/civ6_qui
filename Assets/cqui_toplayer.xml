@@ -44,7 +44,7 @@
           <Image ID="IconNoStretch" Anchor="C,C" Size="35,35" Texture="" />
           <Label ID="Text" Anchor="C,C" Style="FontFlair14" Color="Green" FontStyle="Glow" String="" Offset="0,1"/>
         </Button>
-      </SlideAnim>
+      </AlphaAnim>
     </Container>
   </Instance>
   <Instance Name="ParadoxBarGroupInstance">
