@@ -492,6 +492,7 @@ function CityBanner.Initialize( self : CityBanner, playerID: number, cityID : nu
     self.m_Instance.CityBannerButton:RegisterCallback( Mouse.eLClick, OnCityBannerClick );
     self.m_Instance.CityBannerButton:SetVoid1(playerID);
     self.m_Instance.CityBannerButton:SetVoid2(cityID);
+    self.m_Instance.CityBannerButton:RegisterCallback( Mouse.eRClick, OnCityBannerRightClick );
 
     local pCity = self:GetCity();
     if (pCity ~= nil) then
@@ -3224,6 +3225,31 @@ function CQUI_UpdateSelectedCityCitizens( plotId:number )
 
   local tResults :table = CityManager.RequestCommand( pSelectedCity, CityCommandTypes.MANAGE, tParameters );
   return true;
+end
+
+-- ===========================================================================
+-- CQUI recenter camera on city when right click on citybanner
+function OnCityBannerRightClick( playerID:number, cityID:number )
+	local pPlayer = Players[playerID];
+	if (pPlayer == nil) then
+		return;
+	end
+	
+	local pCity = pPlayer:GetCities():FindID(cityID);
+	if (pCity == nil) then
+		return;
+	end
+	
+	local localPlayerID;
+	if (WorldBuilder.IsActive()) then
+		localPlayerID = playerID;	-- If WorldBuilder is active, allow the user to select the city
+	else
+		localPlayerID = Game.GetLocalPlayer();
+	end
+
+	if (pPlayer:GetID() == localPlayerID) then
+		UI.LookAtPlot( pCity:GetX(), pCity:GetY() );
+	end
 end
 
 -- ===========================================================================
