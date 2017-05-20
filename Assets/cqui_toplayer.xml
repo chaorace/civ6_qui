@@ -1,7 +1,57 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <!-- This context is as high up on the z-axis as possible, which means it is excellent for handling mouse inputs globally and for elements that always need to appear above other things -->
 <Context Name="CQUI_TopLayer">
-  <Container ID="Frame" Size="Full,Full">
+  <!-- Add an element as child of this container to place it free-floating -->
 
+  <!-- Add an element as child of this container to place it relative to where the vanilla controls reside. Set Alpha to 0.5 to visualize standins -->
+  <Container ID="Frame" Size="Full,Full">
+    <!-- Positional mockup of the top half of the UI-->
+    <Stack ID="StandinStackTop" Anchor="C,T" StackGrowth="Down">
+      <!-- Standin for the topbar area -->
+      <Box Anchor="C,T" Size="Full, 30" Color="Green" Alpha="0"/>
+      <Container ID="UnderTopBarArea" Anchor="C,T" Size="Full, 0" AutoSize="V">
+        <Stack Anchor="L,T" StackGrowth="Right">
+          <!-- Standin for the worldtracker -->
+          <Box Anchor="L,T" Size="390,270" Color="Red" Alpha="0"/>
+          <!-- CQUI paradox bar -->
+          <Stack ID="ParadoxBarStack" Anchor="L,T" StackGrowth="Right" StackPadding="-4"/>
+        </Stack>
+        <!-- Standin for the right button panel and diplo ribbon (when considerably full)-->
+        <Box Anchor="R,T" Size="650,140" Color="Beige" Alpha="0"/>
+      </Container>
+    </Stack>
+    <!-- Positional mockup of the bottom half of the UI -->
+    <Stack ID="StandinStackBottom" Anchor="C,B" StackGrowth="Up">
+      <Container ID="BottomArea" Anchor="C,B" Size="Full,0" AutoSize="V">
+        <!-- Standin for the minimap at maximum size -->
+        <Box Anchor="L,B" Size="780, 420" Color="Green" Alpha="0"/>
+        <Stack ID="StandinStackRight" Anchor="R,B" StackGrowth="Up">
+          <!-- Standin for the actionpanel/unitpanel area -->
+          <Box Anchor="R,B" Size="560, 220" Color="Red" Alpha="0"/>
+          <!-- Standin for the notification area -->
+          <Box Anchor="R,B" Size="500,parent-400" Color="Gold" Alpha="0"/>
+        </Stack>
+      </Container>
+    </Stack>
   </Container>
+
+  <Instance Name="ParadoxBarInstance">
+    <Container ID="Top" AutoSize="1">
+      <AlphaAnim ID="AlphaAnimation" Size="35,35" Begin="0" End="1" Cycle="Once" Function="OutQuad" Speed="7">
+        <Button ID="Button" Size="40,40" Tooltip="">
+          <Image Texture="Controls_CircleBacking45" Size="35,35" Anchor="C,C" Offset="0,1" StretchMode="Fill" Sampler="Linear"/>
+          <Image ID="Icon" Anchor="C,C" Size="35,35" Texture="" StretchMode="Fill" Sampler="Linear" />
+          <Image ID="IconNoStretch" Anchor="C,C" Size="35,35" Texture="" />
+          <Label ID="Text" Anchor="C,C" Style="FontFlair14" Color="Green" FontStyle="Glow" String="" Offset="0,1"/>
+        </Button>
+      </SlideAnim>
+    </Container>
+  </Instance>
+  <Instance Name="ParadoxBarGroupInstance">
+    <Container ID="Top" AutoSize="1">
+      <Grid Style="EnhancedToolTip" Size="53,40" Color="255,200,100,255" InnerPadding="10,20" AutoSize="V">
+        <Stack ID="Stack" Anchor="L,C" Offset="1,-7" StackGrowth="Down" StackPadding="4"/>
+      </Grid>
+    </Container>
+  </Instance>
 </Context>
