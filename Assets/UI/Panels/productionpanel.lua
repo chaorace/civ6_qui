@@ -2806,7 +2806,7 @@ end
 --                          At the moment only allow 1000 cities per active local player.
 --- ==========================================================================
 function FindProductionQueueKey(cityID:number, localPlayerID:number)
-  return cityID + 1000 * localPlayerID;
+  return cityID * 1000 + localPlayerID;
 end
 
 --- ==========================================================================
