@@ -4,7 +4,7 @@
     <!-- SPANISH -->
 
     <Row Tag="LOC_CQUI_BINDINGS" Language="es_ES">
-      <Text>Atajos</Text>
+      <Text>Atajos de Teclado</Text>
     </Row>
     <Row Tag="LOC_CQUI_BINDINGS_DROPDOWN" Language="es_ES">
       <Text>Modalidad</Text>
