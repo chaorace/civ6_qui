@@ -3240,16 +3240,7 @@ function OnCityBannerRightClick( playerID:number, cityID:number )
 		return;
 	end
 	
-	local localPlayerID;
-	if (WorldBuilder.IsActive()) then
-		localPlayerID = playerID;	-- If WorldBuilder is active, allow the user to select the city
-	else
-		localPlayerID = Game.GetLocalPlayer();
-	end
-
-	if (pPlayer:GetID() == localPlayerID) then
-		UI.LookAtPlot( pCity:GetX(), pCity:GetY() );
-	end
+	UI.LookAtPlot( pCity:GetX(), pCity:GetY() );
 end
 
 -- ===========================================================================
