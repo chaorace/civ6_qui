@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<GameData>
+  <LocalizedText>
+    <!-- SPANISH -->
+
+    <!-- HUD Common Text -->
+    <Replace Tag="LOC_HUD_REPORTS_TAB_CURRENT_DEALS" Language="es_Es">
+      <Text>Acuerdos actuales</Text>
+    </Replace>
+    <Replace Tag="LOC_HUD_REPORTS_TAB_HIDE_CITY_BUILDINGS" Language="es_Es">
+      <Text>Ocultar edificios</Text>
+    </Replace>
+    <!-- Current Deals -->
+    <Replace Tag="LOC_CURRENT_DEALS_OUTGOING" Language="es_Es">
+      <Text>Saliente</Text>
+    </Replace>
+    <Replace Tag="LOC_CURRENT_DEALS_INCOMING" Language="es_Es">
+      <Text>Entrante</Text>
+    </Replace>
+    <!-- Units Overview -->
+    <Replace Tag="LOC_UNITS_MILITARY_LAND" Language="es_Es">
+      <Text>Militar (Tierra)</Text>
+    </Replace>
+    <Replace Tag="LOC_UNITS_MILITARY_AIR" Language="es_Es">
+      <Text>Militar (Aire)</Text>
+    </Replace>
+    <Replace Tag="LOC_UNITS_MILITARY_SEA" Language="es_Es">
+      <Text>Militar (Mar)</Text>
+    </Replace>
+    <Replace Tag="LOC_UNITS_VIEW_ON_THE_MAP" Language="es_Es">
+      <Text>Ver esta unidad en el mapa.</Text>
+    </Replace>
+	<Replace Tag="LOC_HUD_REPORTS_BONUSES_URS" Language="es_Es">
+		<Text>Bonificaciones</Text>
+	</Replace>
+
+  </LocalizedText>
+</GameData>
