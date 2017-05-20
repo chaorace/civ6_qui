@@ -64,7 +64,7 @@
       <Text>Iconos de distrito indican los distritos construidos</Text>
     </Row>
     <Row Tag="LOC_CQUI_CITYVIEW_SMARTBANNER_POPULATION_TOOLTIP" Language="es_ES">
-      <Text>Muestra el número de turnos hasta el aumento de población [NEWLINE]y el [current population/max housing].</Text>
+      <Text>Muestra el número de turnos hasta el aumento de población [NEWLINE]y la [población/alojamientos max].</Text>
     </Row>
     <Row Tag="LOC_CQUI_CITYVIEW_SMARTBANNER_CULTURAL_TOOLTIP" Language="es_ES">
       <Text>Muestra el número de turnos restantes hasta el crecimiento de bordes.</Text>
@@ -142,7 +142,7 @@
       <Text>Popups</Text>
     </Row>
     <Row Tag="LOC_CQUI_POPUPS_ALWAYSOPENTECHTREES" Language="es_ES">
-      <Text>Árbol completo en lugar de las ventanas</Text>
+      <Text>Siempre árbol completo</Text>
     </Row>
     <Row Tag="LOC_CQUI_POPUPS_TECHVISUAL" Language="es_ES">
       <Text>Ventana de Tecnología/Principio</Text>

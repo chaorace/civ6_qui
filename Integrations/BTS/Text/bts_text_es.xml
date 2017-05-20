@@ -45,7 +45,7 @@
     </Replace>
 
     <Replace Tag="LOC_TRADE_FILTER_CS_WITH_QUEST_TOOLTIP" Language="es_ES">
-      <Text>Ciudad-Estado con Misión Comercial</Text>
+      <Text>C-E con Misión Comercial</Text>
     </Replace>
 
     <!-- Trade Overview -->
