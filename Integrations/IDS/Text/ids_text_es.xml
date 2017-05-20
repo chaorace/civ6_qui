@@ -4,7 +4,7 @@
     <!-- SPANISH -->
 
     <!-- HUD Common Text -->
-    <Replace Tag="LOC_IDS_DUMMY_KEY" Language="de_DE">
+    <Replace Tag="LOC_IDS_DUMMY_KEY" Language="es_ES">
       <Text>Acuerdos actuales</Text>
     </Replace>
 
