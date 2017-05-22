@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<GameData>
+  <LocalizedText>
+    <!-- SPANISH-->
+    <Row Tag="LOC_CQUI_NAME" Language="es">
+      <Text>CQUI</Text>
+    </Row>
+
+    <!-- MESSAGES -->
+    <Row Tag="LOC_CQUI_CIVIC_MESSAGE_S" Language="es">
+      <Text>El Principio actual, </Text>
+    </Row>
+    <Row Tag="LOC_CQUI_TECH_MESSAGE_S" Language="es">
+      <Text>La Tecnología actual, </Text>
+    </Row>
+    <Row Tag="LOC_CQUI_HALF_MESSAGE_E" Language="es">
+      <Text>, se encuentra a un turno de su Maximo Potencial de Inspiración.</Text>
+    </Row>
+    <Row Tag="LOC_CQUI_FINISH_MESSAGE_E" Language="es">
+      <Text>, fue completada.</Text>
+    </Row>
+
+    <!-- CITY PANEL AMENITY -->
+    <Row Tag="LOC_CQUI_CITY_ENTERTAINMENT" Language="es">
+      <Text>Entretenimiento</Text>
+    </Row>
+
+    <!-- POPUPS -->
+    <Row Tag="LOC_CQUI_GREAT_PERSON_PROGRESS" Language="es">
+      <Text>Progreso:</Text>
+    </Row>
+
+    <!-- ActionPanel -->
+    <Row Tag="LOC_CQUI_ACTION_PANEL_ENCAMPMENT_RANGED_ATTACK" Language="es">
+      <Text>Ataque indirecto del Campamento</Text>
+    </Row>
+    <Row Tag="LOC_CQUI_ACTION_PANEL_ENCAMPMENT_RANGED_ATTACK_TOOLTIP" Language="es">
+      <Text>Tu Campamento puede realizar un ataque indirecto.</Text>
+    </Row>
+
+  </LocalizedText>
+</GameData>
