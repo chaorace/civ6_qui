@@ -972,7 +972,7 @@ function CQUI_UpdateAllCitiesCitizens()
 
 		if pCitizens:IsFavoredYield(YieldTypes.CULTURE) then
 			tParameters[CityCommandTypes.PARAM_FLAGS]   = 0;      -- Set favoured
-       			tParameters[CityCommandTypes.PARAM_DATA0] = 1;          -- on
+      tParameters[CityCommandTypes.PARAM_DATA0] = 1;          -- on
      		elseif pCitizens:IsDisfavoredYield(YieldTypes.CULTURE) then
 			tParameters[CityCommandTypes.PARAM_FLAGS]   = 1;      -- Set Ignored
 			tParameters[CityCommandTypes.PARAM_DATA0] = 1;          -- on
