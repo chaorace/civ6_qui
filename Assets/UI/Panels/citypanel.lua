@@ -592,11 +592,11 @@ function ViewMain( data:table )
 
   Controls.ReligionNum:SetText( data.ReligionFollowers );
 
-  CQUI_SelectedCityRealHousingFromImprovements();
+  CQUI_SelectedCityRealHousingFromImprovements();    -- CQUI calculate real housing from improvements for the selected city
   Controls.HousingNum:SetText( data.Population );
   colorName = GetPercentGrowthColor( data.HousingMultiplier );
   Controls.HousingNum:SetColorByName( colorName );
-  Controls.HousingMax:SetText( data.Housing - data.HousingFromImprovements + CQUI_RealHousingFromImprovements );  
+  Controls.HousingMax:SetText( data.Housing - data.HousingFromImprovements + CQUI_RealHousingFromImprovements );    -- CQUI calculate real housing for the selected city
 
   Controls.BreakdownLabel:SetHide( m_isShowingPanels );
   Controls.ReligionLabel:SetHide( m_isShowingPanels );
@@ -1326,7 +1326,7 @@ function CQUI_UpdateSelectedCityCitizens( plotId:number )
 end
 
 -- ===========================================================================
--- CQUI calculate real housing from improvements for selected city
+-- CQUI calculate real housing from improvements for the selected city
 function CQUI_SelectedCityRealHousingFromImprovements()
 
   local pSelectedCity	= UI.GetHeadSelectedCity();
