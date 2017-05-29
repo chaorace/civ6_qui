@@ -487,6 +487,9 @@ end
 
 -- ===========================================================================
 function ViewPanelHousing( data:table )
+
+  CQUI_SelectedCityRealHousingFromImprovements();    -- CQUI calculate real housing from improvements for the selected city
+
   -- Only show the advisor bubbles during the tutorial
   Controls.HousingAdvisorBubble:SetHide( IsTutorialRunning() == false );
 
@@ -508,7 +511,7 @@ function ViewPanelHousing( data:table )
   CQUI_BuildHousingBubbleInstance("ICON_GREAT_PERSON_CLASS_SCIENTIST", data.HousingFromStartingEra, "LOC_ERA_NAME");
 
   local colorName:string = GetPercentGrowthColor( data.HousingMultiplier ) ;
-  Controls.HousingTotalNum:SetText( data.Housing );
+  Controls.HousingTotalNum:SetText( data.Housing - data.HousingFromImprovements + CQUI_RealHousingFromImprovements );    -- CQUI calculate real housing for the selected city
   Controls.HousingTotalNum:SetColorByName( colorName );
   local uv:number;
 
@@ -899,6 +902,40 @@ function OnShowBreakdownTab()
   m_tabs.SelectTab( Controls.BuildingsButton );
 end
 
+-- ===========================================================================
+-- CQUI calculate real housing from improvements for the selected city
+function CQUI_SelectedCityRealHousingFromImprovements()
+
+	local pSelectedCity	= UI.GetHeadSelectedCity();
+	local CQUI_TilesWithHousingCountX2 = 0;
+	local tParameters = {};
+
+	tParameters[CityCommandTypes.PARAM_MANAGE_CITIZEN] = UI.GetInterfaceModeParameter(CityCommandTypes.PARAM_MANAGE_CITIZEN);
+
+	local tResults = CityManager.GetCommandTargets( pSelectedCity, CityCommandTypes.MANAGE, tParameters );
+	local tPlots = tResults[CityCommandResults.PLOTS];
+
+		for i, plotId in pairs(tPlots) do
+
+		local kPlot	= Map.GetPlotByIndex(plotId);
+		local eImprovementType = kPlot:GetImprovementType();
+
+			if( eImprovementType ~= -1 ) then
+
+			local kImprovementData = GameInfo.Improvements[eImprovementType].Housing;
+
+				if kImprovementData == 1 then    -- farms, pastures etc.
+          CQUI_TilesWithHousingCountX2 = CQUI_TilesWithHousingCountX2 + 1;
+
+				elseif kImprovementData == 2 then    -- stepwells
+          CQUI_TilesWithHousingCountX2 = CQUI_TilesWithHousingCountX2 + 2;
+				end
+			end
+		end
+  CQUI_RealHousingFromImprovements = CQUI_TilesWithHousingCountX2 * 0.5;
+end
+
+-- ===========================================================================
 function Initialize()
   PopulateTabs();
 
