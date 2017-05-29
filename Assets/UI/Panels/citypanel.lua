@@ -592,10 +592,11 @@ function ViewMain( data:table )
 
   Controls.ReligionNum:SetText( data.ReligionFollowers );
 
+  CQUI_SelectedCityRealHousingFromImprovements();
   Controls.HousingNum:SetText( data.Population );
   colorName = GetPercentGrowthColor( data.HousingMultiplier );
   Controls.HousingNum:SetColorByName( colorName );
-  Controls.HousingMax:SetText( data.Housing );  
+  Controls.HousingMax:SetText( data.Housing - data.HousingFromImprovements + CQUI_RealHousingFromImprovements );  
 
   Controls.BreakdownLabel:SetHide( m_isShowingPanels );
   Controls.ReligionLabel:SetHide( m_isShowingPanels );
@@ -1322,6 +1323,39 @@ function CQUI_UpdateSelectedCityCitizens( plotId:number )
 
 	local tResults :table = CityManager.RequestCommand( pSelectedCity, CityCommandTypes.MANAGE, tParameters );
 	return true;
+end
+
+-- ===========================================================================
+-- CQUI calculate real housing from improvements for selected city
+function CQUI_SelectedCityRealHousingFromImprovements()
+
+  local pSelectedCity	= UI.GetHeadSelectedCity();
+  local CQUI_TilesWithHousingCountX2 = 0;
+  local tParameters = {};
+
+  tParameters[CityCommandTypes.PARAM_MANAGE_CITIZEN] = UI.GetInterfaceModeParameter(CityCommandTypes.PARAM_MANAGE_CITIZEN);
+
+  local tResults = CityManager.GetCommandTargets( pSelectedCity, CityCommandTypes.MANAGE, tParameters );
+  local tPlots = tResults[CityCommandResults.PLOTS];
+
+  for i, plotId in pairs(tPlots) do
+
+    local kPlot	= Map.GetPlotByIndex(plotId);
+    local eImprovementType = kPlot:GetImprovementType();
+
+    if( eImprovementType ~= -1 ) then
+
+      local kImprovementData = GameInfo.Improvements[eImprovementType].Housing;
+
+      if kImprovementData == 1 then    -- farms, pastures etc.
+        CQUI_TilesWithHousingCountX2 = CQUI_TilesWithHousingCountX2 + 1;
+
+      elseif kImprovementData == 2 then    -- stepwells
+        CQUI_TilesWithHousingCountX2 = CQUI_TilesWithHousingCountX2 + 2;
+      end
+    end
+  end
+  CQUI_RealHousingFromImprovements = CQUI_TilesWithHousingCountX2 * 0.5;
 end
 
 -- ===========================================================================
