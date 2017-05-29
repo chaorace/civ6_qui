@@ -1046,7 +1046,8 @@ function CityBanner.UpdateStats( self : CityBanner)
 
         if g_smartbanner and g_smartbanner_population then
           self.m_Instance.CityPopulation:SetToolTipString(popTooltip);
-          local housingLeft = pCityGrowth:GetHousing() - currentPopulation;
+          CQUI_AllCitiesRealHousingFromImprovements();    -- CQUI calculate real housing from improvements for each city
+          local housingLeft = pCityGrowth:GetHousing() - pCityGrowth:GetHousingFromImprovements() + CQUI_RealHousingFromImprovements[pCity] - currentPopulation;    -- CQUI calculate real housing for each city
           local housingLeftText = housingLeft;
           local housingLeftColor = "Error";
           if housingLeft > 1 then
@@ -3241,6 +3242,44 @@ function OnCityBannerRightClick( playerID:number, cityID:number )
 	end
 	
 	UI.LookAtPlot( pCity:GetX(), pCity:GetY() );
+end
+
+-- ===========================================================================
+-- CQUI calculate real housing from improvements for each city
+function CQUI_AllCitiesRealHousingFromImprovements()
+
+  CQUI_RealHousingFromImprovements = {};
+
+  local m_pCity = Players[Game.GetLocalPlayer()]:GetCities();
+  for i, pCity in m_pCity:Members() do
+
+    local CQUI_TilesWithHousingCountX2 = 0;
+    local tParameters = {};
+
+    tParameters[CityCommandTypes.PARAM_MANAGE_CITIZEN] = UI.GetInterfaceModeParameter(CityCommandTypes.PARAM_MANAGE_CITIZEN);
+
+    local tResults = CityManager.GetCommandTargets( pCity, CityCommandTypes.MANAGE, tParameters );
+    local tPlots = tResults[CityCommandResults.PLOTS];
+
+    for i, plotId in pairs(tPlots) do
+
+      local kPlot	= Map.GetPlotByIndex(plotId);
+      local eImprovementType = kPlot:GetImprovementType();
+
+        if( eImprovementType ~= -1 ) then
+
+          local kImprovementData = GameInfo.Improvements[eImprovementType].Housing;
+
+          if kImprovementData == 1 then    -- farms, pastures etc.
+            CQUI_TilesWithHousingCountX2 = CQUI_TilesWithHousingCountX2 + 1;
+
+          elseif kImprovementData == 2 then    -- stepwells
+            CQUI_TilesWithHousingCountX2 = CQUI_TilesWithHousingCountX2 + 2;
+          end
+        end
+    end
+    CQUI_RealHousingFromImprovements[pCity] = CQUI_TilesWithHousingCountX2 * 0.5;
+  end
 end
 
 -- ===========================================================================
