@@ -592,11 +592,11 @@ function ViewMain( data:table )
 
   Controls.ReligionNum:SetText( data.ReligionFollowers );
 
-  CQUI_SelectedCityRealHousingFromImprovements();    -- CQUI calculate real housing from improvements for the selected city
+  local CQUI_HousingFromImprovements = CQUI_RealHousingFromImprovements(selectedCity);    -- CQUI calculate real housing from improvements
   Controls.HousingNum:SetText( data.Population );
   colorName = GetPercentGrowthColor( data.HousingMultiplier );
   Controls.HousingNum:SetColorByName( colorName );
-  Controls.HousingMax:SetText( data.Housing - data.HousingFromImprovements + CQUI_RealHousingFromImprovements );    -- CQUI calculate real housing for the selected city
+  Controls.HousingMax:SetText( data.Housing - data.HousingFromImprovements + CQUI_RealHousingFromImprovements );    -- CQUI calculate real housing
 
   Controls.BreakdownLabel:SetHide( m_isShowingPanels );
   Controls.ReligionLabel:SetHide( m_isShowingPanels );
@@ -1326,36 +1326,35 @@ function CQUI_UpdateSelectedCityCitizens( plotId:number )
 end
 
 -- ===========================================================================
--- CQUI calculate real housing from improvements for the selected city
-function CQUI_SelectedCityRealHousingFromImprovements()
+-- CQUI calculate real housing from improvements
+function CQUI_RealHousingFromImprovements(pCity)
 
-  local pSelectedCity	= UI.GetHeadSelectedCity();
-  local CQUI_TilesWithHousingCountX2 = 0;
-  local tParameters = {};
+  local CQUI_HousingFromImprovements = {};
+  local m_pCity = Players[Game.GetLocalPlayer()]:GetCities();
+  for i, pCity in m_pCity:Members() do
 
-  tParameters[CityCommandTypes.PARAM_MANAGE_CITIZEN] = UI.GetInterfaceModeParameter(CityCommandTypes.PARAM_MANAGE_CITIZEN);
+    local CQUI_TilesWithHousingCountX2 = 0;
+    local tParameters = {};
+    tParameters[CityCommandTypes.PARAM_MANAGE_CITIZEN] = UI.GetInterfaceModeParameter(CityCommandTypes.PARAM_MANAGE_CITIZEN);
+    local tResults = CityManager.GetCommandTargets( pCity, CityCommandTypes.MANAGE, tParameters );
+    local tPlots = tResults[CityCommandResults.PLOTS];
+    for i, plotId in pairs(tPlots) do
 
-  local tResults = CityManager.GetCommandTargets( pSelectedCity, CityCommandTypes.MANAGE, tParameters );
-  local tPlots = tResults[CityCommandResults.PLOTS];
+      local kPlot	= Map.GetPlotByIndex(plotId);
+      local eImprovementType = kPlot:GetImprovementType();
+      if( eImprovementType ~= -1 ) then
 
-  for i, plotId in pairs(tPlots) do
-
-    local kPlot	= Map.GetPlotByIndex(plotId);
-    local eImprovementType = kPlot:GetImprovementType();
-
-    if( eImprovementType ~= -1 ) then
-
-      local kImprovementData = GameInfo.Improvements[eImprovementType].Housing;
-
-      if kImprovementData == 1 then    -- farms, pastures etc.
-        CQUI_TilesWithHousingCountX2 = CQUI_TilesWithHousingCountX2 + 1;
-
-      elseif kImprovementData == 2 then    -- stepwells
-        CQUI_TilesWithHousingCountX2 = CQUI_TilesWithHousingCountX2 + 2;
+        local kImprovementData = GameInfo.Improvements[eImprovementType].Housing;
+        if kImprovementData == 1 then    -- farms, pastures etc.
+          CQUI_TilesWithHousingCountX2 = CQUI_TilesWithHousingCountX2 + 1;
+        elseif kImprovementData == 2 then    -- stepwells
+          CQUI_TilesWithHousingCountX2 = CQUI_TilesWithHousingCountX2 + 2;
+        end
       end
     end
+    CQUI_HousingFromImprovements[pCity] = CQUI_TilesWithHousingCountX2 * 0.5;
   end
-  CQUI_RealHousingFromImprovements = CQUI_TilesWithHousingCountX2 * 0.5;
+  return CQUI_HousingFromImprovements[pCity];
 end
 
 -- ===========================================================================
