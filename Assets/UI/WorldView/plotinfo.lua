@@ -77,7 +77,7 @@ function OnClickSwapTile( plotId:number )
   tParameters[CityCommandTypes.PARAM_Y] = kPlot:GetY();
 
   local tResults :table = CityManager.RequestCommand( pSelectedCity, CityCommandTypes.SWAP_TILE_OWNER, tParameters );
-  CQUI_UpdateAllCitiesCitizens();    -- CQUI update all cities data when swap tiles
+  CQUI_UpdateAllCitiesCitizens();    -- CQUI update all cities citizens and data when swap tiles
   return true;
 end
 
@@ -957,7 +957,7 @@ function OnInputHandler( pInputStruct:table )
 end
 
 -- ===========================================================================
--- CQUI update all cities data when swap tiles
+-- CQUI update all cities citizens and data when swap tiles
 function CQUI_UpdateAllCitiesCitizens()
 
 	local m_pCity:table = Players[Game.GetLocalPlayer()]:GetCities();
@@ -968,8 +968,8 @@ function CQUI_UpdateAllCitiesCitizens()
 
 		if pCitizens:IsFavoredYield(YieldTypes.CULTURE) then
 			tParameters[CityCommandTypes.PARAM_FLAGS]   = 0;      -- Set favoured
-      tParameters[CityCommandTypes.PARAM_DATA0] = 1;          -- on
-     		elseif pCitizens:IsDisfavoredYield(YieldTypes.CULTURE) then
+			tParameters[CityCommandTypes.PARAM_DATA0] = 1;          -- on
+    elseif pCitizens:IsDisfavoredYield(YieldTypes.CULTURE) then
 			tParameters[CityCommandTypes.PARAM_FLAGS]   = 1;      -- Set Ignored
 			tParameters[CityCommandTypes.PARAM_DATA0] = 1;          -- on
 		else
