@@ -1050,15 +1050,15 @@ function CityBanner.UpdateStats( self : CityBanner)
           local housingLeft = pCityGrowth:GetHousing() - pCityGrowth:GetHousingFromImprovements() + CQUI_HousingFromImprovements - currentPopulation;    -- CQUI calculate real housing
           local housingLeftText = housingLeft;
           local housingLeftColor = "Error";
-          if housingLeft > 1 then
+          if housingLeft > 1.5 then
             housingLeftColor = "StatGoodCS";
             housingLeftText = "+"..housingLeft;
             --COLOR: Green
-          elseif housingLeft == 1 then
+          elseif housingLeft <= 1.5 and housingLeft > 0 then
             housingLeftColor = "WarningMinor";
             housingLeftText = "+"..housingLeft;
             --COLOR: Yellow
-          elseif housingLeft <= 0 and housingLeft >= -4 then
+          elseif housingLeft <= 0 and housingLeft >= -4.5 then
             housingLeftColor = "WarningMajor";
           end
           local CTLS = "[COLOR:"..popTurnLeftColor.."]"..turnsUntilGrowth.."[ENDCOLOR]  [[COLOR:"..housingLeftColor.."]"..housingLeftText.."[ENDCOLOR]]  ";
