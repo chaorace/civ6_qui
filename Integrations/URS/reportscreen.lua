@@ -2131,7 +2131,6 @@ function OnToggleBonus()
 end
 --ARISTOS: End resources toggle
 
--- ===========================================================================
 function Initialize()
 
 	Resize();
