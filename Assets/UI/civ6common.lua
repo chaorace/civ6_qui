@@ -1026,30 +1026,25 @@ end
 -- CQUI calculate real housing from improvements
 function CQUI_RealHousingFromImprovements(pCity)
 
-  local CQUI_HousingFromImprovements = {};
-  local m_pCity = Players[Game.GetLocalPlayer()]:GetCities();
-  for i, pCity in m_pCity:Members() do
+  local CQUI_HousingFromImprovements = 0;
+  local tParameters = {};
+  tParameters[CityCommandTypes.PARAM_MANAGE_CITIZEN] = UI.GetInterfaceModeParameter(CityCommandTypes.PARAM_MANAGE_CITIZEN);
+  local tResults = CityManager.GetCommandTargets( pCity, CityCommandTypes.MANAGE, tParameters );
+  local tPlots = tResults[CityCommandResults.PLOTS];
+  for i, plotId in pairs(tPlots) do
 
-    local CQUI_TilesWithHousingCountX2 = 0;
-    local tParameters = {};
-    tParameters[CityCommandTypes.PARAM_MANAGE_CITIZEN] = UI.GetInterfaceModeParameter(CityCommandTypes.PARAM_MANAGE_CITIZEN);
-    local tResults = CityManager.GetCommandTargets( pCity, CityCommandTypes.MANAGE, tParameters );
-    local tPlots = tResults[CityCommandResults.PLOTS];
-    for i, plotId in pairs(tPlots) do
+    local kPlot	= Map.GetPlotByIndex(plotId);
+    local eImprovementType = kPlot:GetImprovementType();
+    if( eImprovementType ~= -1 ) then
 
-      local kPlot	= Map.GetPlotByIndex(plotId);
-      local eImprovementType = kPlot:GetImprovementType();
-      if( eImprovementType ~= -1 ) then
-
-        local kImprovementData = GameInfo.Improvements[eImprovementType].Housing;
-        if kImprovementData == 1 then    -- farms, pastures etc.
-          CQUI_TilesWithHousingCountX2 = CQUI_TilesWithHousingCountX2 + 1;
-        elseif kImprovementData == 2 then    -- stepwells
-          CQUI_TilesWithHousingCountX2 = CQUI_TilesWithHousingCountX2 + 2;
-        end
+      local kImprovementData = GameInfo.Improvements[eImprovementType].Housing;
+      if kImprovementData == 1 then    -- farms, pastures etc.
+        CQUI_HousingFromImprovements = CQUI_HousingFromImprovements + 1;
+      elseif kImprovementData == 2 then    -- stepwells
+        CQUI_HousingFromImprovements = CQUI_HousingFromImprovements + 2;
       end
     end
-    CQUI_HousingFromImprovements[pCity] = CQUI_TilesWithHousingCountX2 * 0.5;
   end
-  return CQUI_HousingFromImprovements[pCity];
+  CQUI_HousingFromImprovements = CQUI_HousingFromImprovements * 0.5;
+  return CQUI_HousingFromImprovements;
 end
