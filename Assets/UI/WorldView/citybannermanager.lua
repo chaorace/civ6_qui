@@ -1058,7 +1058,10 @@ function CityBanner.UpdateStats( self : CityBanner)
             housingLeftColor = "WarningMinor";
             housingLeftText = "+"..housingLeft;
             --COLOR: Yellow
-          elseif housingLeft <= 0.5 and housingLeft >= -4.5 then
+					elseif housingLeft == 0.5 then
+            housingLeftColor = "WarningMajor";
+            housingLeftText = "+"..housingLeft;
+          elseif housingLeft < 0.5 and housingLeft >= -4.5 then
             housingLeftColor = "WarningMajor";
           end
           local CTLS = "[COLOR:"..popTurnLeftColor.."]"..turnsUntilGrowth.."[ENDCOLOR]  [[COLOR:"..housingLeftColor.."]"..housingLeftText.."[ENDCOLOR]]  ";
