@@ -960,26 +960,25 @@ end
 -- CQUI update all cities citizens and data when swap tiles
 function CQUI_UpdateAllCitiesCitizens()
 
-	local m_pCity:table = Players[Game.GetLocalPlayer()]:GetCities();
-	for i, pCity in m_pCity:Members() do
-
-		local pCitizens   :table = pCity:GetCitizens();
-		local tParameters :table = {};
-
-		if pCitizens:IsFavoredYield(YieldTypes.CULTURE) then
-			tParameters[CityCommandTypes.PARAM_FLAGS]   = 0;      -- Set favoured
-			tParameters[CityCommandTypes.PARAM_DATA0] = 1;          -- on
-		elseif pCitizens:IsDisfavoredYield(YieldTypes.CULTURE) then
-			tParameters[CityCommandTypes.PARAM_FLAGS]   = 1;      -- Set Ignored
-			tParameters[CityCommandTypes.PARAM_DATA0] = 1;          -- on
-		else
-			tParameters[CityCommandTypes.PARAM_FLAGS]   = 0;      -- Set favoured
-			tParameters[CityCommandTypes.PARAM_DATA0] = 0;          -- off
-		end
-      
-		tParameters[CityCommandTypes.PARAM_YIELD_TYPE]= yieldType;  -- Yield type
-		CityManager.RequestCommand(pCity, CityCommandTypes.SET_FOCUS, tParameters);
-	end
+  local m_pCity:table = Players[Game.GetLocalPlayer()]:GetCities();
+  for i, pCity in m_pCity:Members() do
+    local pCitizens   :table = pCity:GetCitizens();
+    
+    local tParameters :table = {};
+    if pCitizens:IsFavoredYield(YieldTypes.CULTURE) then
+      tParameters[CityCommandTypes.PARAM_FLAGS]   = 0;      -- Set favoured
+      tParameters[CityCommandTypes.PARAM_DATA0] = 1;          -- on
+    elseif pCitizens:IsDisfavoredYield(YieldTypes.CULTURE) then
+      tParameters[CityCommandTypes.PARAM_FLAGS]   = 1;      -- Set Ignored
+      tParameters[CityCommandTypes.PARAM_DATA0] = 1;          -- on
+    else
+      tParameters[CityCommandTypes.PARAM_FLAGS]   = 0;      -- Set favoured
+      tParameters[CityCommandTypes.PARAM_DATA0] = 0;          -- off
+    end
+    
+    tParameters[CityCommandTypes.PARAM_YIELD_TYPE]= yieldType;  -- Yield type
+    CityManager.RequestCommand(pCity, CityCommandTypes.SET_FOCUS, tParameters);
+  end
 end
 
 -- ===========================================================================
