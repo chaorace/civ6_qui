@@ -962,9 +962,9 @@ function CQUI_UpdateAllCitiesCitizens()
 
   local m_pCity:table = Players[Game.GetLocalPlayer()]:GetCities();
   for i, pCity in m_pCity:Members() do
-    local pCitizens   :table = pCity:GetCitizens();
-    
+    local pCitizens   :table = pCity:GetCitizens();    
     local tParameters :table = {};
+    
     if pCitizens:IsFavoredYield(YieldTypes.CULTURE) then
       tParameters[CityCommandTypes.PARAM_FLAGS]   = 0;      -- Set favoured
       tParameters[CityCommandTypes.PARAM_DATA0] = 1;          -- on
