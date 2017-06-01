@@ -1026,27 +1026,26 @@ end
 -- CQUI calculate real housing from improvements
 function CQUI_RealHousingFromImprovements(pCity)
 
-  local CQUI_HousingFromImprovements = 0;
-  local tParameters :table = {};
-  tParameters[CityCommandTypes.PARAM_MANAGE_CITIZEN] = UI.GetInterfaceModeParameter(CityCommandTypes.PARAM_MANAGE_CITIZEN);
-  local tResults :table = CityManager.GetCommandTargets( pCity, CityCommandTypes.MANAGE, tParameters );
-  
+	local CQUI_HousingFromImprovements = 0;
+	local tParameters :table = {};
+	tParameters[CityCommandTypes.PARAM_MANAGE_CITIZEN] = UI.GetInterfaceModeParameter(CityCommandTypes.PARAM_MANAGE_CITIZEN);
+	local tResults :table = CityManager.GetCommandTargets( pCity, CityCommandTypes.MANAGE, tParameters );
 	local tPlots :table = tResults[CityCommandResults.PLOTS];
 	if tPlots ~= nil and (table.count(tPlots) > 0) then
-  	for i, plotId in pairs(tPlots) do
-    	local kPlot	:table = Map.GetPlotByIndex(plotId);
+		for i, plotId in pairs(tPlots) do
+			local kPlot	:table = Map.GetPlotByIndex(plotId);
 
 			local eImprovementType :number = kPlot:GetImprovementType();
-    	if( eImprovementType ~= -1 ) then
-      	local kImprovementData = GameInfo.Improvements[eImprovementType].Housing;
-      	if kImprovementData == 1 then    -- farms, pastures etc.
-        	CQUI_HousingFromImprovements = CQUI_HousingFromImprovements + 1;
-      	elseif kImprovementData == 2 then    -- stepwells
-        	CQUI_HousingFromImprovements = CQUI_HousingFromImprovements + 2;
-      	end
-    	end
-  	end
-  CQUI_HousingFromImprovements = CQUI_HousingFromImprovements * 0.5;
+			if( eImprovementType ~= -1 ) then
+				local kImprovementData = GameInfo.Improvements[eImprovementType].Housing;
+				if kImprovementData == 1 then    -- farms, pastures etc.
+					CQUI_HousingFromImprovements = CQUI_HousingFromImprovements + 1;
+				elseif kImprovementData == 2 then    -- stepwells
+					CQUI_HousingFromImprovements = CQUI_HousingFromImprovements + 2;
+				end
+			end
+		end
+	CQUI_HousingFromImprovements = CQUI_HousingFromImprovements * 0.5;
 	end
-  return CQUI_HousingFromImprovements;
+	return CQUI_HousingFromImprovements;
 end
