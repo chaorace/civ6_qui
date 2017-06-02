@@ -77,6 +77,7 @@ function OnClickSwapTile( plotId:number )
   tParameters[CityCommandTypes.PARAM_Y] = kPlot:GetY();
 
   local tResults :table = CityManager.RequestCommand( pSelectedCity, CityCommandTypes.SWAP_TILE_OWNER, tParameters );
+  
   CQUI_UpdateAllCitiesCitizens();    -- CQUI update all cities citizens and data when swap tiles
   return true;
 end
