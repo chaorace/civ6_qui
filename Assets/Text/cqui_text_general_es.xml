@@ -22,7 +22,11 @@
 
     <!-- CITY PANEL AMENITY -->
     <Replace Tag="LOC_CQUI_CITY_ENTERTAINMENT" Language="es_ES">
+<<<<<<< HEAD
       <Text>Ocio</Text>
+=======
+      <Text>Espectáculos</Text>
+>>>>>>> ce14cbb9bae236e5a52002650c3adc3d207e06d7
     </Replace>
 
     <!-- POPUPS -->
