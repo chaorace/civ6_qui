@@ -185,15 +185,13 @@ end
 function CQUI_OnNextCity()
   local kCity:table = UI.GetHeadSelectedCity();
   UI.SelectNextCity(kCity);
-  UI.PlaySound("UI_Click_Sweetener_Metal_Button_Small");
-  CQUI_UpdateSelectedCityCitizens();
+  UI.PlaySound("UI_Click_Sweetener_Metal_Button_Small");  
 end
 
 function CQUI_OnPreviousCity()
   local kCity:table = UI.GetHeadSelectedCity();
   UI.SelectPrevCity(kCity);
-  UI.PlaySound("UI_Click_Sweetener_Metal_Button_Small");
-  CQUI_UpdateSelectedCityCitizens();
+  UI.PlaySound("UI_Click_Sweetener_Metal_Button_Small");  
 end
 
 function CQUI_OnLoadScreenClose()
