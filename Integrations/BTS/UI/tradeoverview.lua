@@ -781,7 +781,7 @@ function AddRouteInstanceFromRouteInfo( routeInfo:table )
             );
         end
     end
-  
+
     local tradeUnit:table = originPlayer:GetUnits():FindID(routeInfo.TraderUnitID);
     if routeInfo.TraderUnitID then        
         routeInstance.GridButton:RegisterCallback( Mouse.eLClick,
