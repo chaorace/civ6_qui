@@ -1045,28 +1045,30 @@ function CityBanner.UpdateStats( self : CityBanner)
         end
 
         if g_smartbanner and g_smartbanner_population then
-          self.m_Instance.CityPopulation:SetToolTipString(popTooltip);
-          local CQUI_HousingFromImprovements = CQUI_RealHousingFromImprovements(pCity);    -- CQUI calculate real housing from improvements
-          local housingLeft = pCityGrowth:GetHousing() - pCityGrowth:GetHousingFromImprovements() + CQUI_HousingFromImprovements - currentPopulation;    -- CQUI calculate real housing
-          local housingLeftText = housingLeft;
-          local housingLeftColor = "Error";
-          if housingLeft > 1.5 then
-            housingLeftColor = "StatGoodCS";
-            housingLeftText = "+"..housingLeft;
-            --COLOR: Green
-          elseif housingLeft <= 1.5 and housingLeft > 0.5 then
-            housingLeftColor = "WarningMinor";
-            housingLeftText = "+"..housingLeft;
-            --COLOR: Yellow
-					elseif housingLeft == 0.5 then
-            housingLeftColor = "WarningMajor";
-            housingLeftText = "+"..housingLeft;
-          elseif housingLeft < 0.5 and housingLeft >= -4.5 then
-            housingLeftColor = "WarningMajor";
+          if CQUI_RealHousingFromImprovements(pCity) ~= nil then    -- CQUI real housing from improvements fix when waiting for the next turn
+            self.m_Instance.CityPopulation:SetToolTipString(popTooltip);
+            local CQUI_HousingFromImprovements = CQUI_RealHousingFromImprovements(pCity);    -- CQUI calculate real housing from improvements
+            local housingLeft = pCityGrowth:GetHousing() - pCityGrowth:GetHousingFromImprovements() + CQUI_HousingFromImprovements - currentPopulation;    -- CQUI calculate real housing
+            local housingLeftText = housingLeft;
+            local housingLeftColor = "Error";
+            if housingLeft > 1.5 then
+              housingLeftColor = "StatGoodCS";
+              housingLeftText = "+"..housingLeft;
+              --COLOR: Green
+            elseif housingLeft <= 1.5 and housingLeft > 0.5 then
+              housingLeftColor = "WarningMinor";
+              housingLeftText = "+"..housingLeft;
+              --COLOR: Yellow
+					  elseif housingLeft == 0.5 then
+              housingLeftColor = "WarningMajor";
+              housingLeftText = "+"..housingLeft;
+            elseif housingLeft < 0.5 and housingLeft >= -4.5 then
+              housingLeftColor = "WarningMajor";
+            end
+            local CTLS = "[COLOR:"..popTurnLeftColor.."]"..turnsUntilGrowth.."[ENDCOLOR]  [[COLOR:"..housingLeftColor.."]"..housingLeftText.."[ENDCOLOR]]  ";
+            self.m_Instance.CityPopTurnsLeft:SetText(CTLS);
+            self.m_Instance.CityPopTurnsLeft:SetHide(false);
           end
-          local CTLS = "[COLOR:"..popTurnLeftColor.."]"..turnsUntilGrowth.."[ENDCOLOR]  [[COLOR:"..housingLeftColor.."]"..housingLeftText.."[ENDCOLOR]]  ";
-          self.m_Instance.CityPopTurnsLeft:SetText(CTLS);
-          self.m_Instance.CityPopTurnsLeft:SetHide(false);
         else
           self.m_Instance.CityPopTurnsLeft:SetHide(true);
         end
