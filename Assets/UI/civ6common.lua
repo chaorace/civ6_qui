@@ -1043,7 +1043,9 @@ function CQUI_RealHousingFromImprovements(pCity)
         end
       end
     end
-  CQUI_HousingFromImprovements = CQUI_HousingFromImprovements * 0.5;
+    CQUI_HousingFromImprovements = CQUI_HousingFromImprovements * 0.5;
+  else
+    return;
   end
   return CQUI_HousingFromImprovements;
 end
