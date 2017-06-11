@@ -1044,8 +1044,9 @@ function CityBanner.UpdateStats( self : CityBanner)
           self.m_Instance.CityCultureTurnsLeft:SetHide(true);
         end
 
+        local CQUI_HousingFromImprovements = CQUI_RealHousingFromImprovements(pCity);    -- CQUI get real housing from improvements value
+
         if g_smartbanner and g_smartbanner_population then
-          local CQUI_HousingFromImprovements = CQUI_RealHousingFromImprovements(pCity);    -- CQUI calculate real housing from improvements
           if CQUI_HousingFromImprovements ~= nil then    -- CQUI real housing from improvements fix to show correct values when waiting for the next turn
             self.m_Instance.CityPopulation:SetToolTipString(popTooltip);            
             local housingLeft = pCityGrowth:GetHousing() - pCityGrowth:GetHousingFromImprovements() + CQUI_HousingFromImprovements - currentPopulation;    -- CQUI calculate real housing
@@ -3247,6 +3248,36 @@ function OnCityBannerRightClick( playerID:number, cityID:number )
 	end
 	
 	UI.LookAtPlot( pCity:GetX(), pCity:GetY() );
+end
+
+-- ===========================================================================
+-- CQUI calculate real housing from improvements
+function CQUI_RealHousingFromImprovements(pCity)
+  local CQUI_HousingFromImprovements = 0;
+  local pCityID = pCity:GetID();
+  local tParameters :table = {};
+  tParameters[CityCommandTypes.PARAM_MANAGE_CITIZEN] = UI.GetInterfaceModeParameter(CityCommandTypes.PARAM_MANAGE_CITIZEN);
+  local tResults :table = CityManager.GetCommandTargets( pCity, CityCommandTypes.MANAGE, tParameters );
+  local tPlots :table = tResults[CityCommandResults.PLOTS];
+    if tPlots ~= nil and (table.count(tPlots) > 0) then
+      for i, plotId in pairs(tPlots) do
+      local kPlot	:table = Map.GetPlotByIndex(plotId);
+      local eImprovementType :number = kPlot:GetImprovementType();
+        if( eImprovementType ~= -1 ) then
+        local kImprovementData = GameInfo.Improvements[eImprovementType].Housing;
+          if kImprovementData == 1 then    -- farms, pastures etc.
+            CQUI_HousingFromImprovements = CQUI_HousingFromImprovements + 1;
+          elseif kImprovementData == 2 then    -- stepwells
+            CQUI_HousingFromImprovements = CQUI_HousingFromImprovements + 2;
+          end
+        end
+      end
+      CQUI_HousingFromImprovements = CQUI_HousingFromImprovements * 0.5;
+    else
+      return;
+    end
+  LuaEvents.CQUI_RealHousingFromImprovementsCalculated(pCityID, CQUI_HousingFromImprovements);
+  return CQUI_HousingFromImprovements;
 end
 
 -- ===========================================================================
