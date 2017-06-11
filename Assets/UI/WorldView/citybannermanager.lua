@@ -1045,9 +1045,9 @@ function CityBanner.UpdateStats( self : CityBanner)
         end
 
         if g_smartbanner and g_smartbanner_population then
-          if CQUI_RealHousingFromImprovements(pCity) ~= nil then    -- CQUI real housing from improvements fix when waiting for the next turn
-            self.m_Instance.CityPopulation:SetToolTipString(popTooltip);
-            local CQUI_HousingFromImprovements = CQUI_RealHousingFromImprovements(pCity);    -- CQUI calculate real housing from improvements
+          local CQUI_HousingFromImprovements = CQUI_RealHousingFromImprovements(pCity);    -- CQUI calculate real housing from improvements
+          if CQUI_HousingFromImprovements ~= nil then    -- CQUI real housing from improvements fix to show correct values when waiting for the next turn
+            self.m_Instance.CityPopulation:SetToolTipString(popTooltip);            
             local housingLeft = pCityGrowth:GetHousing() - pCityGrowth:GetHousingFromImprovements() + CQUI_HousingFromImprovements - currentPopulation;    -- CQUI calculate real housing
             local housingLeftText = housingLeft;
             local housingLeftColor = "Error";
