@@ -62,6 +62,8 @@ local m_secondaryColor        :number = 0xf00d1ace;
 local m_kTutorialDisabledControls :table  = nil;
 local m_GrowthPlot          :number = -1;
 
+local CQUI_HousingFromImprovementsTable :table = {};
+
 -- ====================CQUI Cityview==========================================
 
 local CQUI_cityview = false;
@@ -1329,7 +1331,6 @@ end
 
 -- ===========================================================================
 --CQUI get real housing from improvements
-local CQUI_HousingFromImprovementsTable :table = {};
 function CQUI_HousingFromImprovementsTableInsert (pCityID, CQUI_HousingFromImprovements)
   CQUI_HousingFromImprovementsTable[pCityID] = CQUI_HousingFromImprovements;
 end
