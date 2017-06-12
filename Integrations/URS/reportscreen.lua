@@ -88,6 +88,8 @@ local m_kCurrentDeals	:table = nil;
 local m_kCurrentTab = 1
 -- !!
 
+local CQUI_HousingFromImprovementsTable :table = {};
+
 -- ===========================================================================
 --	Single exit point for display
 -- ===========================================================================
@@ -2135,7 +2137,6 @@ end
 
 -- ===========================================================================
 --CQUI get real housing from improvements
-local CQUI_HousingFromImprovementsTable :table = {};
 function CQUI_HousingFromImprovementsTableInsert (pCityID, CQUI_HousingFromImprovements)
   CQUI_HousingFromImprovementsTable[pCityID] = CQUI_HousingFromImprovements;
 end
