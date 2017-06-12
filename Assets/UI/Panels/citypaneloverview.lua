@@ -72,6 +72,8 @@ local ms_eventID = 0;
 local m_tabs;
 local m_isShowingPanel    :boolean = false;
 
+local CQUI_HousingFromImprovementsTable :table = {};
+
 -- ====================CQUI Cityview==========================================
 
   function CQUI_OnCityviewEnabled()
@@ -907,7 +909,6 @@ end
 
 -- ===========================================================================
 --CQUI get real housing from improvements
-local CQUI_HousingFromImprovementsTable :table = {};
 function CQUI_HousingFromImprovementsTableInsert (pCityID, CQUI_HousingFromImprovements)
   CQUI_HousingFromImprovementsTable[pCityID] = CQUI_HousingFromImprovements;
 end
