@@ -3268,7 +3268,12 @@ function CQUI_RealHousingFromImprovements(pCity)
           if kImprovementData == 1 then    -- farms, pastures etc.
             CQUI_HousingFromImprovements = CQUI_HousingFromImprovements + 1;
           elseif kImprovementData == 2 then    -- stepwells
-            CQUI_HousingFromImprovements = CQUI_HousingFromImprovements + 2;
+            local CQUI_PlayerResearchedSanitation :boolean = Players[Game.GetLocalPlayer()]:GetTechs():HasTech(40);    -- check if a player researched Sanitation (Index == 40)
+            if not CQUI_PlayerResearchedSanitation then
+              CQUI_HousingFromImprovements = CQUI_HousingFromImprovements + 2;
+            else
+              CQUI_HousingFromImprovements = CQUI_HousingFromImprovements + 4;
+            end
           end
         end
       end
