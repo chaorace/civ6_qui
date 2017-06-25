@@ -2462,6 +2462,7 @@ end
 -- INITIALIZATION
 -- ===========================================================================
 function Initialize()
+	CQUI_OnSettingsUpdate(); --ARISTOS: to force lenses settings when first starting the game
   m_MiniMap_xmloffsety = Controls.MiniMap:GetOffsetY();
   m_ContinentsCache = Map.GetContinentsInUse();
   UI.SetMinimapImageControl(Controls.MinimapImage);
