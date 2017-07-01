@@ -103,8 +103,19 @@ function AddNotification(ID, props, funcs)
   if(groupStackInstances[group] == nil) then
     groupStackInstances[group] = groupStackIM:GetInstance();
     groupStacks[group] = InstanceManager:new("ParadoxBarInstance", "Top", groupStackInstances[group].Stack);
+    --Binds the edit slideout button
+    local button = groupStackInstances[group].EditButton
+    local anim = groupStackInstances[group].EditAnim
+    button:RegisterCallback(Mouse.eMouseExit, function()
+      anim:Reverse();
+    end);
+    button:RegisterCallback(Mouse.eMouseEnter, function()
+      if(not anim:IsReversing()) then
+        anim:Reverse();
+      end
+    end);
   end
-  instance = groupStacks[group]:GetInstance();
+  local instance = groupStacks[group]:GetInstance();
 
 
   --Applies properties.
@@ -171,7 +182,7 @@ function RemoveNotification(instance, group)
     Controls.ParadoxBarStack:ReleaseChild(groupStackInstances[group].Top);
     groupStackInstances[group] = nil;
   end)
-  instance.AlphaAnimation:Reverse();
+  instance.AlphaAnimation:Play();
 end
 
 function Initialize()

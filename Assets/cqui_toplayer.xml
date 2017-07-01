@@ -14,7 +14,7 @@
           <!-- Standin for the worldtracker -->
           <Box Anchor="L,T" Size="390,270" Color="Red" Alpha="0"/>
           <!-- CQUI paradox bar -->
-          <Stack ID="ParadoxBarStack" Anchor="L,T" StackGrowth="Right" StackPadding="-4"/>
+          <Stack ID="ParadoxBarStack" Anchor="L,T" Offset="-15,0" StackGrowth="Right" StackPadding="0"/>
         </Stack>
         <!-- Standin for the right button panel and diplo ribbon (when considerably full)-->
         <Box Anchor="R,T" Size="650,140" Color="Beige" Alpha="0"/>
@@ -49,6 +49,9 @@
   </Instance>
   <Instance Name="ParadoxBarGroupInstance">
     <Container ID="Top" AutoSize="1">
+      <SlideAnim ID="EditAnim" Size="26,26" Start="-3,10" End="-20,10" Speed="3" Cycle="Once" Anchor="L,T" AnchorSide="O,I">
+        <Button ID="EditButton" ConsumeMouse="1" Size="26,26" Texture="Controls_TextEntry" SliceTextureSize="26,26"/>
+      </SlideAnim>
       <Grid Style="EnhancedToolTip" Size="53,40" Color="255,200,100,255" InnerPadding="10,20" AutoSize="V">
         <Stack ID="Stack" Anchor="L,C" Offset="1,-7" StackGrowth="Down" StackPadding="4"/>
       </Grid>
