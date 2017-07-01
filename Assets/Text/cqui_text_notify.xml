@@ -8,5 +8,8 @@
     <Row Tag="LOC_CQUI_CITYSHRINK" Language="en_US">
       <Text>{1_cityname} has shrunk!</Text>
     </Row>
+    <Row Tag="LOC_CQUI_CITYTILEGROWTH" Language="en_US">
+      <Text>{1_cityname}'s territory has grown!</Text>
+    </Row>
   </LocalizedText>
 </GameData>
