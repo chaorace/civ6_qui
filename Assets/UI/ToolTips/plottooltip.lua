@@ -368,7 +368,7 @@ function View(data:table, bIsUpdate:boolean)
 
   -- Defense modifier
   if (data.DefenseModifier ~= 0) then
-    table.insert(details, Locale.Lookup("LOC_TOOLTIP_DEFENSE_MODIFIER", data.DefenseModifier).. " [ICON_STRENGTH]");
+    table.insert(details, Locale.Lookup("LOC_TOOLTIP_DEFENSE_MODIFIER", data.DefenseModifier).. "[ICON_STRENGTH]");
   end
 
   -- Appeal
