@@ -359,8 +359,7 @@ function View(data:table, bIsUpdate:boolean)
       szMoveString = szMoveString:gsub("%d?%.?%d+%s",routeInfo.MovementCost.. "[ICON_Movement]",1);
     end
   elseif (not data.Impassable and data.MovementCost > 0) then
-    szMoveString = Locale.Lookup("LOC_TOOLTIP_MOVEMENT_COST", data.MovementCost);
-    szMoveString = szMoveString:gsub("%d?%.?%d+",data.MovementCost.. "[ICON_Movement]",1);
+    szMoveString = Locale.Lookup("LOC_TOOLTIP_MOVEMENT_COST", data.MovementCost).. "[ICON_Movement]";
   end
   if (szMoveString ~=nil) then
     --szMoveString = szMoveString:gsub("%d+%s",": [ICON_Movement]",1);
