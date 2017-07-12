@@ -126,5 +126,22 @@
       <Text>Goody Hut</Text>
     </Row>
 
+    <!-- Naturalist Lens -->
+    <Row Tag="LOC_HUD_NATURALIST_LENS">
+      <Text>Naturalist</Text>
+    </Row>
+    <Row Tag="LOC_HUD_NATURALIST_LENS_TOOLTIP">
+      <Text>Highlights places where National Parks can be built</Text>
+    </Row>
+    <Row Tag="LOC_TOOLTIP_NATURALIST_LENS_NPARK">
+      <Text>Area is ok for National Park</Text>
+    </Row>
+    <Row Tag="LOC_TOOLTIP_NATURALIST_LENS_OK">
+      <Text>Tile is ok for National Park</Text>
+    </Row>
+    <Row Tag="LOC_TOOLTIP_NATURALIST_LENS_FIXABLE">
+      <Text>Tile is ok, but something fixable is blocking</Text>
+    </Row>
+
   </BaseGameText>
 </GameData>

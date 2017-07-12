@@ -23,6 +23,7 @@ local MODDED_LENS_ID:table = {
   WONDER = 8;
   ADJACENCY_YIELD = 9;
   SCOUT = 10;
+  NATURALIST = 11;
 };
 
 -- Should the builder lens auto apply, when a builder is selected.
@@ -235,6 +236,7 @@ function OnToggleLensList()
     Controls.CityOverlap6LensButton:SetCheck(false);
     Controls.ArchaeologistLensButton:SetCheck(false);
     Controls.BuilderLensButton:SetCheck(false);
+    Controls.NaturalistLensButton:SetCheck(false);
     if UI.GetInterfaceMode() == InterfaceModeTypes.VIEW_MODAL_LENS then
       UI.SetInterfaceMode(InterfaceModeTypes.SELECTION);
     end
@@ -576,6 +578,29 @@ function ToggleScoutLens()
 end
 
 -- ===========================================================================
+function ToggleNaturalistLens()
+  if Controls.NaturalistLensButton:IsChecked() then
+    SetActiveModdedLens(MODDED_LENS_ID.NATURALIST);
+
+    -- Check if the appeal lens is already active
+    if UILens.IsLayerOn(LensLayers.HEX_COLORING_APPEAL_LEVEL) then
+      -- Unapply the appeal lens, so it can be cleared from the screen
+      UILens.SetActive("Default");
+    end
+
+    UILens.SetActive("Appeal");
+
+    RefreshInterfaceMode();
+  else
+    m_shouldCloseLensMenu = false;
+    if UI.GetInterfaceMode() == InterfaceModeTypes.VIEW_MODAL_LENS then
+      UI.SetInterfaceMode(InterfaceModeTypes.SELECTION);
+    end
+    SetActiveModdedLens(MODDED_LENS_ID.NONE);
+  end
+end
+
+-- ===========================================================================
 function ToggleGrid()
   bGridOn = not bGridOn;
   UI.ToggleGrid( bGridOn );
@@ -658,6 +683,8 @@ function OnLensLayerOn( layerNum:number )
       SetAdjacencyYieldLens();
     elseif currentModdedLens == MODDED_LENS_ID.SCOUT then
       SetScoutLens();
+    elseif currentModdedLens == MODDED_LENS_ID.NATURALIST then
+      SetNaturalistLens();
     end
     UI.PlaySound("UI_Lens_Overlay_On");
   elseif layerNum == LensLayers.HEX_COLORING_GOVERNMENT then
@@ -1412,6 +1439,124 @@ function ShowScoutLens()
   UILens.ToggleLayerOn(LensLayers.HEX_COLORING_APPEAL_LEVEL);
 end
 
+-- ===========================================================================
+function SetNaturalistLens()
+  print("Show Naturalist lens")
+  local localPlayer:number = Game.GetLocalPlayer();
+  local parkPlotColor:number = UI.GetColorValue("COLOR_PARK_NATURALIST_LENS");
+  local OkColor:number = UI.GetColorValue("COLOR_OK_NATURALIST_LENS");
+  local FixableColor:number = UI.GetColorValue("COLOR_FIXABLE_NATURALIST_LENS");
+  local rawParkPlots:table = Game.GetNationalParks():GetPossibleParkTiles(localPlayer);
+  local localPlayerVis:table = PlayersVisibility[localPlayer];
+  local mapWidth, mapHeight = Map.GetGridSize();
+  local fixableHexes:table = {};
+  local okHexes:table = {};
+  local tiles:table = {};
+
+  -- Collect individual tile data
+  for i = 0, (mapWidth * mapHeight) - 1, 1 do
+    local pPlot:table = Map.GetPlotByIndex(i);
+    local data =  {
+      X     = pPlot:GetX(),
+      Y     = pPlot:GetY(),
+      Level = 0,
+      Mine  = true,
+      Use   = false,
+    };
+    -- Level 3 = OK
+    -- Level 2 = Fixable
+    -- Level 1 = Semifixable
+
+    -- Base requirements
+    if plotHasNaturalWonder(pPlot) then
+      data.Level = 3;
+    elseif plotHasMountain(pPlot) then
+      data.Level = 3;
+    elseif pPlot:GetAppeal() >= 2 then
+      -- Charming
+      data.Level = 3;
+    elseif pPlot:GetAppeal() >= 1 then
+      -- It is tricky to analyse if a lower appeal is fixable so we
+      -- view it as semifixable without further analysis.
+      data.Level = 1;
+    end
+
+    -- An improvement can be removed, downgrade to fixable
+    if data.Level > 2 and plotHasImprovement(pPlot) then
+      data.Level = 2;
+    end
+
+    -- If not owned, downgrade to fixable
+    if pPlot:GetOwner() ~= Game.GetLocalPlayer() then
+      data.Mine = false;
+      if data.Level > 2 then
+        data.Level = 2;
+      end
+    end
+
+    -- Blocking changes
+    if plotHasWonder(pPlot) then
+      data.Level = 0;
+    elseif plotHasDistrict(pPlot) then
+      data.Level = 0;
+    elseif pPlot:IsNationalPark() then
+      data.Level = 0;
+    end
+
+    -- Only keep relevant tiles
+    if data.Level > 0 and localPlayerVis:IsRevealed(pPlot:GetX(), pPlot:GetY()) then
+      tiles[i] = data;
+    end
+  end
+
+  -- Mark those that are interesting
+  -- They must belong to a diamond where all four are at least semifixable.
+  for i, data in pairs(tiles) do
+    -- Figure out a diamond going up from this tile
+    local p1:table = Map.GetPlot(data.X + data.Y % 2 - 1, data.Y + 1);
+    local p2:table = Map.GetPlot(data.X + data.Y % 2,     data.Y + 1);
+    local p3:table = Map.GetPlot(data.X, data.Y + 2);
+
+    -- All three must exist
+    if p1 ~= nil and p2 ~= nil and p3 ~= nil then
+      local i1 = p1:GetIndex();
+      local i2 = p2:GetIndex();
+      local i3 = p3:GetIndex();
+      -- All three must have stored data
+      if tiles[i1] ~= nil and tiles[i2] ~= nil and tiles[i3] ~= nil then
+        -- At least one must be owned
+        if tiles[i].Mine or tiles[i1].Mine or tiles[i2].Mine or tiles[i3].Mine then
+          tiles[i].Use  = true;
+          tiles[i1].Use = true;
+          tiles[i2].Use = true;
+          tiles[i3].Use = true;
+        end
+      end
+    end
+  end
+
+  -- Extract info
+  for i, data in pairs(tiles) do
+    if tiles[i].Use then
+      if tiles[i].Level == 3 then
+        table.insert(okHexes, i)
+      elseif tiles[i].Level == 2 then
+        table.insert(fixableHexes, i)
+      end
+    end
+  end
+
+  if table.count(fixableHexes) > 0 then
+    UILens.SetLayerHexesColoredArea( LensLayers.HEX_COLORING_APPEAL_LEVEL, localPlayer, fixableHexes, FixableColor );
+  end
+  if table.count(okHexes) > 0 then
+    UILens.SetLayerHexesColoredArea( LensLayers.HEX_COLORING_APPEAL_LEVEL, localPlayer, okHexes, OkColor );
+  end
+  if table.count(rawParkPlots) > 0 then
+    UILens.SetLayerHexesColoredArea( LensLayers.HEX_COLORING_APPEAL_LEVEL, localPlayer, rawParkPlots, parkPlotColor );
+  end
+end
+
 -- Helper functions ===========================================================
 function SetActiveModdedLens(lensID)
   m_CurrentModdedLensOn = lensID;
@@ -1469,6 +1614,14 @@ end
 function plotHasHill(plot)
   local terrainInfo = GameInfo.Terrains[plot:GetTerrainType()];
   if terrainInfo ~= nil and terrainInfo.Hills then
+    return true
+  end
+  return false;
+end
+
+function plotHasMountain(plot)
+  local terrainInfo = GameInfo.Terrains[plot:GetTerrainType()];
+  if terrainInfo ~= nil and terrainInfo.Mountain then
     return true
   end
   return false;
@@ -2234,6 +2387,7 @@ function OnInterfaceModeChanged(eOldMode:number, eNewMode:number)
       Controls.CityOverlap6LensButton:SetCheck(false);
       Controls.ArchaeologistLensButton:SetCheck(false);
       Controls.BuilderLensButton:SetCheck(false);
+      Controls.NaturalistLensButton:SetCheck(false);
 
       if GetCurrentModdedLens() ~= MODDED_LENS_ID.NONE then
         ClearModdedLens()
@@ -2485,6 +2639,7 @@ function Initialize()
   Controls.CityOverlap6LensButton:RegisterCallback( Mouse.eLClick, ToggleCityOverlap6Lens );
   Controls.ArchaeologistLensButton:RegisterCallback( Mouse.eLClick, ToggleArchaeologistLens );
   Controls.BuilderLensButton:RegisterCallback( Mouse.eLClick, ToggleBuilderLens );
+  Controls.NaturalistLensButton:RegisterCallback( Mouse.eLClick, ToggleNaturalistLens );
 
   Controls.AppealLensButton:RegisterCallback( Mouse.eLClick, ToggleAppealLens );
   Controls.ContinentLensButton:RegisterCallback( Mouse.eLClick, ToggleContinentLens );
