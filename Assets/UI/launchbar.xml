@@ -39,6 +39,36 @@
       <Image  ID="ReportsBolt"     Anchor="L,C" Offset="0,-2"  Size="7,7"      Texture="LaunchBar_TrackPip"     Color="255,255,255,200" />
     </Stack>
 
+    <Container Anchor="L,T" Offset="361,77">
+      <!-- Control Box -->
+      <AlphaAnim ID="LaunchExtraAlpha" AlphaBegin="0" AlphaEnd="1" Speed="3" Cycle="Once" Function="OutQuint">
+        <SlideAnim ID="LaunchExtraSlide" Start="0,-10" EndOffset="0,10" Function="OutQuint" Speed="1.5" Cycle="Once">
+
+          <Container ID="LaunchExtraControls" Size="170,200" Offset="1,3" Anchor="L,T" Offset="1,0" ConsumeAllMouse="0" ConsumeMouseOver="1" ConsumeMouseButton="1" Hidden="1">
+            <Stack StackGrowth="Down" StackPadding="0">
+              <!-- Controls -->
+              <Box ID="LaunchExtraWrapper" Color="40,35,25,230" Size="parent,0" Offset="0,0" AutoSize="Vertical" AutoSizePadding="0,2">
+                <Stack ID="LaunchExtraStack" StackGrowth="Down" StackPadding="-2" Offset="0,3">
+                  <!-- Entries goes here -->
+                </Stack>
+
+
+              </Box>
+
+              <!-- Bottom Divier -->
+              <Box Color="143,122,82,200" Offset="-1,-3" Anchor="L,B" Size="parent,3">
+                <Box Color="0,0,0,200" Offset="-2,-1" Anchor="L,B" Size="parent+3,1" AnchorSide="I,O"/>
+              </Box>
+            </Stack>
+          </Container>
+        </SlideAnim>
+      </AlphaAnim>
+
+      <!-- Toggle Show/Hide Button -->
+      <CheckBox ID="LaunchExtraShow" Offset="16,-28" Anchor="L,T" ButtonSize="35,35" ButtonTexture="Controls_RadioButtonLarge" CheckTexture="Controls_RadioButtonLarge" CheckSize="35,35" CheckTextureOffset="0,35"/>
+    </Container>
+
+
     <Tutorial ID="TutOpenGovernment" Style="TutorialContainer" Anchor="L,B" AnchorSide="O,O" Offset="-220, 120" TriggerBy="TutorialOpenGovernment" >
       <Grid Style="TutorialCalloutGrid">
         <Label Style="TutorialHeaderText" String="LOC_META_93b_HEAD" />
@@ -110,6 +140,10 @@
       </Image>
     </Button>
   </Container>
+
+  <Instance Name="LaunchExtraEntry">
+    <GridButton ID="Button" Style="ButtonControlBrown" Size="parent,20"/>
+  </Instance>
 
 
 </Context>

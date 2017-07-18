@@ -73,7 +73,7 @@ function ToggleAll(hideAll:boolean)
     UI.PlaySound("Tech_Tray_Slide_Open");
   end
 
-  Controls.ToggleAllButton:SetCheck(not m_hideAll);
+  -- Controls.ToggleAllButton:SetCheck(not m_hideAll);
 
   if ( not m_TrackerAlwaysVisuallyCollapsed) then
     Controls.TrackerHeading:SetHide(hideAll);
@@ -125,7 +125,7 @@ function OnLaunchBarResized( buttonStackSize: number)
     Controls.TrackerHeading:SetHide(m_hideAll);
     Controls.TrackerHeadingCollapsed:SetHide(not m_hideAll);
   end
-  Controls.ToggleAllButton:SetOffsetX(buttonStackSize - 7);
+  -- Controls.ToggleAllButton:SetOffsetX(buttonStackSize - 7);
 end
 -- ===========================================================================
 function RealizeStack()
@@ -477,14 +477,14 @@ function Initialize()
   Controls.ChatCheck:SetCheck(true);
   Controls.CivicsCheck:SetCheck(true);
   Controls.ResearchCheck:SetCheck(true);
-  Controls.ToggleAllButton:SetCheck(true);
+  -- Controls.ToggleAllButton:SetCheck(true);
 
   Controls.ChatCheck:RegisterCheckHandler(						function() UpdateChatPanel(not m_hideChat); end);
   Controls.CivicsCheck:RegisterCheckHandler(						function() UpdateCivicsPanel(not m_hideCivics); end);
   Controls.ResearchCheck:RegisterCheckHandler(					function() UpdateResearchPanel(not m_hideResearch); end);
   m_researchInstance.IconButton:RegisterCallback(	Mouse.eLClick,	function() LuaEvents.WorldTracker_OpenChooseResearch(); end);
   m_civicsInstance.IconButton:RegisterCallback(	Mouse.eLClick,	function() LuaEvents.WorldTracker_OpenChooseCivic(); end);
-  Controls.ToggleAllButton:RegisterCheckHandler(					function() ToggleAll(not Controls.ToggleAllButton:IsChecked()) end);
+  -- Controls.ToggleAllButton:RegisterCheckHandler(					function() ToggleAll(not Controls.ToggleAllButton:IsChecked()) end);
   Controls.ToggleDropdownButton:RegisterCallback(	Mouse.eLClick, ToggleDropdown);
   Controls.WorldTrackerAlpha:RegisterEndCallback( OnWorldTrackerAnimationFinished );
 

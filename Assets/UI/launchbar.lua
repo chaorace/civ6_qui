@@ -20,6 +20,9 @@ local m_isGovernmentUnlocked	:boolean = false;
 
 local isDebug			:boolean = false;			-- Set to true to force all hook buttons to show on game start
 
+-- Launchbar Extras. Contains the callback and the button text
+local m_LaunchbarExtras:table = {};
+
 -- ===========================================================================
 --	Callbacks
 -- ===========================================================================
@@ -188,6 +191,32 @@ end
 function SetGovernmentClosed()
   isGovernmentOpen = false;
   CloseTree();
+end
+
+-- ===========================================================================
+function BuildExtraEntries()
+  -- Clear previous entries
+  Controls.LaunchExtraStack:DestroyAllChildren();
+
+  for _, entryInfo in ipairs(m_LaunchbarExtras) do
+    local tButtonEntry:table = {};
+
+    -- Get Button Info
+    local fCallback = function() entryInfo.Callback(); OnCloseExtras(); end;
+    local sButtonText = Locale.Lookup(entryInfo.ButtonText)
+    local sButtonTooltip = Locale.Lookup(entryInfo.ButtonTooltip)
+    ContextPtr:BuildInstanceForControl("LaunchExtraEntry", tButtonEntry, Controls.LaunchExtraStack);
+
+    tButtonEntry.Button:SetText(sButtonText);
+    tButtonEntry.Button:SetToolTipString(sButtonTooltip);
+    tButtonEntry.Button:RegisterCallback(Mouse.eLClick, fCallback);
+  end
+
+  -- Cleanup
+  Controls.LaunchExtraStack:CalculateSize();
+  Controls.LaunchExtraStack:ReprocessAnchoring();
+  Controls.LaunchExtraWrapper:DoAutoSize();
+  Controls.LaunchExtraWrapper:ReprocessAnchoring();
 end
 
 -- ===========================================================================
@@ -544,6 +573,28 @@ function CloseTree()
   end
 end
 
+function OnToggleExtras()
+  if Controls.LaunchExtraShow:IsChecked() then
+    Controls.LaunchExtraControls:SetHide(true);
+
+    Controls.LaunchExtraAlpha:SetToBeginning();
+    Controls.LaunchExtraSlide:SetToBeginning();
+
+    Controls.LaunchExtraAlpha:Play();
+    Controls.LaunchExtraSlide:Play();
+
+    Controls.LaunchExtraControls:SetHide(false);
+
+    BuildExtraEntries();
+  else
+    Controls.LaunchExtraControls:SetHide(true);
+  end
+end
+
+function OnAddExtraEntry(entryInfo:table)
+  table.insert(m_LaunchbarExtras, entryInfo)
+end
+
 -- ===========================================================================
 function OnToggleResearchPanel(hideResearch)
   Controls.ScienceHookWithMeter:SetHide(not hideResearch);
@@ -590,8 +641,11 @@ function Initialize()
   Controls.ScienceMeterButton:RegisterCallback(Mouse.eLClick, OnOpenResearch);
 
   -- CQUI --
+  Controls.LaunchExtraShow:RegisterCallback( Mouse.eLClick, OnToggleExtras );
   Controls.ReportsButton:RegisterCallback(Mouse.eLClick, OnToggleReportsScreen);
   Controls.ReportsButton:RegisterCallback( Mouse.eMouseEnter, function() UI.PlaySound("Main_Menu_Mouse_Over"); end);
+
+  LuaEvents.LaunchBar_AddExtra.Add( OnAddExtraEntry );
   -- CQUI --
 
   Events.TurnBegin.Add( OnTurnBegin );
@@ -633,5 +687,6 @@ function Initialize()
   end
 
   OnTurnBegin();
+  OnAddExtraEntry({ButtonText="Test", Callback=function() print("Test") end, ButtonTooltip="Test"})
 end
 Initialize();
