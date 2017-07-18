@@ -204,12 +204,17 @@ function BuildExtraEntries()
     -- Get Button Info
     local fCallback = function() entryInfo.Callback(); OnCloseExtras(); end;
     local sButtonText = Locale.Lookup(entryInfo.ButtonText)
-    local sButtonTooltip = Locale.Lookup(entryInfo.ButtonTooltip)
     ContextPtr:BuildInstanceForControl("LaunchExtraEntry", tButtonEntry, Controls.LaunchExtraStack);
 
     tButtonEntry.Button:SetText(sButtonText);
-    tButtonEntry.Button:SetToolTipString(sButtonTooltip);
     tButtonEntry.Button:RegisterCallback(Mouse.eLClick, fCallback);
+
+    if entryInfo.ButtonTooltip ~= nil then
+      local sButtonTooltip = Locale.Lookup(entryInfo.ButtonTooltip)
+      tButtonEntry.Button:SetToolTipString(sButtonTooltip);
+    else
+      tButtonEntry.Button:SetToolTipString("");
+    end
   end
 
   -- Cleanup
@@ -687,6 +692,9 @@ function Initialize()
   end
 
   OnTurnBegin();
-  OnAddExtraEntry({ButtonText="Test", Callback=function() print("Test") end, ButtonTooltip="Test"})
+
+  -- Launchbar Extra Tests
+  -- OnAddExtraEntry({ButtonText="Test1", Callback=function() print("Test1") end, ButtonTooltip="Test1"})
+  -- OnAddExtraEntry({ButtonText="Test2", Callback=function() print("Test2") end})
 end
 Initialize();
