@@ -115,6 +115,8 @@ end
 
 -- ===========================================================================
 -- CQUI: Moved here from toppanel.lua since we moved the reports button here
+-- Control moved to reportscreen.lua
+--[[
 function OnToggleReportsScreen()
   local pReportsScreen :table = ContextPtr:LookUpControl( "/InGame/ReportScreen" );
   if pReportsScreen == nil then
@@ -127,6 +129,7 @@ function OnToggleReportsScreen()
     LuaEvents.TopPanel_CloseReportsScreen();
   end
 end
+]]
 
 -- ===========================================================================
 function OnOpenOldCityStates()
@@ -224,6 +227,11 @@ function BuildExtraEntries()
   Controls.LaunchExtraWrapper:ReprocessAnchoring();
 end
 
+function OnCloseExtras()
+  Controls.LaunchExtraControls:SetHide(true);
+  Controls.LaunchExtraShow:SetCheck(false);
+end
+
 function OnToggleExtras()
   if Controls.LaunchExtraShow:IsChecked() then
     Controls.LaunchExtraControls:SetHide(true);
@@ -238,7 +246,7 @@ function OnToggleExtras()
 
     BuildExtraEntries();
   else
-    Controls.LaunchExtraControls:SetHide(true);
+    OnCloseExtras()
   end
 end
 
@@ -252,9 +260,9 @@ function OnAddLaunchbarIcon(buttonInfo:table)
   local tButtonEntry:table = {};
   ContextPtr:BuildInstanceForControl("LaunchbarButtonInstance", tButtonEntry, Controls.ButtonStack);
 
-  local textureOffsetX = buttonInfo.IconTexture.OffsetX
-  local textureOffsetY = buttonInfo.IconTexture.OffsetY
-  local textureSheet = buttonInfo.IconTexture.Sheet
+  local textureOffsetX = buttonInfo.IconTexture.OffsetX;
+  local textureOffsetY = buttonInfo.IconTexture.OffsetY;
+  local textureSheet = buttonInfo.IconTexture.Sheet;
 
   -- Update Icon Info
   if (textureOffsetX ~= nil and textureOffsetY ~= nil and textureSheet ~= nil) then
@@ -268,23 +276,24 @@ function OnAddLaunchbarIcon(buttonInfo:table)
     tButtonEntry.Button:SetToolTipString(buttonInfo.Tooltip);
   end
 
-  textureOffsetX = buttonInfo.BaseTexture.OffsetX
-  textureOffsetY = buttonInfo.BaseTexture.OffsetY
-  textureSheet = buttonInfo.BaseTexture.Sheet
+  textureOffsetX = buttonInfo.BaseTexture.OffsetX;
+  textureOffsetY = buttonInfo.BaseTexture.OffsetY;
+  textureSheet = buttonInfo.BaseTexture.Sheet;
 
-  local stateOffsetX = buttonInfo.BaseTexture.HoverOffsetX
-  local stateOffsetY = buttonInfo.BaseTexture.HoverOffsetY
+  local stateOffsetX = buttonInfo.BaseTexture.HoverOffsetX;
+  local stateOffsetY = buttonInfo.BaseTexture.HoverOffsetY;
 
   if (textureOffsetX ~= nil and textureOffsetY ~= nil and textureSheet ~= nil) then
     tButtonEntry.Base:SetTexture(textureOffsetX, textureOffsetY, textureSheet);
     if (buttonInfo.BaseTexture.Color ~= nil) then
-      tButtonEntry.Base:SetColor(buttonInfo.BaseTexture.Color)
+      tButtonEntry.Base:SetColor(buttonInfo.BaseTexture.Color);
     end
 
     -- Setup behaviour on hover
     if (stateOffsetX ~= nil and stateOffsetY ~= nil) then
       local OnMouseOver = function()
         tButtonEntry.Base:SetTextureOffsetVal(stateOffsetX, stateOffsetY);
+        UI.PlaySound("Main_Menu_Mouse_Over");
       end
 
       local OnMouseExit = function()
@@ -681,11 +690,12 @@ end
 -- ===========================================================================
 function Initialize()
 
-  local iconName = "ICON_CIVIC_FUTURE_CIVIC";
-  local textureOffsetX, textureOffsetY, textureSheet = IconManager:FindIconAtlas(iconName,38);
-  if (textureOffsetX ~= nil) then
-    Controls.ReportsImage:SetTexture( textureOffsetX, textureOffsetY, textureSheet );
-  end
+  -- Icon added in reportscreen.lua
+  -- local iconName = "ICON_CIVIC_FUTURE_CIVIC";
+  -- local textureOffsetX, textureOffsetY, textureSheet = IconManager:FindIconAtlas(iconName,38);
+  -- if (textureOffsetX ~= nil) then
+  --   Controls.ReportsImage:SetTexture( textureOffsetX, textureOffsetY, textureSheet );
+  -- end
 
   Controls.CultureButton:RegisterCallback(Mouse.eLClick, OnOpenCulture);
   Controls.CultureButton:RegisterCallback( Mouse.eMouseEnter, function() UI.PlaySound("Main_Menu_Mouse_Over"); end);
@@ -704,8 +714,8 @@ function Initialize()
 
   -- CQUI --
   Controls.LaunchExtraShow:RegisterCallback( Mouse.eLClick, OnToggleExtras );
-  Controls.ReportsButton:RegisterCallback(Mouse.eLClick, OnToggleReportsScreen);
-  Controls.ReportsButton:RegisterCallback( Mouse.eMouseEnter, function() UI.PlaySound("Main_Menu_Mouse_Over"); end);
+  -- Controls.ReportsButton:RegisterCallback(Mouse.eLClick, OnToggleReportsScreen);
+  -- Controls.ReportsButton:RegisterCallback( Mouse.eMouseEnter, function() UI.PlaySound("Main_Menu_Mouse_Over"); end);
 
   LuaEvents.LaunchBar_AddExtra.Add( OnAddExtraEntry );
   LuaEvents.LaunchBar_AddIcon.Add( OnAddLaunchbarIcon );
@@ -782,9 +792,9 @@ function Initialize()
     Tooltip = "Agora";
   }
 
-  textureOffsetX, textureOffsetY, textureSheet = IconManager:FindIconAtlas("ICON_UNIT_JAPANESE_SAMURAI", 38);
-  LuaEvents.LaunchBar_AddIcon(buttonInfo);
+  LuaEvents.LaunchBar_AddIcon("test1", buttonInfo);
 
+  textureOffsetX, textureOffsetY, textureSheet = IconManager:FindIconAtlas("ICON_UNIT_JAPANESE_SAMURAI", 38);
   local button2Info = {
     -- ICON TEXTURE
     IconTexture = {
@@ -809,6 +819,6 @@ function Initialize()
     -- Tooltip = "barbs...";
   }
 
-  LuaEvents.LaunchBar_AddIcon(button2Info);
+  LuaEvents.LaunchBar_AddIcon("test2", button2Info);
 end
 Initialize();

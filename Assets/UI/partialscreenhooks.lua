@@ -310,8 +310,6 @@ end
 
 -- ===========================================================================
 function Initialize()
-  print(" ~~~~~~~~~~~~~~~~~~~~~~~~~~~ CQUI partialScreenhooks ~~~~~~~~~~~~~~~~~~ ")
-
   Controls.CityStatesButton:RegisterCallback( Mouse.eLClick,    OnToggleCityStates );
   Controls.CityStatesButton:RegisterCallback( Mouse.eMouseEnter, function() UI.PlaySound("Main_Menu_Mouse_Over"); end);
   Controls.EspionageButton:RegisterCallback( Mouse.eLClick,   OnToggleEspionage );

@@ -2191,6 +2191,33 @@ function Initialize()
   LuaEvents.TopPanel_OpenReportsScreen.Add( OnTopOpenReportsScreen );
   LuaEvents.TopPanel_CloseReportsScreen.Add( OnTopCloseReportsScreen );
   LuaEvents.CQUI_RealHousingFromImprovementsCalculated.Add(CQUI_HousingFromImprovementsTableInsert);    --CQUI get real housing from improvements values
+
+  -- Add Icon to Launchbar
+  local textureOffsetX, textureOffsetY, textureSheet = IconManager:FindIconAtlas("ICON_CIVIC_FUTURE_CIVIC" ,38);
+  local reportsButtonInfo = {
+    -- ICON TEXTURE
+    IconTexture = {
+      OffsetX = textureOffsetX;
+      OffsetY = textureOffsetY;
+      Sheet = textureSheet;
+    };
+
+    -- BUTTON TEXTURE
+    BaseTexture = {
+      OffsetX = 4;
+      OffsetY = 245;
+      Sheet = "LaunchBar_Hook_CultureButton";
+
+      -- Offset to have when hovering
+      HoverOffsetX = 4;
+      HoverOffsetY = 5;
+    };
+
+    -- BUTTON INFO
+    Callback = Open;
+    Tooltip = Locale.Lookup("LOC_HUD_REPORTS_VIEW_REPORTS");
+  }
+
+  LuaEvents.LaunchBar_AddIcon(reportsButtonInfo);
 end
 Initialize();
-
