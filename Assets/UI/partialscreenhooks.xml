@@ -37,4 +37,14 @@
     </Stack>
 
   </Container>
+
+  <Instance Name="HookIconInstance">
+    <Stack StackGrowth="Left" Padding="-3" >
+      <Button ID="Button" Anchor="L,C" Size="40,40"  Style="ButtonNormalText">
+        <Image ID="Base" Texture="" Size="40,40" Anchor="C,C" Offset="0,0"/>
+        <Image ID="Icon" Texture="" Size="26,26" Anchor="C,C" Offset="0,0"/>
+      </Button>
+      <Image Anchor="L,C" Size="7,7" Texture="LaunchBar_TrackPip.dds" Color="255,255,255,200" Offset="0,-2"/>
+    </Stack>
+  </Instance>
 </Context>

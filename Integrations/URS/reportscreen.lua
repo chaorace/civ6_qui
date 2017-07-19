@@ -2141,57 +2141,7 @@ function CQUI_HousingFromImprovementsTableInsert (pCityID, CQUI_HousingFromImpro
   CQUI_HousingFromImprovementsTable[pCityID] = CQUI_HousingFromImprovements;
 end
 
--- ===========================================================================
-function Initialize()
-
-  Resize();
-
-  m_tabs = CreateTabs( Controls.TabContainer, 42, 34, 0xFF331D05 );
-  --AddTabSection( "Test",								ViewTestPage );			--TRONSTER debug
-  --AddTabSection( "Test2",								ViewTestPage );			--TRONSTER debug
-  AddTabSection( "LOC_HUD_REPORTS_TAB_YIELDS",		ViewYieldsPage );
-  AddTabSection( "LOC_HUD_REPORTS_TAB_RESOURCES",	ViewResourcesPage );
-  AddTabSection( "LOC_HUD_REPORTS_TAB_CITY_STATUS",	ViewCityStatusPage );
-  AddTabSection( "LOC_HUD_REPORTS_TAB_CURRENT_DEALS", ViewDealsPage );
-  AddTabSection( "LOC_UNIT_NAME",						ViewUnitsPage );
-
-  m_tabs.SameSizedTabs(0);
-  m_tabs.CenterAlignTabs(-10);
-
-  -- UI Callbacks
-  ContextPtr:SetInitHandler( OnInit );
-  ContextPtr:SetInputHandler( OnInputHandler, true );
-  ContextPtr:SetRefreshHandler( function() if bUnits.group then m_kCityData, m_kCityTotalData, m_kResourceData, m_kUnitData, m_kDealData, m_kCultureData, m_kCurrentDeals = GetData(); sort_units( bUnits.type, bUnits.group, bUnits.parent ); end; end )
-
-  Events.UnitPromoted.Add( function() LuaEvents.UnitPanel_HideUnitPromotion(); ContextPtr:RequestRefresh() end )
-  Events.UnitUpgraded.Add( function() ContextPtr:RequestRefresh() end )
-
-  Controls.CloseButton:RegisterCallback( Mouse.eLClick, OnCloseButton );
-  Controls.CloseButton:RegisterCallback(	Mouse.eMouseEnter, function() UI.PlaySound("Main_Menu_Mouse_Over"); end);
-  Controls.CollapseAll:RegisterCallback( Mouse.eLClick, OnCollapseAllButton );
-  Controls.CollapseAll:RegisterCallback(	Mouse.eMouseEnter, function() UI.PlaySound("Main_Menu_Mouse_Over"); end);
-
-  Controls.CityBuildingsCheckbox:RegisterCallback( Mouse.eLClick, OnToggleCityBuildings )
-  Controls.CityBuildingsCheckbox:RegisterCallback( Mouse.eMouseEnter, function() UI.PlaySound("Main_Menu_Mouse_Over"); end )
-
-  --ARISTOS: Resources toggle
-  Controls.LuxuryCheckbox:RegisterCallback( Mouse.eLClick, OnToggleLuxury );
-  Controls.LuxuryCheckbox:RegisterCallback( Mouse.eMouseEnter, function() UI.PlaySound("Main_Menu_Mouse_Over"); end );
-  Controls.LuxuryCheckbox:SetSelected( true );
-
-  Controls.StrategicCheckbox:RegisterCallback( Mouse.eLClick, OnToggleStrategic );
-  Controls.StrategicCheckbox:RegisterCallback( Mouse.eMouseEnter, function() UI.PlaySound("Main_Menu_Mouse_Over"); end );
-  Controls.StrategicCheckbox:SetSelected( true );
-
-  Controls.BonusCheckbox:RegisterCallback( Mouse.eLClick, OnToggleBonus );
-  Controls.BonusCheckbox:RegisterCallback( Mouse.eMouseEnter, function() UI.PlaySound("Main_Menu_Mouse_Over"); end );
-  Controls.BonusCheckbox:SetSelected( true );
-
-  -- Events
-  LuaEvents.TopPanel_OpenReportsScreen.Add( OnTopOpenReportsScreen );
-  LuaEvents.TopPanel_CloseReportsScreen.Add( OnTopCloseReportsScreen );
-  LuaEvents.CQUI_RealHousingFromImprovementsCalculated.Add(CQUI_HousingFromImprovementsTableInsert);    --CQUI get real housing from improvements values
-
+function OnLoadScreenClose()
   -- Add Icon to Launchbar
   local textureOffsetX, textureOffsetY, textureSheet = IconManager:FindIconAtlas("ICON_CIVIC_FUTURE_CIVIC" ,38);
   local reportsButtonInfo = {
@@ -2219,5 +2169,58 @@ function Initialize()
   }
 
   LuaEvents.LaunchBar_AddIcon(reportsButtonInfo);
+end
+
+-- ===========================================================================
+function Initialize()
+
+  Resize();
+
+  m_tabs = CreateTabs( Controls.TabContainer, 42, 34, 0xFF331D05 );
+  --AddTabSection( "Test",								ViewTestPage );			--TRONSTER debug
+  --AddTabSection( "Test2",								ViewTestPage );			--TRONSTER debug
+  AddTabSection( "LOC_HUD_REPORTS_TAB_YIELDS",		ViewYieldsPage );
+  AddTabSection( "LOC_HUD_REPORTS_TAB_RESOURCES",	ViewResourcesPage );
+  AddTabSection( "LOC_HUD_REPORTS_TAB_CITY_STATUS",	ViewCityStatusPage );
+  AddTabSection( "LOC_HUD_REPORTS_TAB_CURRENT_DEALS", ViewDealsPage );
+  AddTabSection( "LOC_UNIT_NAME",						ViewUnitsPage );
+
+  m_tabs.SameSizedTabs(0);
+  m_tabs.CenterAlignTabs(-10);
+
+  -- UI Callbacks
+  ContextPtr:SetInitHandler( OnInit );
+  ContextPtr:SetInputHandler( OnInputHandler, true );
+  ContextPtr:SetRefreshHandler( function() if bUnits.group then m_kCityData, m_kCityTotalData, m_kResourceData, m_kUnitData, m_kDealData, m_kCultureData, m_kCurrentDeals = GetData(); sort_units( bUnits.type, bUnits.group, bUnits.parent ); end; end )
+
+  Events.UnitPromoted.Add( function() LuaEvents.UnitPanel_HideUnitPromotion(); ContextPtr:RequestRefresh() end )
+  Events.UnitUpgraded.Add( function() ContextPtr:RequestRefresh() end )
+  Events.LoadScreenClose.Add( OnLoadScreenClose );
+
+  Controls.CloseButton:RegisterCallback( Mouse.eLClick, OnCloseButton );
+  Controls.CloseButton:RegisterCallback(	Mouse.eMouseEnter, function() UI.PlaySound("Main_Menu_Mouse_Over"); end);
+  Controls.CollapseAll:RegisterCallback( Mouse.eLClick, OnCollapseAllButton );
+  Controls.CollapseAll:RegisterCallback(	Mouse.eMouseEnter, function() UI.PlaySound("Main_Menu_Mouse_Over"); end);
+
+  Controls.CityBuildingsCheckbox:RegisterCallback( Mouse.eLClick, OnToggleCityBuildings )
+  Controls.CityBuildingsCheckbox:RegisterCallback( Mouse.eMouseEnter, function() UI.PlaySound("Main_Menu_Mouse_Over"); end )
+
+  --ARISTOS: Resources toggle
+  Controls.LuxuryCheckbox:RegisterCallback( Mouse.eLClick, OnToggleLuxury );
+  Controls.LuxuryCheckbox:RegisterCallback( Mouse.eMouseEnter, function() UI.PlaySound("Main_Menu_Mouse_Over"); end );
+  Controls.LuxuryCheckbox:SetSelected( true );
+
+  Controls.StrategicCheckbox:RegisterCallback( Mouse.eLClick, OnToggleStrategic );
+  Controls.StrategicCheckbox:RegisterCallback( Mouse.eMouseEnter, function() UI.PlaySound("Main_Menu_Mouse_Over"); end );
+  Controls.StrategicCheckbox:SetSelected( true );
+
+  Controls.BonusCheckbox:RegisterCallback( Mouse.eLClick, OnToggleBonus );
+  Controls.BonusCheckbox:RegisterCallback( Mouse.eMouseEnter, function() UI.PlaySound("Main_Menu_Mouse_Over"); end );
+  Controls.BonusCheckbox:SetSelected( true );
+
+  -- Events
+  LuaEvents.TopPanel_OpenReportsScreen.Add( OnTopOpenReportsScreen );
+  LuaEvents.TopPanel_CloseReportsScreen.Add( OnTopCloseReportsScreen );
+  LuaEvents.CQUI_RealHousingFromImprovementsCalculated.Add(CQUI_HousingFromImprovementsTableInsert);    --CQUI get real housing from improvements values
 end
 Initialize();
