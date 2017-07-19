@@ -37,7 +37,7 @@
         <Button ID="ReportsButton"     Anchor="L,C"                Size="49,49"    Texture="LaunchBar_Hook_GreatPeopleButton" Style="ButtonNormalText"  TextureOffset="0,2"   StateOffsetIncrement="0,49" ToolTip="LOC_HUD_REPORTS_VIEW_REPORTS">
           <Image ID="ReportsImage" Texture="LaunchBar_Hook_Reports" Size="38,38" Anchor="C,T" Offset="0,4" Color="255,255,255,200"/>
         </Button>
-        <Image      Anchor="L,C" Offset="0,-2"  Size="7,7"      Texture="LaunchBar_TrackPip"     Color="255,255,255,200" />
+        <Image  ID="ReportsBolt"     Anchor="L,C" Offset="0,-2"  Size="7,7"      Texture="LaunchBar_TrackPip"     Color="255,255,255,200" />
       </Stack>
 
       <!-- Toggle Show/Hide Button -->
@@ -148,8 +148,9 @@
   </Instance>
 
   <Instance Name="LaunchbarButtonInstance">
-    <Button ID="Button" ID=""     Anchor="L,C"                Size="49,49"    Texture="LaunchBar_Hook_GreatPeopleButton" Style="ButtonNormalText"  TextureOffset="0,2"   StateOffsetIncrement="0,49" ToolTip="LOC_HUD_REPORTS_VIEW_REPORTS">
-      <Image ID="Image" Texture="LaunchBar_Hook_Reports" Size="38,38" Anchor="C,T" Offset="0,4" Color="255,255,255,200"/>
+    <Button ID="Button" Anchor="L,C" Offset="0,-1" Size="49,49" Style="ButtonNormalText">
+      <Image ID="Base" Size="49,49" Anchor="C,C" Offset="0,0" Color="255,255,255,250"/>
+      <Image ID="Image" Size="38,38" Anchor="C,T" Offset="0,4" Color="255,255,255,200"/>
     </Button>
     <Image  ID="Dolt" Anchor="L,C" Offset="0,-2"  Size="7,7"      Texture="LaunchBar_TrackPip"     Color="255,255,255,200" />
   </Instance>
