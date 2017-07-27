@@ -1,4 +1,4 @@
-﻿-- ===========================================================================
+-- ===========================================================================
 --  City Banner Manager
 -- ===========================================================================
 
@@ -47,6 +47,9 @@ local ALPHA_DIM         :number = 0.45;
 
 local m_pDirtyCityComponents  :table = {};
 local m_isReligionLensActive  :boolean = false;
+
+local CQUI_HousingFromImprovementsTable :table = {};
+local CQUI_HousingUpdated :table = {};
 
 -- The meta table definition that holds the function pointers
 hstructure CityBannerMeta
@@ -492,6 +495,7 @@ function CityBanner.Initialize( self : CityBanner, playerID: number, cityID : nu
     self.m_Instance.CityBannerButton:RegisterCallback( Mouse.eLClick, OnCityBannerClick );
     self.m_Instance.CityBannerButton:SetVoid1(playerID);
     self.m_Instance.CityBannerButton:SetVoid2(cityID);
+    self.m_Instance.CityBannerButton:RegisterCallback( Mouse.eRClick, OnCityBannerRightClick );    -- for CQUI recenter camera on city when right click on citybanner
 
     local pCity = self:GetCity();
     if (pCity ~= nil) then
@@ -1043,25 +1047,37 @@ function CityBanner.UpdateStats( self : CityBanner)
           self.m_Instance.CityCultureTurnsLeft:SetHide(true);
         end
 
+        -- CQUI get real housing from improvements value
+        local pCityID = pCity:GetID();
+        if CQUI_HousingUpdated[pCityID] ~= true then
+          CQUI_RealHousingFromImprovements(pCity);
+        end
+
         if g_smartbanner and g_smartbanner_population then
-          self.m_Instance.CityPopulation:SetToolTipString(popTooltip);
-          local housingLeft = pCityGrowth:GetHousing() - currentPopulation;
-          local housingLeftText = housingLeft;
-          local housingLeftColor = "Error";
-          if housingLeft > 1 then
-            housingLeftColor = "StatGoodCS";
-            housingLeftText = "+"..housingLeft;
-            --COLOR: Green
-          elseif housingLeft == 1 then
-            housingLeftColor = "WarningMinor";
-            housingLeftText = "+"..housingLeft;
-            --COLOR: Yellow
-          elseif housingLeft <= 0 and housingLeft >= -4 then
-            housingLeftColor = "WarningMajor";
+          local CQUI_HousingFromImprovements = CQUI_HousingFromImprovementsTable[pCityID];
+          if CQUI_HousingFromImprovements ~= nil then    -- CQUI real housing from improvements fix to show correct values when waiting for the next turn
+            self.m_Instance.CityPopulation:SetToolTipString(popTooltip);
+            local housingLeft = pCityGrowth:GetHousing() - pCityGrowth:GetHousingFromImprovements() + CQUI_HousingFromImprovements - currentPopulation;    -- CQUI calculate real housing
+            local housingLeftText = housingLeft;
+            local housingLeftColor = "Error";
+            if housingLeft > 1.5 then
+              housingLeftColor = "StatGoodCS";
+              housingLeftText = "+"..housingLeft;
+              --COLOR: Green
+            elseif housingLeft <= 1.5 and housingLeft > 0.5 then
+              housingLeftColor = "WarningMinor";
+              housingLeftText = "+"..housingLeft;
+              --COLOR: Yellow
+            elseif housingLeft == 0.5 then
+              housingLeftColor = "WarningMajor";
+              housingLeftText = "+"..housingLeft;
+            elseif housingLeft < 0.5 and housingLeft >= -4.5 then
+              housingLeftColor = "WarningMajor";
+            end
+            local CTLS = "[COLOR:"..popTurnLeftColor.."]"..turnsUntilGrowth.."[ENDCOLOR]  [[COLOR:"..housingLeftColor.."]"..housingLeftText.."[ENDCOLOR]]  ";
+            self.m_Instance.CityPopTurnsLeft:SetText(CTLS);
+            self.m_Instance.CityPopTurnsLeft:SetHide(false);
           end
-          local CTLS = "[COLOR:"..popTurnLeftColor.."]"..turnsUntilGrowth.."[ENDCOLOR]  [[COLOR:"..housingLeftColor.."]"..housingLeftText.."[ENDCOLOR]]  ";
-          self.m_Instance.CityPopTurnsLeft:SetText(CTLS);
-          self.m_Instance.CityPopTurnsLeft:SetHide(false);
         else
           self.m_Instance.CityPopTurnsLeft:SetHide(true);
         end
@@ -2156,10 +2172,10 @@ function OnCityRangeStrikeButtonClick( playerID, cityID )
   if (pCity == nil) then
     return;
   end;
-	--ARISTOS: fix for the range strike not showing odds window
-	UI.DeselectAll();
-	UI.SelectCity( pCity );
-	UI.SetInterfaceMode(InterfaceModeTypes.CITY_RANGE_ATTACK);
+  --ARISTOS: fix for the range strike not showing odds window
+  UI.DeselectAll();
+  UI.SelectCity( pCity );
+  UI.SetInterfaceMode(InterfaceModeTypes.CITY_RANGE_ATTACK);
 
 end
 
@@ -2763,20 +2779,20 @@ end
 
 -- ===========================================================================
 function OnUnitAddedOrUpgraded( playerID:number, unitID:number )
-	-- Update city and district garrison strength values if a melee unit has been added or upgraded.
-	-- This is done because the base city strength is calculated using the max melee strength for the player.
-	local localPlayer = Game.GetLocalPlayer();
-	if localPlayer == -1 or Players[localPlayer]:IsTurnActive() then -- Don't do this during end turn times
-		local pUnit = Players[ playerID ]:GetUnits():FindID(unitID);
-		if pUnit ~= nil then
-			local pUnitDef = GameInfo.Units[pUnit:GetUnitType()];
-			if pUnitDef ~= nil then
-				if pUnitDef.Combat > 0 then -- Only do this for melee units
-					RefreshPlayerBanners( playerID );
-				end
-			end
-		end
-	end
+  -- Update city and district garrison strength values if a melee unit has been added or upgraded.
+  -- This is done because the base city strength is calculated using the max melee strength for the player.
+  local localPlayer = Game.GetLocalPlayer();
+  if localPlayer == -1 or Players[localPlayer]:IsTurnActive() then -- Don't do this during end turn times
+    local pUnit = Players[ playerID ]:GetUnits():FindID(unitID);
+    if pUnit ~= nil then
+      local pUnitDef = GameInfo.Units[pUnit:GetUnitType()];
+      if pUnitDef ~= nil then
+        if pUnitDef.Combat > 0 then -- Only do this for melee units
+          RefreshPlayerBanners( playerID );
+        end
+      end
+    end
+  end
 end
 
 -- ===========================================================================
@@ -3227,6 +3243,72 @@ function CQUI_UpdateSelectedCityCitizens( plotId:number )
 end
 
 -- ===========================================================================
+-- CQUI recenter camera on city when right click on citybanner
+function OnCityBannerRightClick( playerID:number, cityID:number )
+  local pPlayer = Players[playerID];
+  if (pPlayer == nil) then
+    return;
+  end
+
+  local pCity = pPlayer:GetCities():FindID(cityID);
+  if (pCity == nil) then
+    return;
+  end
+
+  UI.LookAtPlot( pCity:GetX(), pCity:GetY() );
+end
+
+-- ===========================================================================
+-- CQUI calculate real housing from improvements
+function CQUI_RealHousingFromImprovements(pCity)
+  local CQUI_HousingFromImprovements = 0;
+  local pCityID = pCity:GetID();
+  local tParameters :table = {};
+  tParameters[CityCommandTypes.PARAM_MANAGE_CITIZEN] = UI.GetInterfaceModeParameter(CityCommandTypes.PARAM_MANAGE_CITIZEN);
+  local tResults :table = CityManager.GetCommandTargets( pCity, CityCommandTypes.MANAGE, tParameters );
+  local tPlots :table = tResults[CityCommandResults.PLOTS];
+  if tPlots ~= nil and (table.count(tPlots) > 0) then
+    for i, plotId in pairs(tPlots) do
+    local kPlot	:table = Map.GetPlotByIndex(plotId);
+    local eImprovementType :number = kPlot:GetImprovementType();
+      if( eImprovementType ~= -1 ) then
+      local kImprovementData = GameInfo.Improvements[eImprovementType].Housing;
+        if kImprovementData == 1 then    -- farms, pastures etc.
+          CQUI_HousingFromImprovements = CQUI_HousingFromImprovements + 1;
+        elseif kImprovementData == 2 then    -- stepwells
+          local CQUI_PlayerResearchedSanitation :boolean = Players[Game.GetLocalPlayer()]:GetTechs():HasTech(40);    -- check if a player researched Sanitation (Index == 40)
+          if not CQUI_PlayerResearchedSanitation then
+            CQUI_HousingFromImprovements = CQUI_HousingFromImprovements + 2;
+          else
+            CQUI_HousingFromImprovements = CQUI_HousingFromImprovements + 4;
+          end
+        end
+      end
+    end
+    CQUI_HousingFromImprovements = CQUI_HousingFromImprovements * 0.5;
+    CQUI_HousingFromImprovementsTable[pCityID] = CQUI_HousingFromImprovements;
+    CQUI_HousingUpdated[pCityID] = true;
+    LuaEvents.CQUI_RealHousingFromImprovementsCalculated(pCityID, CQUI_HousingFromImprovements);
+  else
+    return;
+  end
+end
+
+-- ===========================================================================
+function CQUI_OnCityInfoUpdated(pCityID)
+  CQUI_HousingUpdated[pCityID] = false;
+end
+
+-- ===========================================================================
+function CQUI_OnCityLostTileByCultureBomb()
+  local m_pCity:table = Players[Game.GetLocalPlayer()]:GetCities();
+  for i, pCity in m_pCity:Members() do
+    local pCityID = pCity:GetID();
+    CQUI_HousingUpdated[pCityID] = false;
+  end
+end
+
+-- ===========================================================================
 function Initialize()
 
   RegisterDirtyEvents();
@@ -3285,6 +3367,9 @@ function Initialize()
   Events.GovernmentPolicyObsoleted.Add(       OnPolicyChanged );
   Events.CitySiegeStatusChanged.Add(      OnSiegeStatusChanged);
   Events.CityWorkerChanged.Add(           OnCityWorkerChanged );
+
+  LuaEvents.CQUI_CityInfoUpdated.Add( CQUI_OnCityInfoUpdated );
+  LuaEvents.CQUI_CityLostTileByCultureBomb.Add( CQUI_OnCityLostTileByCultureBomb );
 
   LuaEvents.GameDebug_Return.Add(OnGameDebugReturn);
 

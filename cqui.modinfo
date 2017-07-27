@@ -6,7 +6,7 @@
     <Teaser>CQUI_TEASER</Teaser>
     <Description>CQUI_TEASER</Description>
     <Authors>vans163, chaorace, zgavin, olegbl, jacks0n, OfekA, Proustldee, RatchetJ, kblease, benjaminjackman, LordYanaek, zeyangl, velit, the-m4a, Frozen-In-Ice, Remolten, bestekov, bolbass, SpaceOgre, cpinter, JHCD, paavohuhtala, Aristos, MarkusKV, apskim</Authors>
-    <SpecialThanks>vans163 for his original qui mod.[NEWLINE]astog for his Better Trade Screen mod.[NEWLINE]astog for his More Lenses mod.[NEWLINE]Ace for his Next City Plot mod.[NEWLINE]Divine Yuri for his Custom City Panel mod.[NEWLINE]Greg Miller for his Unit Report Screen mod.[NEWLINE]Lozenged/kblease for his Production Queue mod.[NEWLINE]mironos for his Improved Deal Screen mod.[NEWLINE]HellBlazer for parts of his NQ EUI mod.[NEWLINE]ZhouYzzz for providing the Chinese translation.[NEWLINE]Simone1974 for providing the Italian translation.[NEWLINE]e1ectron for providing the Russian translation.[NEWLINE]sejbr for providing the Polish translation.[NEWLINE]frytom/maxap/JHCD for providing the German translation.[NEWLINE]lctrs for providing a partial French translation.[NEWLINE]wbqd for providing the Korean translation.</SpecialThanks>
+    <SpecialThanks>vans163 for his original qui mod.[NEWLINE]astog for his Better Trade Screen mod.[NEWLINE]astog for his More Lenses mod.[NEWLINE]astog for his Better Espionage Screen mod.[NEWLINE]Ace for his Next City Plot mod.[NEWLINE]Divine Yuri for his Custom City Panel mod.[NEWLINE]Greg Miller for his Unit Report Screen mod.[NEWLINE]Lozenged/kblease for his Production Queue mod.[NEWLINE]mironos for his Improved Deal Screen mod.[NEWLINE]HellBlazer for parts of his NQ EUI mod.[NEWLINE]ZhouYzzz for providing the Chinese translation.[NEWLINE]Simone1974 for providing the Italian translation.[NEWLINE]e1ectron for providing the Russian translation.[NEWLINE]sejbr for providing the Polish translation.[NEWLINE]frytom/maxap/JHCD for providing the German translation.[NEWLINE]lctrs for providing a partial French translation.[NEWLINE]wbqd for providing the Korean translation.</SpecialThanks>
     <Stability>CQUI_STABILITY_NIGHTLY</Stability>
   </Properties>
   <Dependencies />
@@ -23,8 +23,6 @@
     <Mod id="2027E5A2-A48D-E606-031F-141E1196975A" title="Production Queue" />
     <!-- More Lenses: Integrated already, doubling up on installed mods is bad! -->
     <Mod id="35f33319-ad93-4d6b-bf27-406fac382d06" title="More Lenses" />
-    <!-- YnAMP: Breaks CQUI for some reason... see issue #207 on the Github tracker and issue #43 on the YnAMP Github tracker for more details -->
-    <Mod id="36e88483-48fe-4545-b85f-bafc50dde315" title="Yet (not) Another Maps Pack" />
     <!-- NQ EUI: Uses some things from CQUI and CQUI uses some things from NQ EUI -->
     <Mod id="c9d28cde-61ee-459c-93f5-c734cd392553" title="NQ Enhanced User Interface" />
   </Blocks>
@@ -49,6 +47,7 @@
       <de_DE>Alpha</de_DE>
       <it_IT>Alfa</it_IT>
       <ko_KR>알파</ko_KR>
+      <es_ES>Alfa</es_ES>
     </Text>
     <Text id="CQUI_STABILITY_BETA">
       <en_US>Beta</en_US>
@@ -59,6 +58,7 @@
       <de_DE>Beta</de_DE>
       <it_IT>Beta</it_IT>
       <ko_KR>베타</ko_KR>
+      <es_ES>Beta</es_ES>
     </Text>
     <Text id="CQUI_STABILITY_RELEASECANDIDATE">
       <en_US>Release Candidate</en_US>
@@ -69,6 +69,7 @@
       <de_DE>Release Candidate</de_DE>
       <it_IT>Release Candidate</it_IT>
       <ko_KR>릴리즈 후보</ko_KR>
+      <es_ES>Release Candidate</es_ES>
     </Text>
     <Text id="CQUI_STABILITY_RELEASE">
       <en_US>Release</en_US>
@@ -79,6 +80,7 @@
       <de_DE>Release</de_DE>
       <it_IT>Release</it_IT>
       <ko_KR>릴리즈</ko_KR>
+      <es_ES>Release</es_ES>
     </Text>
     <Text id="CQUI_STABILITY_NIGHTLY">
       <en_US>Nightly</en_US>
@@ -89,6 +91,7 @@
       <de_DE>Nightly</de_DE>
       <it_IT>Nightly</it_IT>
       <ko_KR>나이틀리</ko_KR>
+      <es_ES>Nightly</es_ES>
     </Text>
   </LocalizedText>
 
@@ -111,6 +114,7 @@
     <File>Assets/Text/cqui_text_general_pl.xml</File>
     <File>Assets/Text/cqui_text_general_ru.xml</File>
     <File>Assets/Text/cqui_text_general_zh.xml</File>
+    <File>Assets/Text/cqui_text_general_es.xml</File>
     <File>Assets/Text/cqui_text_settings.xml</File>
     <File>Assets/Text/cqui_text_settings_de.xml</File>
     <File>Assets/Text/cqui_text_settings_fr.xml</File>
@@ -119,6 +123,7 @@
     <File>Assets/Text/cqui_text_settings_pl.xml</File>
     <File>Assets/Text/cqui_text_settings_ru.xml</File>
     <File>Assets/Text/cqui_text_settings_zh.xml</File>
+    <File>Assets/Text/cqui_text_settings_es.xml</File>
     <File>Assets/UI/actionpanel.lua</File>
     <File>Assets/UI/citysupport.lua</File>
     <File>Assets/UI/civ6common.lua</File>
@@ -189,6 +194,7 @@
     <File>Integrations/BTS/Text/bts_text_pl.xml</File>
     <File>Integrations/BTS/Text/bts_text_ru.xml</File>
     <File>Integrations/BTS/Text/bts_text_zh.xml</File>
+    <File>Integrations/BTS/Text/bts_text_es.xml</File>
     <File>Integrations/URS/reportscreen.lua</File>
     <File>Integrations/URS/reportscreen.xml</File>
     <File>Integrations/URS/unitpromotionpopup.lua</File>
@@ -200,6 +206,7 @@
     <File>Integrations/URS/Text/urs_text_pl.xml</File>
     <File>Integrations/URS/Text/urs_text_ru.xml</File>
     <File>Integrations/URS/Text/urs_text_zh.xml</File>
+    <File>Integrations/URS/Text/urs_text_es.xml</File>
     <File>Integrations/IDS/diplomacydealview.lua</File>
     <File>Integrations/IDS/diplomacydealview.xml</File>
     <File>Integrations/IDS/Text/ids_text.xml</File>
@@ -210,6 +217,7 @@
     <File>Integrations/IDS/Text/ids_text_pl.xml</File>
     <File>Integrations/IDS/Text/ids_text_ru.xml</File>
     <File>Integrations/IDS/Text/ids_text_zh.xml</File>
+    <File>Integrations/IDS/Text/ids_text_es.xml</File>
     <File>Integrations/ML/UI/minimappanel.lua</File>
     <File>Integrations/ML/UI/minimappanel.xml</File>
     <File>Integrations/ML/UI/Panels/modallenspanel.lua</File>
@@ -223,11 +231,18 @@
     <File>Integrations/ML/Text/morelenses_text_pl.xml</File>
     <File>Integrations/ML/Text/morelenses_text_ru.xml</File>
     <File>Integrations/ML/Text/morelenses_text_zh.xml</File>
+    <File>Integrations/ML/Text/morelenses_text_es.xml</File>
+    <File>Integrations/BES/UI/espionagesupport.lua</File>
+    <File>Integrations/BES/UI/Choosers/espionagechooser.lua</File>
+    <File>Integrations/BES/UI/Choosers/espionagechooser.xml</File>
+    <File>Integrations/BES/UI/PartialScreens/espionageoverview.lua</File>
+    <File>Integrations/BES/UI/PartialScreens/espionageoverview.xml</File>
+    <File>Integrations/BES/Text/bes_text.xml</File>
+    <File>Integrations/BES/Text/bes_text_es.xml</File>
   </Files>
 
   <!-- Describes how each file is used -->
   <Components>
-
     <!-- CQUI changes that override the base game files -->
     <ImportFiles id="CQUI_IMPORT_FILES">
       <Items>
@@ -299,6 +314,7 @@
         <File>Assets/Text/cqui_text_general_pl.xml</File>
         <File>Assets/Text/cqui_text_general_ru.xml</File>
         <File>Assets/Text/cqui_text_general_zh.xml</File>
+        <File>Assets/Text/cqui_text_general_es.xml</File>
         <File>Assets/Text/cqui_text_settings.xml</File>
         <File>Assets/Text/cqui_text_settings_de.xml</File>
         <File>Assets/Text/cqui_text_settings_fr.xml</File>
@@ -307,6 +323,7 @@
         <File>Assets/Text/cqui_text_settings_pl.xml</File>
         <File>Assets/Text/cqui_text_settings_ru.xml</File>
         <File>Assets/Text/cqui_text_settings_zh.xml</File>
+        <File>Assets/Text/cqui_text_settings_es.xml</File>
       </Items>
     </LocalizedText>
     <!-- CQUI specific settings -->
@@ -355,6 +372,7 @@
         <File>Integrations/BTS/Text/bts_text_pl.xml</File>
         <File>Integrations/BTS/Text/bts_text_ru.xml</File>
         <File>Integrations/BTS/Text/bts_text_zh.xml</File>
+        <File>Integrations/BTS/Text/bts_text_es.xml</File>
       </Items>
     </LocalizedText>
     <ImportFiles id="BTS_IMPORT_FILES">
@@ -378,6 +396,7 @@
         <File>Integrations/URS/Text/urs_text_pl.xml</File>
         <File>Integrations/URS/Text/urs_text_ru.xml</File>
         <File>Integrations/URS/Text/urs_text_zh.xml</File>
+        <File>Integrations/URS/Text/urs_text_es.xml</File>
       </Items>
     </LocalizedText>
     <ImportFiles id="UNITREPORT_IMPORT_FILES">
@@ -387,13 +406,13 @@
         <File>Integrations/URS/unitpromotionpopup.lua</File>
       </Items>
     </ImportFiles>
-	<ImportFiles id="IDS_IMPORT_FILES">
+  <ImportFiles id="IDS_IMPORT_FILES">
       <Items>
         <File>Integrations/IDS/diplomacydealview.lua</File>
         <File>Integrations/IDS/diplomacydealview.xml</File>
       </Items>
     </ImportFiles>
-	<LocalizedText id="IDS_TEXT">
+  <LocalizedText id="IDS_TEXT">
       <Items>
         <File>Integrations/IDS/Text/ids_text.xml</File>
         <File>Integrations/IDS/Text/ids_text_de.xml</File>
@@ -403,6 +422,21 @@
         <File>Integrations/IDS/Text/ids_text_pl.xml</File>
         <File>Integrations/IDS/Text/ids_text_ru.xml</File>
         <File>Integrations/IDS/Text/ids_text_zh.xml</File>
+        <File>Integrations/IDS/Text/ids_text_es.xml</File>
+      </Items>
+    </LocalizedText>
+  <ImportFiles id="BES_IMPORT_FILES">
+      <Items>
+        <File>Integrations/BES/UI/espionagesupport.lua</File>
+        <File>Integrations/BES/UI/Choosers/espionagechooser.lua</File>
+        <File>Integrations/BES/UI/Choosers/espionagechooser.xml</File>
+        <File>Integrations/BES/UI/PartialScreens/espionageoverview.lua</File>
+        <File>Integrations/BES/UI/PartialScreens/espionageoverview.xml</File>
+      </Items>
+    </ImportFiles>
+    <LocalizedText id="BES_TEXT">
+      <Items>
+        <File>Integrations/BES/Text/bes_text.xml</File>
       </Items>
     </LocalizedText>
     <ImportFiles id="MORELENSES_IMPORT_FILES">
@@ -423,6 +457,7 @@
         <File>Integrations/ML/Text/morelenses_text_pl.xml</File>
         <File>Integrations/ML/Text/morelenses_text_ru.xml</File>
         <File>Integrations/ML/Text/morelenses_text_zh.xml</File>
+        <File>Integrations/ML/Text/morelenses_text_es.xml</File>
       </Items>
     </LocalizedText>
     <UpdateDatabase id="MORELENSES_DATABASE">
@@ -431,7 +466,5 @@
       </Items>
     </UpdateDatabase>
   </Components>
-
   <Settings />
-
 </Mod>

@@ -1,4 +1,4 @@
-﻿--CityPanelOverview
+--CityPanelOverview
 --Triggered by selecting a city
 
 include( "AdjacencyBonusSupport" );   -- GetAdjacentYieldBonusString()
@@ -71,6 +71,8 @@ local m_secondaryColor    :number = 0xf00d1ace;
 local ms_eventID = 0;
 local m_tabs;
 local m_isShowingPanel    :boolean = false;
+
+local CQUI_HousingFromImprovementsTable :table = {};
 
 -- ====================CQUI Cityview==========================================
 
@@ -487,6 +489,12 @@ end
 
 -- ===========================================================================
 function ViewPanelHousing( data:table )
+
+  -- CQUI get real housing from improvements value
+  local selectedCity  = UI.GetHeadSelectedCity();
+  local selectedCityID = selectedCity:GetID();
+  local CQUI_HousingFromImprovements = CQUI_HousingFromImprovementsTable[selectedCityID];
+
   -- Only show the advisor bubbles during the tutorial
   Controls.HousingAdvisorBubble:SetHide( IsTutorialRunning() == false );
 
@@ -503,12 +511,12 @@ function ViewPanelHousing( data:table )
   --Water
   CQUI_BuildHousingBubbleInstance("ICON_GREAT_PERSON_CLASS_ADMIRAL", data.HousingFromWater, "LOC_PEDIA_CONCEPTS_PAGE_CITIES_15_CHAPTER_CONTENT_TITLE");
   --Improvements
-  CQUI_BuildHousingBubbleInstance("ICON_IMPROVEMENT_PASTURE", data.HousingFromImprovements, "LOC_IMPROVEMENT_NAME");
+  CQUI_BuildHousingBubbleInstance("ICON_IMPROVEMENT_PASTURE", CQUI_HousingFromImprovements, "LOC_IMPROVEMENT_NAME");    -- CQUI real housing from improvements value
   --Era
   CQUI_BuildHousingBubbleInstance("ICON_GREAT_PERSON_CLASS_SCIENTIST", data.HousingFromStartingEra, "LOC_ERA_NAME");
 
   local colorName:string = GetPercentGrowthColor( data.HousingMultiplier ) ;
-  Controls.HousingTotalNum:SetText( data.Housing );
+  Controls.HousingTotalNum:SetText( data.Housing - data.HousingFromImprovements + CQUI_HousingFromImprovements );    -- CQUI calculate real housing
   Controls.HousingTotalNum:SetColorByName( colorName );
   local uv:number;
 
@@ -899,6 +907,13 @@ function OnShowBreakdownTab()
   m_tabs.SelectTab( Controls.BuildingsButton );
 end
 
+-- ===========================================================================
+--CQUI get real housing from improvements
+function CQUI_HousingFromImprovementsTableInsert (pCityID, CQUI_HousingFromImprovements)
+  CQUI_HousingFromImprovementsTable[pCityID] = CQUI_HousingFromImprovements;
+end
+
+-- ===========================================================================
 function Initialize()
   PopulateTabs();
 
@@ -912,6 +927,7 @@ function Initialize()
   Events.SystemUpdateUI.Add( OnUpdateUI );
   LuaEvents.CityPanel_ShowOverviewPanel.Add( OnShowOverviewPanel );
   LuaEvents.CityPanel_LiveCityDataChanged.Add( OnLiveCityDataChanged )
+  LuaEvents.CQUI_RealHousingFromImprovementsCalculated.Add(CQUI_HousingFromImprovementsTableInsert);    --CQUI get real housing from improvements values
 
   Events.SystemUpdateUI.Add( OnUpdateUI );
   Events.CityNameChanged.Add(OnCityNameChanged);
