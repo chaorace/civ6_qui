@@ -20,6 +20,7 @@
           <Grid Texture="Controls_SeparatorAngled" TextureSize="14,6" Anchor="L,T" Size="parent,6" SliceCorner="6,4" AnchorSide="I,O" Offset="0,-2"/>
         </Box>
 
+        <!--
         <Box ID="EmptyPanel" Color="40,35,25,230" Size="296,25" AutoSize="V" AutoSizePadding="0,5" Hidden="1">
           <Image Texture="Controls_GradientSmall" Size="parent,50" Color="0,0,0,200" Anchor="L,T"/>
           <Grid                           Anchor="C,C"              Size="parent-10,0"  AutoSize="Vertical" InnerPadding="40,30" Texture="Controls_DecoFrame" SliceCorner="20,19" SliceSize="1,1" SliceTextureSize="40,38" Color="143,122,82,100" MinSize="40,38">
@@ -30,6 +31,7 @@
             <Box Color="0,0,0,200" Anchor="L,B" Size="parent,1" AnchorSide="I,O"/>
           </Box>
         </Box>
+        -->
 
         <Container        ID="ChatPanel" Size="300,106" Offset="0,0">
           <LuaContext     FileName="ChatPanel"/>

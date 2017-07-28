@@ -114,24 +114,6 @@ function OnOpenCulture()
 end
 
 -- ===========================================================================
--- CQUI: Moved here from toppanel.lua since we moved the reports button here
--- Control moved to reportscreen.lua
---[[
-function OnToggleReportsScreen()
-  local pReportsScreen :table = ContextPtr:LookUpControl( "/InGame/ReportScreen" );
-  if pReportsScreen == nil then
-    UI.DataError("Unable to toggle Reports Screen.  Not found in '/InGame/ReportScreen'.");
-    return;
-  end
-  if pReportsScreen:IsHidden() then
-    LuaEvents.TopPanel_OpenReportsScreen();
-  else
-    LuaEvents.TopPanel_CloseReportsScreen();
-  end
-end
-]]
-
--- ===========================================================================
 function OnOpenOldCityStates()
   LuaEvents.TopPanel_OpenOldCityStatesPopup();
 end
@@ -212,9 +194,9 @@ function BuildExtraEntries()
     tButtonEntry.Button:SetText(sButtonText);
     tButtonEntry.Button:RegisterCallback(Mouse.eLClick, fCallback);
 
-    if entryInfo.ButtonTooltip ~= nil then
-      local sButtonTooltip = Locale.Lookup(entryInfo.ButtonTooltip)
-      tButtonEntry.Button:SetToolTipString(sButtonTooltip);
+    if entryInfo.Tooltip ~= nil then
+      local sTooltip = Locale.Lookup(entryInfo.Tooltip)
+      tButtonEntry.Button:SetToolTipString(sTooltip);
     else
       tButtonEntry.Button:SetToolTipString("");
     end
@@ -714,9 +696,8 @@ function Initialize()
 
   -- CQUI --
   Controls.LaunchExtraShow:RegisterCallback( Mouse.eLClick, OnToggleExtras );
-  -- Controls.ReportsButton:RegisterCallback(Mouse.eLClick, OnToggleReportsScreen);
-  -- Controls.ReportsButton:RegisterCallback( Mouse.eMouseEnter, function() UI.PlaySound("Main_Menu_Mouse_Over"); end);
 
+  -- Modular Screens
   LuaEvents.LaunchBar_AddExtra.Add( OnAddExtraEntry );
   LuaEvents.LaunchBar_AddIcon.Add( OnAddLaunchbarIcon );
   -- CQUI --
@@ -764,7 +745,8 @@ function Initialize()
 
   -- TESTS
   --------------------------------
-  LuaEvents.LaunchBar_AddExtra("Test1", {Text="Test1", Callback=function() print("Test1") end, ButtonTooltip="Test1"})
+  --[[
+  LuaEvents.LaunchBar_AddExtra("Test1", {Text="Test1", Callback=function() print("Test1") end, Tooltip="Test1"})
   LuaEvents.LaunchBar_AddExtra("Test2", {Text="Test2", Callback=function() print("Test2") end})
 
   local textureOffsetX, textureOffsetY, textureSheet = IconManager:FindIconAtlas("ICON_BUILDING_AGORA", 38);
@@ -772,7 +754,7 @@ function Initialize()
     -- ICON TEXTURE
     IconTexture = {
       OffsetX = textureOffsetX;
-      OffsetY = textureOffsetY;
+      OffsetY = textureOffsetY+3;
       Sheet = textureSheet;
     };
 
@@ -792,14 +774,14 @@ function Initialize()
     Tooltip = "Agora";
   }
 
-  LuaEvents.LaunchBar_AddIcon("test1", buttonInfo);
+  LuaEvents.LaunchBar_AddIcon(buttonInfo);
 
   textureOffsetX, textureOffsetY, textureSheet = IconManager:FindIconAtlas("ICON_UNIT_JAPANESE_SAMURAI", 38);
   local button2Info = {
     -- ICON TEXTURE
     IconTexture = {
       OffsetX = textureOffsetX;
-      OffsetY = textureOffsetY;
+      OffsetY = textureOffsetY+3;
       Sheet = textureSheet;
       Color = UI.GetColorValue("COLOR_PLAYER_BARBARIAN_PRIMARY");
     };
@@ -819,6 +801,7 @@ function Initialize()
     -- Tooltip = "barbs...";
   }
 
-  LuaEvents.LaunchBar_AddIcon("test2", button2Info);
+  LuaEvents.LaunchBar_AddIcon(button2Info);
+  ]]
 end
 Initialize();

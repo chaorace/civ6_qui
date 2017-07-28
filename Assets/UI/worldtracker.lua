@@ -15,6 +15,7 @@ local MAX_BEFORE_TRUNC_TITLE			:number = 225;
 local LAUNCH_BAR_PADDING				:number = 50;
 local WORLD_TRACKER_PANEL_WIDTH			:number = 300;
 local STARTING_TRACKER_OPTIONS_OFFSET	:number = 75;
+local LAUNCH_BAR_EXTRA_OFFSET     :number = 361;
 
 -- ===========================================================================
 --	VARIABLES
@@ -39,9 +40,9 @@ local m_TrackerAlwaysVisuallyCollapsed:boolean = false;	-- Once the launch bar e
 
 function RealizeEmptyMessage()
   if(m_hideChat and m_hideCivics and m_hideResearch) then
-    Controls.EmptyPanel:SetHide(false);
+    -- Controls.EmptyPanel:SetHide(false);
   else
-    Controls.EmptyPanel:SetHide(true);
+    -- Controls.EmptyPanel:SetHide(true);
   end
 end
 
@@ -454,6 +455,19 @@ function OnTutorialGoalsHiding()
   RealizeStack();
 end
 
+function OnLoadScreenClose()
+  local callback = function()
+    ToggleAll(not m_hideAll)
+  end
+
+  local buttonInfo = {
+    Text = Locale.Lookup("LOC_WORLDTRACKER_HIDE_TEXT");
+    Callback = callback;
+    Tooltip = Locale.Lookup("LOC_WORLDTRACKER_HIDE_TEXT");
+  }
+
+  LuaEvents.LaunchBar_AddExtra("ToggleWorldTracker", buttonInfo)
+end
 
 -- ===========================================================================
 function Initialize()

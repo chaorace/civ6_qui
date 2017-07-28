@@ -40,7 +40,7 @@
       <CheckBox ID="LaunchExtraShow" Offset="-4,49" Anchor="R,T" ButtonSize="35,35" ButtonTexture="Controls_RadioButtonLarge" CheckTexture="Controls_RadioButtonLarge" CheckSize="35,35" CheckTextureOffset="0,35"/>
     </Stack>
 
-    <Container Anchor="L,T" Offset="361,77">
+    <Container ID="LaunchExtraContainer" Anchor="L,T" Offset="361,75">
       <!-- Control Box -->
       <AlphaAnim ID="LaunchExtraAlpha" AlphaBegin="0" AlphaEnd="1" Speed="3" Cycle="Once" Function="OutQuint">
         <SlideAnim ID="LaunchExtraSlide" Start="0,-10" EndOffset="0,10" Function="OutQuint" Speed="1.5" Cycle="Once">
@@ -138,7 +138,7 @@
   </Container>
 
   <Instance Name="LaunchExtraEntry">
-    <GridButton ID="Button" Style="ButtonControlBrown" Size="parent,20"/>
+    <GridButton ID="Button" Style="ButtonControlBrown" Size="parent,24"/>
   </Instance>
 
   <Instance Name="LaunchbarButtonInstance">

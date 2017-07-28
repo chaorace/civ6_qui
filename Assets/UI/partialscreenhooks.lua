@@ -390,6 +390,7 @@ function Initialize()
 
   -- TESTS
   -----------------------------
+  --[[
   local hookInfo1:table = {
     -- ICON TEXTURE
     IconTexture = {
@@ -415,6 +416,7 @@ function Initialize()
   };
 
   LuaEvents.PartialScreenHooks_AddHook(hookInfo1);
+  ]]
 
   OnTurnBegin();
 end
