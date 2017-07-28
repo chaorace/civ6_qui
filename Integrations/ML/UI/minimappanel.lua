@@ -47,11 +47,11 @@ local AUTO_APPLY_SCOUT_LENS:boolean = true;
 -- Show citizen management area when hovering over city plot
 local SHOW_CITIZEN_MANAGEMENT_ONHOVER:boolean = false;
 
--- Show citizen management when managing citizens
+-- Show citizen management area when managing citizens
 local SHOW_CITIZEN_MANAGEMENT_INSCREEN:boolean = true;
 
 -- Highlight nothing to do (red plots) in builder lens
-local HIGHLIGHT_NOTHING_TODO_IN_BUILDER_LENS:boolean = false;
+local SHOW_NOTHING_TODO_IN_BUILDER_LENS:boolean = false;
 
 local CITY_WORK_RANGE:number = 3;
 
@@ -167,6 +167,8 @@ function CQUI_OnSettingsUpdate()
   AUTO_APPLY_ARCHEOLOGIST_LENS = GameConfiguration.GetValue("CQUI_AutoapplyArchaeologistLens");
   AUTO_APPLY_BUILDER_LENS = GameConfiguration.GetValue("CQUI_AutoapplyBuilderLens");
   AUTO_APPLY_SCOUT_LENS = GameConfiguration.GetValue("CQUI_AutoapplyScoutLens");
+  SHOW_CITIZEN_MANAGEMENT_INSCREEN = GameConfiguration.GetValue("CQUI_ShowCityMangeAreaInScreen");
+  SHOW_NOTHING_TODO_IN_BUILDER_LENS = GameConfiguration.GetValue("CQUI_ShowNothingToDoBuilderLens");
 
   --Cycles the minimap after resizing
   CQUI_UpdateMinimapSize();
@@ -2006,6 +2008,7 @@ end
 
 -- ===========================================================================
 function ShowCitizenManagementArea(cityID)
+  print("Showing city manage area for " .. cityID)
   SetActiveAreaLens(AREA_LENS_ID.CITIZEN_MANAGEMENT)
   UILens.ToggleLayerOn(LensLayers.HEX_COLORING_GOVERNMENT)
 
