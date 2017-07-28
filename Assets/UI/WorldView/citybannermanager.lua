@@ -299,7 +299,7 @@ function CQUI_OnBannerMouseOver(playerID: number, cityID: number)
     local yields :table = {};
     local yieldsIndex :table = {};
 
-    if CQUI_ShowCitizenIconsOnCityHover and (tPlots ~= nil and table.count(tPlots) ~= 0) and UILens.IsLayerOn(LensLayers.CITIZEN_MANAGEMENT) == false then
+    if (tPlots ~= nil and table.count(tPlots) ~= 0) and UILens.IsLayerOn(LensLayers.CITIZEN_MANAGEMENT) == false then
 
       CQUI_yieldsOn = UserConfiguration.ShowMapYield();
 
@@ -311,28 +311,30 @@ function CQUI_OnBannerMouseOver(playerID: number, cityID: number)
         local numUnits:number = tUnits[i];
         local maxUnits:number = tMaxUnits[i];
 
-        -- If this plot is getting worked
-        if workerCount > 0 and kPlot:IsCity() == false then
-          pInstance.CitizenButton:SetHide(false);
-          pInstance.CitizenButton:SetTextureOffsetVal(0, 256);
-          if(CQUI_SmartWorkIcon) then
-            pInstance.CitizenButton:SetSizeVal(CQUI_SmartWorkIconSize, CQUI_SmartWorkIconSize);
-            pInstance.CitizenButton:SetAlpha(CQUI_SmartWorkIconAlpha);
-          else
-            pInstance.CitizenButton:SetSizeVal(CQUI_WorkIconSize, CQUI_WorkIconSize);
-            pInstance.CitizenButton:SetAlpha(CQUI_WorkIconAlpha);
+        if CQUI_ShowCitizenIconsOnCityHover then
+          -- If this plot is getting worked
+          if workerCount > 0 and kPlot:IsCity() == false then
+            pInstance.CitizenButton:SetHide(false);
+            pInstance.CitizenButton:SetTextureOffsetVal(0, 256);
+            if(CQUI_SmartWorkIcon) then
+              pInstance.CitizenButton:SetSizeVal(CQUI_SmartWorkIconSize, CQUI_SmartWorkIconSize);
+              pInstance.CitizenButton:SetAlpha(CQUI_SmartWorkIconAlpha);
+            else
+              pInstance.CitizenButton:SetSizeVal(CQUI_WorkIconSize, CQUI_WorkIconSize);
+              pInstance.CitizenButton:SetAlpha(CQUI_WorkIconAlpha);
+            end
           end
-        end
 
-        if(tLockedUnits[i] > 0) then
-          pInstance.LockedIcon:SetHide(false);
-          if(CQUI_SmartWorkIcon) then
-            pInstance.LockedIcon:SetAlpha(CQUI_SmartWorkIconAlpha);
+          if(tLockedUnits[i] > 0) then
+            pInstance.LockedIcon:SetHide(false);
+            if(CQUI_SmartWorkIcon) then
+              pInstance.LockedIcon:SetAlpha(CQUI_SmartWorkIconAlpha);
+            else
+              pInstance.LockedIcon:SetAlpha(CQUI_WorkIconAlpha);
+            end
           else
-            pInstance.LockedIcon:SetAlpha(CQUI_WorkIconAlpha);
+            pInstance.LockedIcon:SetHide(true);
           end
-        else
-          pInstance.LockedIcon:SetHide(true);
         end
 
         table.insert(yields, plotId);
@@ -425,7 +427,7 @@ function CQUI_OnBannerMouseExit(playerID: number, cityID: number)
 
   local tPlots    :table = tResults[CityCommandResults.PLOTS];
 
-  if CQUI_ShowCitizenIconsOnCityHover and (tPlots ~= nil and table.count(tPlots) ~= 0) then
+  if (tPlots ~= nil and table.count(tPlots) ~= 0) then
 
     for i,plotId in pairs(tPlots) do
       local kPlot :table = Map.GetPlotByIndex(plotId);
