@@ -116,6 +116,10 @@ local m_tAreaPlotsColored:table = {}
 local m_CtrlDown:boolean = false;
 
 local CQUI_MapSize = 512;
+local CQUI_MapImageScaler = 0.5;
+
+local CQUI_MapBackingXSizeDiff = 27;
+local CQUI_MapBackingYSizeDiff = 54;
 
 -- ===========================================================================
 --  FUNCTIONS
@@ -136,21 +140,26 @@ function CQUI_OnToggleBindings(mode: number)
 end
 
 function CQUI_UpdateMinimapSize()
-  CQUI_MapSize = GameConfiguration.GetValue("CQUI_MinimapSize");
+  local size = GameConfiguration.GetValue("CQUI_MinimapSize");
+  if size ~= nil then
+    CQUI_MapSize = size
+  else
+    print("Using previous minimap size")
+  end
 
   --Cycles the minimap after resizing
-  if(Controls.MinimapImage:GetSizeX() ~= CQUI_MapSize) then
-    Controls.MinimapImage:SetSizeVal(CQUI_MapSize, CQUI_MapSize / 2);
-    Controls.CollapseAnim:SetEndVal(0, Controls.MinimapImage:GetOffsetY() + Controls.MinimapImage:GetSizeY() -25);
-    Controls.CollapseAnim:SetProgress(1);
-    m_isCollapsed = true;
-    OnCollapseToggle();
-    --Squeezes the map buttons if extra space is needed
-    if(CQUI_MapSize < 256) then
-      Controls.OptionsStack:SetPadding(-7);
-    else
-      Controls.OptionsStack:SetPadding(-3);
-    end
+  local xSize = CQUI_MapSize
+  local ySize = CQUI_MapSize * CQUI_MapImageScaler
+  Controls.MinimapContainer:SetSizeVal(xSize, ySize);
+  Controls.MinimapImage:SetSizeVal(xSize, ySize);
+  Controls.MinimapBacking:SetSizeVal(xSize + CQUI_MapBackingXSizeDiff, ySize + CQUI_MapBackingYSizeDiff);
+  -- Controls.CollapseAnim:SetEndVal(0, Controls.MinimapImage:GetOffsetY() + Controls.MinimapImage:GetSizeY());
+
+  --Squeezes the map buttons if extra space is needed
+  if(CQUI_MapSize < 256) then
+    Controls.OptionsStack:SetPadding(-7);
+  else
+    Controls.OptionsStack:SetPadding(-3);
   end
 end
 
@@ -164,7 +173,7 @@ function CQUI_OnSettingsUpdate()
 end
 
 function CQUI_ToggleYieldIcons()
--- CQUI: Toggle yield icons if option is enabled
+  -- CQUI: Toggle yield icons if option is enabled
   if(GameConfiguration.GetValue("CQUI_ToggleYieldsOnLoad")) then
     ToggleYieldIcons();
   end
@@ -672,6 +681,7 @@ function OnCollapseToggle()
   if ( m_isCollapsed ) then
     UI.PlaySound("Minimap_Open");
     Controls.ExpandButton:SetHide( true );
+    Controls.CollapseButton:SetHide( false );
     Controls.ExpandAnim:SetEndVal(0, -Controls.MinimapContainer:GetOffsetY() - Controls.MinimapContainer:GetSizeY());
     Controls.ExpandAnim:SetToBeginning();
     Controls.ExpandAnim:Play();
@@ -3507,7 +3517,8 @@ function Initialize()
   LuaEvents.CQUI_SettingsUpdate.Add( CQUI_OnSettingsUpdate );
   LuaEvents.CQUI_SettingsInitialized.Add( CQUI_UpdateMinimapSize );
   LuaEvents.CQUI_SettingsInitialized.Add( CQUI_ToggleYieldIcons );
-  CQUI_OnSettingsUpdate(); --ARISTOS: to force lenses settings when first starting the game
+  Events.LoadScreenClose.Add( CQUI_OnSettingsUpdate ); -- Astog: Update settings when load screen close
+  -- CQUI_OnSettingsUpdate()
 
   -- For Area Lens
   Events.CityWorkerChanged.Add( OnCityWorkerChanged );
