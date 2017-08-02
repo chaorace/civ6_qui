@@ -3,6 +3,7 @@
 -- ===========================================================================
 
 local showSortOrdersPermanently = false
+local colorYieldValues = true
 
 -- ===========================================================================
 --  INCLUDES and Local Functions
@@ -67,6 +68,17 @@ m_SortBySettings[1] = {
   SortByID = SORT_BY_ID.TURNS_TO_COMPLETE,
   SortOrder = SORT_ASCENDING
 };
+
+-- ===========================================================================
+--  CQUI
+-- ===========================================================================
+
+function CQUI_OnSettingsUpdate()
+  showSortOrdersPermanently = GameConfiguration.GetValue("CQUI_TraderShowSortOrder");
+  colorYieldValues = GameConfiguration.GetValue("CQUI_TraderColorYields");
+
+  -- Don't call refresh here, since CQUI panel and trade route chooser can't be open simultaneously.
+end
 
 -- ===========================================================================
 --  Refresh functions
@@ -481,6 +493,36 @@ function SetRouteInstanceYields(yieldsInstance, yieldIndex, yieldValue)
     yieldsInstance.YieldCultureLabel:SetText(text .. iconString);
   elseif (yieldIndex == FAITH_INDEX) then
     yieldsInstance.YieldFaithLabel:SetText(text .. iconString);
+  end
+
+  if colorYieldValues then
+    if (yieldIndex == FOOD_INDEX) then
+      yieldsInstance.YieldFoodLabel:SetColorByName("Food");
+    elseif (yieldIndex == PRODUCTION_INDEX) then
+      yieldsInstance.YieldProductionLabel:SetColorByName("Production");
+    elseif (yieldIndex == GOLD_INDEX) then
+      yieldsInstance.YieldGoldLabel:SetColorByName("Gold");
+    elseif (yieldIndex == SCIENCE_INDEX) then
+      yieldsInstance.YieldScienceLabel:SetColorByName("Science");
+    elseif (yieldIndex == CULTURE_INDEX) then
+      yieldsInstance.YieldCultureLabel:SetColorByName("Culture");
+    elseif (yieldIndex == FAITH_INDEX) then
+      yieldsInstance.YieldFaithLabel:SetColorByName("Faith");
+    end
+  else
+    if (yieldIndex == FOOD_INDEX) then
+      yieldsInstance.YieldFoodLabel:SetColorByName("White");
+    elseif (yieldIndex == PRODUCTION_INDEX) then
+      yieldsInstance.YieldProductionLabel:SetColorByName("White");
+    elseif (yieldIndex == GOLD_INDEX) then
+      yieldsInstance.YieldGoldLabel:SetColorByName("White");
+    elseif (yieldIndex == SCIENCE_INDEX) then
+      yieldsInstance.YieldScienceLabel:SetColorByName("White");
+    elseif (yieldIndex == CULTURE_INDEX) then
+      yieldsInstance.YieldCultureLabel:SetColorByName("White");
+    elseif (yieldIndex == FAITH_INDEX) then
+      yieldsInstance.YieldFaithLabel:SetColorByName("White");
+    end
   end
 end
 
@@ -1240,6 +1282,9 @@ function Initialize()
   print("Initializing BTS Trade Route Chooser");
 
   TradeSupportAutomater_Initialize();
+
+  -- CQUI Handlers
+  LuaEvents.CQUI_SettingsUpdate.Add( CQUI_OnSettingsUpdate );
 
   -- Context Events
   ContextPtr:SetInitHandler( OnInit );

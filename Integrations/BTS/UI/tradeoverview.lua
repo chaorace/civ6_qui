@@ -2,9 +2,9 @@
 --  SETTINGS
 -- ===========================================================================
 
-local alignTradeYields = true
-local showNoBenefitsString = false
 local showSortOrdersPermanently = false
+local addDividerBetweenGroups = true
+local colorYieldValues = true
 local hideTradingPostIcon = false
 
 -- Color Settings for Headers
@@ -128,8 +128,33 @@ local m_FilterSettingsChanged:boolean = true;
 -- Stores the sort settings.
 local m_InGroupSortBySettings = {}; -- Stores the setting each group will have within it. Applicable when routes are grouped
 local m_GroupSortBySettings = {}; -- Stores the overall group sort setting. This is used, when routes are NOT grouped
+m_GroupSortBySettings[1] = {
+  SortByID = SORT_BY_ID.GOLD,
+  SortOrder = SORT_DESCENDING
+}
+
+m_InGroupSortBySettings[1] = {
+  SortByID = SORT_BY_ID.GOLD,
+  SortOrder = SORT_DESCENDING
+}
+m_InGroupSortBySettings[2] = {
+  SortByID = SORT_BY_ID.TURNS_TO_COMPLETE,
+  SortOrder = SORT_ASCENDING
+}
 
 local m_dividerCount = 0
+
+-- ===========================================================================
+--  CQUI
+-- ===========================================================================
+
+function CQUI_OnSettingsUpdate()
+  showSortOrdersPermanently = GameConfiguration.GetValue("CQUI_TraderShowSortOrder");
+  addDividerBetweenGroups = GameConfiguration.GetValue("CQUI_TraderAddDivider");
+  colorYieldValues = GameConfiguration.GetValue("CQUI_TraderColorYields");
+
+  Refresh()
+end
 
 -- ===========================================================================
 --  Refresh functions
@@ -897,6 +922,22 @@ function SetOriginRouteInstanceYields(routeInstance, routeInfo)
   routeInstance.OriginYieldScienceLabel:SetText(yieldTexts[SCIENCE_INDEX])
   routeInstance.OriginYieldCultureLabel:SetText(yieldTexts[CULTURE_INDEX])
   routeInstance.OriginYieldFaithLabel:SetText(yieldTexts[FAITH_INDEX])
+
+  if colorYieldValues then
+    routeInstance.OriginYieldFoodLabel:SetColorByName("Food");
+    routeInstance.OriginYieldProductionLabel:SetColorByName("Production");
+    routeInstance.OriginYieldGoldLabel:SetColorByName("Gold");
+    routeInstance.OriginYieldScienceLabel:SetColorByName("Science");
+    routeInstance.OriginYieldCultureLabel:SetColorByName("Culture");
+    routeInstance.OriginYieldFaithLabel:SetColorByName("Faith");
+  else
+    routeInstance.OriginYieldFoodLabel:SetColorByName("White");
+    routeInstance.OriginYieldProductionLabel:SetColorByName("White");
+    routeInstance.OriginYieldGoldLabel:SetColorByName("White");
+    routeInstance.OriginYieldScienceLabel:SetColorByName("White");
+    routeInstance.OriginYieldCultureLabel:SetColorByName("White");
+    routeInstance.OriginYieldFaithLabel:SetColorByName("White");
+  end
 end
 
 function SetDestinationRouteInstanceYields(routeInstance, routeInfo)
@@ -912,6 +953,22 @@ function SetDestinationRouteInstanceYields(routeInstance, routeInfo)
   routeInstance.DestinationYieldScienceLabel:SetText(yieldTexts[SCIENCE_INDEX])
   routeInstance.DestinationYieldCultureLabel:SetText(yieldTexts[CULTURE_INDEX])
   routeInstance.DestinationYieldFaithLabel:SetText(yieldTexts[FAITH_INDEX])
+
+  if colorYieldValues then
+    routeInstance.OriginYieldFoodLabel:SetColorByName("Food");
+    routeInstance.OriginYieldProductionLabel:SetColorByName("Production");
+    routeInstance.OriginYieldGoldLabel:SetColorByName("Gold");
+    routeInstance.OriginYieldScienceLabel:SetColorByName("Science");
+    routeInstance.OriginYieldCultureLabel:SetColorByName("Culture");
+    routeInstance.OriginYieldFaithLabel:SetColorByName("Faith");
+  else
+    routeInstance.OriginYieldFoodLabel:SetColorByName("White");
+    routeInstance.OriginYieldProductionLabel:SetColorByName("White");
+    routeInstance.OriginYieldGoldLabel:SetColorByName("White");
+    routeInstance.OriginYieldScienceLabel:SetColorByName("White");
+    routeInstance.OriginYieldCultureLabel:SetColorByName("White");
+    routeInstance.OriginYieldFaithLabel:SetColorByName("White");
+  end
 end
 
 -- ===========================================================================
@@ -919,6 +976,10 @@ end
 -- ===========================================================================
 
 function CreateSectionDivider()
+  if not addDividerBetweenGroups then
+    return
+  end
+
   if m_dividerCount > 0 then
     local dividerInstance:table = m_DividerInstanceIM:GetInstance();
   end
@@ -1548,10 +1609,8 @@ function RefreshSortBar()
     RefreshSortButtons( m_GroupSortBySettings );
   end
 
+  HideSortOrderLabels();
   if showSortOrdersPermanently or m_shiftDown then
-    -- Hide the order texts
-    HideSortOrderLabels();
-    -- Show them based on current settings
     ShowSortOrderLabels();
   end
 end
@@ -1627,7 +1686,7 @@ function RefreshSortButtons( sortSettings:table )
 end
 
 function RefreshSortOrderLabels( sortSettings:table )
-  for _, sortEntry in ipairs(sortSettings) do
+  for index, sortEntry in ipairs(sortSettings) do
     if sortEntry.SortByID == SORT_BY_ID.FOOD then
       Controls.FoodSortOrder:SetHide(false);
       Controls.FoodSortOrder:SetText(index);
@@ -1637,6 +1696,7 @@ function RefreshSortOrderLabels( sortSettings:table )
       Controls.ProductionSortOrder:SetText(index);
       Controls.ProductionSortOrder:SetColorByName("ResProductionLabelCS");
     elseif sortEntry.SortByID == SORT_BY_ID.GOLD then
+      print("////////////////////////////////////////////////")
       Controls.GoldSortOrder:SetHide(false);
       Controls.GoldSortOrder:SetText(index);
       Controls.GoldSortOrder:SetColorByName("ResGoldLabelCS");
@@ -2219,6 +2279,9 @@ function Initialize()
 
   -- Initialize tracker
   TradeSupportTracker_Initialize();
+
+  -- CQUI Handlers
+  LuaEvents.CQUI_SettingsUpdate.Add( CQUI_OnSettingsUpdate );
 
   -- Input handler
   ContextPtr:SetInputHandler( OnInputHandler, true );
