@@ -168,6 +168,7 @@ function CQUI_OnSettingsUpdate()
   AUTO_APPLY_SCOUT_LENS = GameConfiguration.GetValue("CQUI_AutoapplyScoutLens");
   SHOW_CITIZEN_MANAGEMENT_INSCREEN = GameConfiguration.GetValue("CQUI_ShowCityMangeAreaInScreen");
   SHOW_NOTHING_TODO_IN_BUILDER_LENS = GameConfiguration.GetValue("CQUI_ShowNothingToDoBuilderLens");
+  SHOW_GENERIC_PLOTS_IN_BUILDER_LENS = GameConfiguration.GetValue("CQUI_ShowGenericBuilderLens");
 
   --Cycles the minimap after resizing
   CQUI_UpdateMinimapSize();
@@ -3422,7 +3423,10 @@ function Initialize()
   m_MiniMap_xmloffsety = Controls.MiniMap:GetOffsetY();
   m_ContinentsCache = Map.GetContinentsInUse();
 
-  Controls.MinimapImage:RegisterSizeChanged( OnMinimapImageSizeChanged );
+  -- Check for function nil for backward compatibiliy. @Summer Patch 2017
+  if Controls.MinimapImage.RegisterSizeChanged ~= nil then
+    Controls.MinimapImage:RegisterSizeChanged( OnMinimapImageSizeChanged );
+  end
   UI.SetMinimapImageControl(Controls.MinimapImage);
   Controls.LensChooserList:CalculateSize();
 
