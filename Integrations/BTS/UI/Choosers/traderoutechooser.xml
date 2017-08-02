@@ -21,8 +21,8 @@
 
                   <Label ID="TradingPostIcon" Anchor="L,C" Offset="14,-4" Style="FontNormal16" FontStyle="Shadow" String="[ICON_TradingPost]" Color="255,0,0,255" EffectColor="255,0,0,255" GradientColor="255,0,0,255" />
                   <Label ID="CityStateQuestIcon" Anchor="L,C" Offset="-2,-12"  Style="FontNormal16" FontStyle="Shadow" String="[ICON_CityStateQuest]" Color="255,0,0,255" EffectColor="255,0,0,255" GradientColor="255,0,0,255" />
-                  <Stack StackGrowth="Left" Offset="14,-4" Anchor="R,C">
-                    <Label ID="TurnsToComplete" Anchor="R,C" Style="FontFlair16" String="??" FontStyle="Stroke" EffectColor="0,0,0,25" />
+                  <Stack StackGrowth="Left" Offset="14,-3" Anchor="R,C">
+                    <Label ID="TurnsToComplete" Anchor="R,T" Offset="0,0" Style="FontFlair16" String="??" FontStyle="Stroke" EffectColor="0,0,0,25" />
                     <Label ID="TurnsToCompleteIcon"  String="[ICON_Turn]" Offset="0,-1" Anchor="R,C" Style="FontFlair16" FontStyle="Stroke" EffectColor="0,0,0,25" />
                   </Stack>
                 </Grid>
@@ -221,7 +221,7 @@
           <Label            ID="TradingPostIcon"  Anchor="L,C" Offset="10,-4" Style="FontNormal16" FontStyle="Shadow" String="[ICON_TradingPost]" Color="255,0,0,255" EffectColor="255,0,0,255" GradientColor="255,0,0,255" />
           <Label            ID="CityStateQuestIcon" Anchor="L,C" Offset="-2,-12"  Style="FontNormal16" FontStyle="Shadow" String="[ICON_CityStateQuest]" Color="255,0,0,255" EffectColor="255,0,0,255" GradientColor="255,0,0,255" />
 
-          <Stack StackGrowth="Left" Anchor="R,C" Offset="12,-4" StackPadding="0">
+          <Stack StackGrowth="Left" Anchor="R,C" Offset="12,-3" StackPadding="0">
             <Label ID="TurnsToComplete" Anchor="C,C" Offset="0,0" Style="FontFlair14" FontStyle="Stroke" EffectColor="0,0,0,25" String="??" />
             <Label ID="TurnsToCompleteIcon"  String="[ICON_Turn]" Anchor="C,C" Offset="0,-1"  Style="FontFlair16" FontStyle="Stroke" EffectColor="0,0,0,25" />
           </Stack>

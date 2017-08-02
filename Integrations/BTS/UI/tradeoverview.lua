@@ -128,11 +128,12 @@ local m_FilterSettingsChanged:boolean = true;
 -- Stores the sort settings.
 local m_InGroupSortBySettings = {}; -- Stores the setting each group will have within it. Applicable when routes are grouped
 local m_GroupSortBySettings = {}; -- Stores the overall group sort setting. This is used, when routes are NOT grouped
+
+-- Default sort setting = Smart descending gold, ie second level is lowest turns consumed
 m_GroupSortBySettings[1] = {
   SortByID = SORT_BY_ID.GOLD,
   SortOrder = SORT_DESCENDING
 }
-
 m_InGroupSortBySettings[1] = {
   SortByID = SORT_BY_ID.GOLD,
   SortOrder = SORT_DESCENDING
@@ -1696,7 +1697,6 @@ function RefreshSortOrderLabels( sortSettings:table )
       Controls.ProductionSortOrder:SetText(index);
       Controls.ProductionSortOrder:SetColorByName("ResProductionLabelCS");
     elseif sortEntry.SortByID == SORT_BY_ID.GOLD then
-      print("////////////////////////////////////////////////")
       Controls.GoldSortOrder:SetHide(false);
       Controls.GoldSortOrder:SetText(index);
       Controls.GoldSortOrder:SetColorByName("ResGoldLabelCS");
