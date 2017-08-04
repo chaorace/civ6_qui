@@ -188,6 +188,7 @@ end
 -- ===========================================================================
 function RefreshDestinationList()
     m_RouteChoiceIM:ResetInstances();
+    local localPlayer = Players[Game.GetLocalPlayer()];
 
     -- Add each players cities to destination list
     local players:table = Game.GetPlayers();
@@ -196,12 +197,14 @@ function RefreshDestinationList()
         -- Ignore city states (only they can receive influence)
         if playerInfluence and not playerInfluence:CanReceiveInfluence() and
                 m_filterList[m_filterSelected].FilterFunction(player) then
-            AddPlayerCities(player)
+            if (player:GetID() == localPlayer:GetID() or player:GetTeam() == -1 or localPlayer:GetTeam() == -1 or player:GetTeam() ~= localPlayer:GetTeam()) then
+                AddPlayerCities(player)
+            end
         end
     end
 
     Controls.DestinationStack:CalculateSize();
-    Controls.DestinationPanel:CalculateSize();
+    Controls.DestinationPanel:CalculateInternalSize();
 end
 
 -- ===========================================================================
@@ -461,7 +464,7 @@ function UpdateCityBanner(city:table)
     Controls.BannerDarker:SetColor( darkerBackColor );
     Controls.BannerLighter:SetColor( brighterBackColor );
     Controls.CityName:SetColor( frontColor );
-	TruncateStringWithTooltip(Controls.CityName, 195, Locale.ToUpper(city:GetName()));
+    TruncateStringWithTooltip(Controls.CityName, 195, Locale.ToUpper(city:GetName()));
     Controls.BannerBase:SetHide(false);
 
     if m_currentChooserMode == EspionageChooserModes.DESTINATION_CHOOSER then
@@ -537,7 +540,7 @@ function AddDestination(city:table)
     local destinationInstance:table = m_RouteChoiceIM:GetInstance();
 
     -- Update city name and banner color
-    destinationInstance.CityName:SetText(Locale.ToUpper(city:GetName()));
+    TruncateStringWithTooltip(destinationInstance.CityName, 185, Locale.ToUpper(city:GetName()));
 
     local backColor:number, frontColor:number  = UI.GetPlayerColors( city:GetOwner() );
     local darkerBackColor:number = DarkenLightenColor(backColor,(-85),238);
@@ -575,29 +578,7 @@ end
 
 -- ===========================================================================
 function RefreshDistrictIcon(city:table, districtType:string, districtIcon:table)
-	local hasDistrict:boolean = false;
-	local cityDistricts:table = city:GetDistricts();
-	for i, district in cityDistricts:Members() do
-		if district:IsComplete() then
-			
-			--gets the district type of the currently selected district 
-			local districtInfo:table = GameInfo.Districts[district:GetType()];
-			local currentDistrictType = districtInfo.DistrictType
-
-			--assigns currentDistrictType to be the general type of district (i.e. DISTRICT_HANSA becomes DISTRICT_INDUSTRIAL_ZONE)
-			local replaces = GameInfo.DistrictReplaces[districtInfo.Hash];
-			if(replaces) then
-				currentDistrictType = GameInfo.Districts[replaces.ReplacesDistrictType].DistrictType
-			end
-
-			--if this district is the type we are looking for, display that
-			if currentDistrictType == districtType then
-				hasDistrict = true;
-			end
-		end
-	end
-
-	if hasDistrict then
+    if hasDistrict(city, districtType) then
         districtIcon:SetHide(false);
     else
         districtIcon:SetHide(true);

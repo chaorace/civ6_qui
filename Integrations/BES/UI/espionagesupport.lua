@@ -130,8 +130,17 @@ function hasDistrict(city:table, districtType:string)
     local cityDistricts:table = city:GetDistricts();
     for i, district in cityDistricts:Members() do
         if district:IsComplete() then
+            --gets the district type of the currently selected district
             local districtInfo:table = GameInfo.Districts[district:GetType()];
-            if districtInfo.DistrictType == districtType then
+            local currentDistrictType = districtInfo.DistrictType
+
+            --assigns currentDistrictType to be the general type of district (i.e. DISTRICT_HANSA becomes DISTRICT_INDUSTRIAL_ZONE)
+            local replaces = GameInfo.DistrictReplaces[districtInfo.Hash];
+            if replaces then
+                currentDistrictType = GameInfo.Districts[replaces.ReplacesDistrictType].DistrictType
+            end
+
+            if currentDistrictType == districtType then
                 return true
             end
         end
