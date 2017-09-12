@@ -739,7 +739,8 @@ end
 -- ===========================================================================
 --  Update the 3D displayed path for a unit.
 -- ===========================================================================
-function RealizeMovementPath(showQueuedPath:boolean)
+--CQUI modifications for showing unit paths on hover
+function RealizeMovementPath(showQueuedPath:boolean, CQUI_HoveredUnit)
 
   if not UI.IsMovementPathOn() or UI.IsGameCoreBusy() then
     return;
@@ -751,7 +752,11 @@ function RealizeMovementPath(showQueuedPath:boolean)
     UILens.SetActive("Default");
     m_cachedPathUnit = nil;
     m_cachedPathPlotId = -1;
-    return;
+    if CQUI_HoveredUnit then
+      kUnit = CQUI_HoveredUnit;
+    else
+      return;
+    end
   end
 
   -- Bail if unit is not a type that allows movement.
@@ -761,6 +766,9 @@ function RealizeMovementPath(showQueuedPath:boolean)
 
   -- Bail if end plot is not determined.
   local endPlotId :number = UI.GetCursorPlotID();
+  if CQUI_HoveredUnit then
+    endPlotId = -1;
+  end
 
 	-- Use the queued destinationt o show the queued path
 	if (showQueuedPath) then
@@ -784,9 +792,10 @@ function RealizeMovementPath(showQueuedPath:boolean)
       UILens.UnFocusHex( LensLayers.ATTACK_RANGE, m_cachedPathPlotId );
     end
 
-    m_cachedPathUnit  = kUnit;
-    m_cachedPathPlotId  = endPlotId;
-
+    if not CQUI_HoveredUnit then
+      m_cachedPathUnit  = kUnit;
+      m_cachedPathPlotId  = endPlotId;
+    end
 
     -- Obtain ordered list of plots.
     local turnsList   : table;
@@ -3761,6 +3770,7 @@ function Initialize()
   -- CQUI Events
   LuaEvents.CQUI_WorldInput_CityviewEnable.Add( function() CQUI_cityview = true; end );
   LuaEvents.CQUI_WorldInput_CityviewDisable.Add( function() CQUI_cityview = false; end );
+  LuaEvents.CQUI_RealizeMovementPathOnHover.Add( RealizeMovementPath );
 
   Controls.DebugStuff:SetHide(not m_isDebuging);
   -- Popup setup
