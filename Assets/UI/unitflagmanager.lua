@@ -156,22 +156,25 @@ UnitFlag.__index = UnitFlag;
 local CQUI_ShowingPath = nil; --unitID for the unit whose path is currently being shown. nil for no unit
 local CQUI_SelectionMade = false;
 local CQUI_ShowPaths = true; --Toggle for showing the paths
+--CQUI: 2 tables below added to fix an issue appeared in 1.0.0.167 patch when function UnitFlag.SetInteractivity() didn't
+--update unitID for CQUI_ShowPath() function after a unit was upgraded. In that case we couldn't see paths when hover upgraded
+--units. If we find how to update it or if it will be fixed in the next patch we can remove all lines that have links to these tables.
+local CQUI_UnitList = {};
+local CQUI_UnitListForShowPaths = {};
 
 --CQUI Functions
 --Draws a path with numbers for the given unitID.
 function CQUI_ShowPath(unitID)
   local CQUI_HoveredUnit = Players[Game.GetLocalPlayer()]:GetUnits():FindID(unitID);
-  if UnitManager.GetQueuedDestination( CQUI_HoveredUnit ) then
+  if UnitManager.GetQueuedDestination(CQUI_HoveredUnit) then
     CQUI_ShowingPath = unitID;
-    LuaEvents.CQUI_RealizeMovementPathOnHover (true, CQUI_HoveredUnit);
+    LuaEvents.CQUI_ShowPathOnHover(true, CQUI_HoveredUnit);
   end
 end
 --Hides any currently drawn paths.
 function CQUI_HidePath()
   CQUI_ShowingPath = nil;
-  UILens.ClearLayerHexes(LensLayers.MOVEMENT_PATH); --Hide path
-  UILens.ClearLayerHexes(LensLayers.NUMBERS); --Hide numbers
-  UILens.ClearLayerHexes( LensLayers.ATTACK_RANGE );
+  LuaEvents.CQUI_HidePathOnHover();
 end
 
 function CQUI_OnSettingsUpdate()
@@ -359,6 +362,12 @@ function UnitFlag.SetInteractivity( self )
     function()
       LuaEvents.UnitFlagManager_PointerEntered( flagPlayerID, unitID );
       if (not CQUI_SelectionMade) and (CQUI_ShowPaths) and (flagPlayerID == localPlayerID) then
+        --CQUI: 4 lines below can be removed later. Information about it is on top when we set CQUI_UnitListForShowPaths
+        --table. Here we take correct unitIDs from a table after units were upgraded.
+        local pUnit = Players[localPlayerID]:GetUnits():FindID(unitID);
+        if (pUnit == nil) then
+          unitID = CQUI_UnitListForShowPaths[unitID];
+        end
         CQUI_ShowPath(unitID);
       end
     end );
@@ -1207,13 +1216,21 @@ function OnUnitSelectionChanged( playerID : number, unitID : number, hexI : numb
     --]]
     UpdateIconStack(hexI, hexJ);
     -- CQUI modifications for tracking unit selection and displaying unit paths
-    CQUI_SelectionMade = true;
-    if (CQUI_ShowingPath ~= unitID) then
-      if (CQUI_ShowingPath ~= nil) then
-        CQUI_HidePath();
+    if CQUI_ShowPaths then
+      CQUI_SelectionMade = true;
+      if (CQUI_ShowingPath ~= unitID) then
+        if (CQUI_ShowingPath ~= nil) then
+          CQUI_HidePath();
+        end
+      end
+      --CQUI: 4 lines below can be removed later. Information about it is on the top when we set CQUI_UnitListForShowPaths
+      --table. Here we assign unitIDs to a table when units are selected for the first time.
+      if CQUI_UnitListForShowPaths[unitID] == nil then
+        CQUI_UnitListForShowPaths[unitID] = unitID;
+        table.insert (CQUI_UnitList, unitID)
       end
     end
-  else
+  elseif CQUI_ShowPaths then
     CQUI_SelectionMade = false;
     CQUI_ShowingPath = nil;
   end
@@ -1798,6 +1815,18 @@ function OnUnitUpgraded(player, unitID, eUpgradeUnitType)
       if (flagInstance ~= nil) then
         flagInstance:UpdateName();
         flagInstance:UpdatePromotions();
+      end
+    end
+  end
+  --CQUI: 10 lines below can be removed later. Information about it is on the top when we set CQUI_UnitListForShowPaths
+  --table. Here we assign correct unitIDs to a table when units are upgraded.
+  local localPlayer = Players[Game.GetLocalPlayer()];
+  if (CQUI_ShowPaths) and (pPlayer == localPlayer) then
+    for i, pUnitID in pairs(CQUI_UnitList) do
+      local pUnit = localPlayer:GetUnits():FindID(pUnitID);
+      if pUnit == nil then
+        CQUI_UnitListForShowPaths[pUnitID] = unitID;
+        table.remove(CQUI_UnitList, i)
       end
     end
   end
