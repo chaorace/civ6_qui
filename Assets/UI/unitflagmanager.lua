@@ -156,47 +156,28 @@ UnitFlag.__index = UnitFlag;
 local CQUI_ShowingPath = nil; --unitID for the unit whose path is currently being shown. nil for no unit
 local CQUI_SelectionMade = false;
 local CQUI_ShowPaths = true; --Toggle for showing the paths
+--CQUI: 2 tables below added to fix an issue appeared in 1.0.0.167 patch when function UnitFlag.SetInteractivity() didn't
+--update unitID for CQUI_ShowPath() function after a unit was upgraded. In that case we couldn't see paths when hover upgraded
+--units. If we find how to update it or if it will be fixed in the next patch we can remove all lines that have links to these tables.
+local CQUI_UnitList = {};
+local CQUI_UnitListForShowPaths = {};
 
 --CQUI Functions
---Draws a path with numbers for the given unitID. Hijacks trade layer
+--Draws a path with numbers for the given unitID.
 function CQUI_ShowPath(unitID)
-  if(CQUI_ShowPaths) and (Game.GetLocalPlayer() > -1) then
-    local unit = Players[Game.GetLocalPlayer()]:GetUnits():FindID(unitID);
-    if (unit ~= nil) then
-      if (GameInfo.Units[unit:GetUnitType()].UnitType ~= "UNIT_TRADER") then --Since this hijacks the trade layer, be sure to NOT touch it when the game actually needs the trade layer!
-          local dest = UnitManager.GetQueuedDestination(unit);
-          local pathPlots, turnsToReach, _ = UnitManager.GetMoveToPath(unit, dest); --pathPlots holds the tileIDs for each tile in the path in order. turnsToReach describes how many turns it takes to reach each given tile, also in order
-          local last = 1; --The number of turns it takes to reach the last given tile
-          for i,v in pairs(turnsToReach) do --Show numbers, but only once for each turn incrememnt
-              if(v > last) then
-                  UI.AddNumberToPath(last, pathPlots[i - 1]);
-              end
-              last = v;
-          end
-          UI.AddNumberToPath(last, dest); --Show a number on the destination plot unconditionally
-          local variations:table = {};
-          table.insert(variations, {"TradeRoute_Destination", dest} );
-          UILens.SetLayerHexesPath( LensLayers.TRADE_ROUTE, Game.GetLocalPlayer(), pathPlots, variations );
-          CQUI_ShowingPath = unitID;
-      end
-    end
+  local CQUI_HoveredUnit = Players[Game.GetLocalPlayer()]:GetUnits():FindID(unitID);
+  if UnitManager.GetQueuedDestination(CQUI_HoveredUnit) then
+    CQUI_ShowingPath = unitID;
+    LuaEvents.CQUI_ShowPathOnHover(true, CQUI_HoveredUnit);
   end
 end
 --Hides any currently drawn paths.
-function CQUI_HidePath(unitID)
-  if(CQUI_ShowPaths) and (Game.GetLocalPlayer() > -1) then
-    local unit = Players[Game.GetLocalPlayer()]:GetUnits():FindID(unitID);
-    if (unit ~= nil) then
-      if (unitID == nil or GameInfo.Units[unit:GetUnitType()].UnitType ~= "UNIT_TRADER") then
-          UILens.ClearLayerHexes(LensLayers.TRADE_ROUTE); --Hide path
-          UILens.ClearLayerHexes(LensLayers.NUMBERS); --Hide numbers
-      end
-    end
-  end
+function CQUI_HidePath()
+  CQUI_ShowingPath = nil;
+  LuaEvents.CQUI_HidePathOnHover();
 end
 
 function CQUI_OnSettingsUpdate()
-  CQUI_HidePath();
   CQUI_ShowPaths = GameConfiguration.GetValue("CQUI_ShowUnitPaths");
 end
 
@@ -380,16 +361,26 @@ function UnitFlag.SetInteractivity( self )
   self.m_Instance.FlagRoot:RegisterMouseEnterCallback(
     function()
       LuaEvents.UnitFlagManager_PointerEntered( flagPlayerID, unitID );
-      if(not CQUI_SelectionMade) then
-        CQUI_ShowPath(unitID);
+      if CQUI_ShowPaths then
+        if (not CQUI_SelectionMade) and (flagPlayerID == localPlayerID) then
+          --CQUI: 4 lines below can be removed later. Information about it is on the top when we set CQUI_UnitListForShowPaths
+          --table. Here we take correct unitIDs from a table after units were upgraded.
+          local pUnit = Players[localPlayerID]:GetUnits():FindID(unitID);
+          if (pUnit == nil) then
+            unitID = CQUI_UnitListForShowPaths[unitID];
+          end
+          CQUI_ShowPath(unitID);
+        end
       end
     end );
 
   self.m_Instance.FlagRoot:RegisterMouseExitCallback(
     function()
       LuaEvents.UnitFlagManager_PointerExited( flagPlayerID, unitID );
-      if(not CQUI_SelectionMade) then
-        CQUI_HidePath(unitID);
+      if CQUI_ShowPaths then
+        if (not CQUI_SelectionMade) and (flagPlayerID == localPlayerID) and (CQUI_ShowingPath) then
+          CQUI_HidePath();
+        end
       end
     end );
 end
@@ -1229,23 +1220,20 @@ function OnUnitSelectionChanged( playerID : number, unitID : number, hexI : numb
     --]]
     UpdateIconStack(hexI, hexJ);
     -- CQUI modifications for tracking unit selection and displaying unit paths
-    -- unitID could be nil, if unit is consumed (f.e. settler, worker)
-    if (unitID ~= nil) then
-      CQUI_SelectionMade = true;
-      if(CQUI_ShowingPath ~= unitID) then
-        if(CQUI_ShowingPath ~= nil) then
-            CQUI_HidePath(unitID);
-        end
-        CQUI_ShowPath(unitID);
-        CQUI_ShowingPath = unitID;
+    CQUI_SelectionMade = true;
+    if (CQUI_ShowingPath ~= unitID) then
+      if (CQUI_ShowingPath ~= nil) then
+        CQUI_HidePath();
       end
-    else
-      CQUI_SelectionMade = false;
-      CQUI_ShowingPath = nil;
+    end
+    --CQUI: 4 lines below can be removed later. Information about it is on the top when we set CQUI_UnitListForShowPaths
+    --table. Here we assign unitIDs to a table when units are selected for the first time.
+    if CQUI_UnitListForShowPaths[unitID] == nil then
+      CQUI_UnitListForShowPaths[unitID] = unitID;
+      table.insert (CQUI_UnitList, unitID)
     end
   else
     CQUI_SelectionMade = false;
-    CQUI_HidePath(unitID);
     CQUI_ShowingPath = nil;
   end
 end
@@ -1829,6 +1817,18 @@ function OnUnitUpgraded(player, unitID, eUpgradeUnitType)
       if (flagInstance ~= nil) then
         flagInstance:UpdateName();
         flagInstance:UpdatePromotions();
+        --CQUI: 10 lines below can be removed later. Information about it is on the top when we set CQUI_UnitListForShowPaths
+        --table. Here we assign correct unitIDs to a table when units are upgraded.
+        local localPlayer = Players[Game.GetLocalPlayer()];
+        if pPlayer == localPlayer then
+          for i, lpUnitID in pairs(CQUI_UnitList) do
+            local lpUnit = localPlayer:GetUnits():FindID(lpUnitID);
+            if lpUnit == nil then
+              CQUI_UnitListForShowPaths[lpUnitID] = unitID;
+              table.remove(CQUI_UnitList, i)
+            end
+          end
+        end
       end
     end
   end
