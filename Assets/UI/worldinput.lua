@@ -739,20 +739,14 @@ end
 -- ===========================================================================
 --  Update the 3D displayed path for a unit.
 -- ===========================================================================
---CQUI modifications for showing unit paths on hover
-function RealizeMovementPath(showQueuedPath:boolean, CQUI_HoveredUnit)
+function RealizeMovementPath(showQueuedPath:boolean)
 
   if not UI.IsMovementPathOn() or UI.IsGameCoreBusy() then
     return;
   end
 
   -- Bail if no selected unit.
-  local kUnit :table = nil;
-  if CQUI_HoveredUnit then
-    kUnit = CQUI_HoveredUnit;
-  else
-    kUnit = UI.GetHeadSelectedUnit();
-  end
+  local kUnit :table = UI.GetHeadSelectedUnit();
   if kUnit == nil then
     UILens.SetActive("Default");
     m_cachedPathUnit = nil;
@@ -3767,8 +3761,6 @@ function Initialize()
   -- CQUI Events
   LuaEvents.CQUI_WorldInput_CityviewEnable.Add( function() CQUI_cityview = true; end );
   LuaEvents.CQUI_WorldInput_CityviewDisable.Add( function() CQUI_cityview = false; end );
-  LuaEvents.CQUI_ShowPathOnHover.Add( RealizeMovementPath );
-  LuaEvents.CQUI_HidePathOnHover.Add( ClearMovementPath );
 
   Controls.DebugStuff:SetHide(not m_isDebuging);
   -- Popup setup
