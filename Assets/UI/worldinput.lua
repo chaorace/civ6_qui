@@ -13,6 +13,7 @@
 -- ===========================================================================
 
 include("PopupDialogSupport.lua");
+include("PopupDialog.lua");
 -- More interface-specific includes before the initialization
 
 
@@ -2041,19 +2042,34 @@ end
 function UnitAirAttack( pInputStruct )
   local plotID = UI.GetCursorPlotID();
   if (Map.IsPlot(plotID)) then
-    local plot = Map.GetPlotByIndex(plotID);
+		local plot = Map.GetPlotByIndex(plotID);
+		local plotX = plot:GetX();
+		local plotY = plot:GetY();
+		local tParameters = {};
+		tParameters[UnitOperationTypes.PARAM_X] = plot:GetX();
+		tParameters[UnitOperationTypes.PARAM_Y] = plot:GetY();
 
-    local tParameters = {};
-    tParameters[UnitOperationTypes.PARAM_X] = plot:GetX();
-    tParameters[UnitOperationTypes.PARAM_Y] = plot:GetY();
-
-    local pSelectedUnit = UI.GetHeadSelectedUnit();
-    -- Assuming that the operation is AIR_ATTACK.  Store this in the InterfaceMode somehow?
-    if (UnitManager.CanStartOperation( pSelectedUnit, UnitOperationTypes.AIR_ATTACK, nil, tParameters)) then
-      UnitManager.RequestOperation( pSelectedUnit, UnitOperationTypes.AIR_ATTACK, tParameters);
-        UI.SetInterfaceMode(InterfaceModeTypes.SELECTION);
-    end
-  end
+		local pSelectedUnit = UI.GetHeadSelectedUnit();
+		local eAttackingPlayer = pSelectedUnit:GetOwner();
+		local eUnitComponentID:table = pSelectedUnit:GetComponentID();
+		local bWillStartWar = PlayersVisibility[eAttackingPlayer]:IsVisible(plotX, plotY) and CombatManager.IsAttackChangeWarState(eUnitComponentID, plotX, plotY);
+		if (bWillStartWar) then
+			local eDefendingPlayer = CombatManager.GetBestDefender(eUnitComponentID, plotX, plotY );
+			if (eDefendingPlayer == nil) then
+				local pPlot = Map.GetPlot(plotX, plotY);
+				eDefendingPlayer = pPlot:GetOwner();
+			end
+			-- Create the action specific parameters 
+			if (eDefendingPlayer ~= nil and eDefendingPlayer ~= -1) then
+				LuaEvents.Civ6Common_ConfirmWarDialog(eAttackingPlayer, eDefendingPlayer, WarTypes.SURPRISE_WAR);
+			end
+		else
+			if (UnitManager.CanStartOperation( pSelectedUnit, UnitOperationTypes.AIR_ATTACK, nil, tParameters)) then
+				UnitManager.RequestOperation( pSelectedUnit, UnitOperationTypes.AIR_ATTACK, tParameters);
+				UI.SetInterfaceMode(InterfaceModeTypes.SELECTION);
+			end
+		end
+	end
   return true;
 end
 -------------------------------------------------------------------------------
@@ -2102,29 +2118,36 @@ function OnWMDStrikeEnd( pInputStruct )
     return false;
   end
 
-  local plotID = UI.GetCursorPlotID();
-  if (Map.IsPlot(plotID)) then
-    local plot = Map.GetPlotByIndex(plotID);
-    local eWMD = UI.GetInterfaceModeParameter(UnitOperationTypes.PARAM_WMD_TYPE);
-    local strikeFn = function() WMDStrike(plot, pSelectedUnit, eWMD); end;
-    local bWillStartWar = CombatManager.IsAttackChangeWarState( pSelectedUnit:GetComponentID(), plot:GetX(), plot:GetY(), eWMD );
-    if (bWillStartWar) then
-      local eDefendingPlayer = CombatManager.GetBestDefender( pSelectedUnit:GetComponentID(), plot:GetX(), plot:GetY() );
-      if (eDefendingPlayer == nil) then
-        eDefendingPlayer = plot:GetOwner();
-      end
-      -- Create the action specific parameters
-      if (eDefendingPlayer ~= nil and eDefendingPlayer ~= -1) then
-        LuaEvents.WorldInput_ConfirmWarDialog(pSelectedUnit:GetOwner(), eDefendingPlayer, WarTypes.SURPRISE_WAR, strikeFn);
-      end
-    else
-      local pPopupDialog :table = PopupDialog:new("ConfirmWMDStrike");
-      pPopupDialog:AddText(Locale.Lookup("LOC_LAUNCH_WMD_DIALOG_ARE_YOU_SURE"));
-      pPopupDialog:AddButton(Locale.Lookup("LOC_LAUNCH_WMD_DIALOG_CANCEL"), nil);
-      pPopupDialog:AddButton(Locale.Lookup("LOC_LAUNCH_WMD_DIALOG_LAUNCH"), strikeFn);
-      pPopupDialog:Open();
-    end
-  end
+ local plotID = UI.GetCursorPlotID();
+	if (Map.IsPlot(plotID)) then
+		local plot = Map.GetPlotByIndex(plotID);
+		local eWMD = UI.GetInterfaceModeParameter(UnitOperationTypes.PARAM_WMD_TYPE);
+		local strikeFn = function() WMDStrike(plot, pSelectedUnit, eWMD); end;
+		local tParameters = {};
+		tParameters[UnitOperationTypes.PARAM_X] = plot:GetX();
+		tParameters[UnitOperationTypes.PARAM_Y] = plot:GetY();
+		tParameters[UnitOperationTypes.PARAM_WMD_TYPE] = eWMD;
+		if (UnitManager.CanStartOperation( pSelectedUnit, UnitOperationTypes.WMD_STRIKE, nil, tParameters)) then
+
+			local bWillStartWar = CombatManager.IsAttackChangeWarState( pSelectedUnit:GetComponentID(), plot:GetX(), plot:GetY(), eWMD );
+			if (bWillStartWar) then
+				local eDefendingPlayer = CombatManager.GetBestDefender( pSelectedUnit:GetComponentID(), plot:GetX(), plot:GetY() );
+				if (eDefendingPlayer == nil) then
+					eDefendingPlayer = plot:GetOwner();
+				end
+				-- Create the action specific parameters 
+				if (eDefendingPlayer ~= nil and eDefendingPlayer ~= -1) then
+					LuaEvents.WorldInput_ConfirmWarDialog(pSelectedUnit:GetOwner(), eDefendingPlayer, WarTypes.SURPRISE_WAR, strikeFn);
+				end
+			else
+				local pPopupDialog :table = PopupDialogInGame:new("ConfirmWMDStrike");
+				pPopupDialog:AddText(Locale.Lookup("LOC_LAUNCH_WMD_DIALOG_ARE_YOU_SURE"));
+				pPopupDialog:AddCancelButton(Locale.Lookup("LOC_LAUNCH_WMD_DIALOG_CANCEL"), nil);
+				pPopupDialog:AddConfirmButton(Locale.Lookup("LOC_LAUNCH_WMD_DIALOG_LAUNCH"), strikeFn);
+				pPopupDialog:Open();
+			end
+		end
+	end
   return true;
 end
 -------------------------------------------------------------------------------
@@ -2196,31 +2219,39 @@ function OnICBMStrikeEnd( pInputStruct )
   end
 
   local targetPlotID = UI.GetCursorPlotID();
-  if (Map.IsPlot(targetPlotID)) then
-    local targetPlot = Map.GetPlotByIndex(targetPlotID);
-    local eWMD = UI.GetInterfaceModeParameter(CityCommandTypes.PARAM_WMD_TYPE);
-    local sourcePlotX = UI.GetInterfaceModeParameter(CityCommandTypes.PARAM_X0);
-    local sourcePlotY = UI.GetInterfaceModeParameter(CityCommandTypes.PARAM_Y0);
-    local strikeFn = function() ICBMStrike(pSelectedCity, sourcePlotX, sourcePlotY, targetPlot, eWMD); end;
-    --PlayersVisibility[ pSelectedCity:GetOwner() ]:IsVisible(targetPlot:GetX(), targetPlot:GetY())
-    local bWillStartWar = CombatManager.IsAttackChangeWarState( pSelectedCity:GetComponentID(), targetPlot:GetX(), targetPlot:GetY(), eWMD );
-    if (bWillStartWar) then
-      local eDefendingPlayer = CombatManager.GetBestDefender( pSelectedCity:GetComponentID(), targetPlot:GetX(), targetPlot:GetY() );
-      if (eDefendingPlayer == nil) then
-        eDefendingPlayer = targetPlot:GetOwner();
-      end
-      -- Create the action specific parameters
-      if (eDefendingPlayer ~= nil and eDefendingPlayer ~= -1) then
-        LuaEvents.WorldInput_ConfirmWarDialog(pSelectedCity:GetOwner(), eDefendingPlayer, WarTypes.SURPRISE_WAR, strikeFn );
-      end
-    else
-      local pPopupDialog :table = PopupDialog:new("ConfirmICBMStrike");
-      pPopupDialog:AddText(Locale.Lookup("LOC_LAUNCH_ICBM_DIALOG_ARE_YOU_SURE"));
-      pPopupDialog:AddButton(Locale.Lookup("LOC_LAUNCH_ICBM_DIALOG_CANCEL"), nil);
-      pPopupDialog:AddButton(Locale.Lookup("LOC_LAUNCH_ICBM_DIALOG_LAUNCH"), strikeFn);
-      pPopupDialog:Open();
-    end
-  end
+if (Map.IsPlot(targetPlotID)) then
+		local targetPlot = Map.GetPlotByIndex(targetPlotID);
+		local eWMD = UI.GetInterfaceModeParameter(CityCommandTypes.PARAM_WMD_TYPE);
+		local sourcePlotX = UI.GetInterfaceModeParameter(CityCommandTypes.PARAM_X0);
+		local sourcePlotY = UI.GetInterfaceModeParameter(CityCommandTypes.PARAM_Y0);
+		local strikeFn = function() ICBMStrike(pSelectedCity, sourcePlotX, sourcePlotY, targetPlot, eWMD); end;
+		--PlayersVisibility[ pSelectedCity:GetOwner() ]:IsVisible(targetPlot:GetX(), targetPlot:GetY())
+		local tParameters = {};
+		tParameters[CityCommandTypes.PARAM_X0] = sourcePlotX;
+		tParameters[CityCommandTypes.PARAM_Y0] = sourcePlotY;
+		tParameters[CityCommandTypes.PARAM_X1] = targetPlot:GetX();
+		tParameters[CityCommandTypes.PARAM_Y1] = targetPlot:GetY();
+		tParameters[CityCommandTypes.PARAM_WMD_TYPE] = eWMD;
+		if (CityManager.CanStartCommand( pSelectedCity, CityCommandTypes.WMD_STRIKE, tParameters)) then
+			local bWillStartWar = CombatManager.IsAttackChangeWarState( pSelectedCity:GetComponentID(), targetPlot:GetX(), targetPlot:GetY(), eWMD );
+			if (bWillStartWar) then
+				local eDefendingPlayer = CombatManager.GetBestDefender( pSelectedCity:GetComponentID(), targetPlot:GetX(), targetPlot:GetY() );
+				if (eDefendingPlayer == nil) then
+					eDefendingPlayer = targetPlot:GetOwner();
+				end
+				-- Create the action specific parameters 
+				if (eDefendingPlayer ~= nil and eDefendingPlayer ~= -1 ) then
+					LuaEvents.WorldInput_ConfirmWarDialog(pSelectedCity:GetOwner(), eDefendingPlayer, WarTypes.SURPRISE_WAR, strikeFn );
+				end
+			else
+				local pPopupDialog :table = PopupDialogInGame:new("ConfirmICBMStrike");
+				pPopupDialog:AddText(Locale.Lookup("LOC_LAUNCH_ICBM_DIALOG_ARE_YOU_SURE"));
+				pPopupDialog:AddCancelButton(Locale.Lookup("LOC_LAUNCH_ICBM_DIALOG_CANCEL"), nil);
+				pPopupDialog:AddConfirmButton(Locale.Lookup("LOC_LAUNCH_ICBM_DIALOG_LAUNCH"), strikeFn);
+				pPopupDialog:Open();
+			end
+		end
+	end
 end
 -------------------------------------------------------------------------------
 function ICBMStrike( fromCity, sourcePlotX, sourcePlotY, targetPlot, eWMD )
@@ -3671,6 +3702,6 @@ function Initialize()
 
   Controls.DebugStuff:SetHide(not m_isDebuging);
   -- Popup setup
-  m_kConfirmWarDialog = PopupDialog:new( "ConfirmWarPopup" );
+  -- m_kConfirmWarDialog = PopupDialog:new( "ConfirmWarPopup" );
 end
 Initialize();
