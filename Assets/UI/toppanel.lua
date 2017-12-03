@@ -532,6 +532,13 @@ function Initialize()
   Controls.MenuButton:RegisterCallback( Mouse.eLClick, OnMenu );
   Controls.MenuButton:RegisterCallback( Mouse.eMouseEnter, function() UI.PlaySound("Main_Menu_Mouse_Over"); end);
 
+  --  Open victorycondition for yield (P_Sanja)
+  Controls.ScienceBacking:RegisterCallback( Mouse.eLClick, function() LuaEvents.PartialScreenHooks_OpenWorldRankings(); LuaEvents.PartialScreenHooks_ViewScience(); end );
+  Controls.CultureBacking:RegisterCallback( Mouse.eLClick, function() LuaEvents.PartialScreenHooks_OpenWorldRankings(); LuaEvents.PartialScreenHooks_ViewCulture(); end );
+  Controls.FaithBacking:RegisterCallback( Mouse.eLClick, function() LuaEvents.PartialScreenHooks_OpenWorldRankings(); LuaEvents.PartialScreenHooks_ViewReligion(); end );
+  Controls.TourismBacking:RegisterCallback( Mouse.eLClick, function() LuaEvents.PartialScreenHooks_OpenWorldRankings(); LuaEvents.PartialScreenHooks_ViewCulture(); end );
+  Controls.GoldBacking:RegisterCallback( Mouse.eLClick, function() LuaEvents.PartialScreenHooks_OpenWorldRankings(); LuaEvents.PartialScreenHooks_ViewScore(); end );
+
   -- Game Events
   Events.AnarchyBegins.Add(       OnRefreshYields );
   Events.AnarchyEnds.Add(         OnRefreshYields );

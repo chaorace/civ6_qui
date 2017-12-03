@@ -165,6 +165,7 @@
     <File>Assets/UI/Panels/unitpanel.lua</File>
     <File>Assets/UI/PartialScreens/citystates.lua</File>
     <File>Assets/UI/PartialScreens/citystates.xml</File>
+    <File>Assets/UI/PartialScreens/WorldRankings.lua</File>
     <File>Assets/UI/Popups/greatpeoplepopup.lua</File>
     <File>Assets/UI/Popups/greatpeoplepopup.xml</File>
     <File>Assets/UI/Popups/mappinlistpanel.lua</File>
@@ -290,6 +291,7 @@
         <File>Assets/UI/Panels/unitpanel.lua</File>
         <File>Assets/UI/PartialScreens/citystates.lua</File>
         <File>Assets/UI/PartialScreens/citystates.xml</File>
+        <File>Assets/UI/PartialScreens/WorldRankings.lua</File>
         <File>Assets/UI/Popups/greatpeoplepopup.lua</File>
         <File>Assets/UI/Popups/greatpeoplepopup.xml</File>
         <File>Assets/UI/Popups/mappinlistpanel.lua</File>
