@@ -270,6 +270,7 @@ function Initialize()
     {Controls.CityviewTab, Controls.CityviewOptions},
     {Controls.LensesTab, Controls.LensesOptions},
     {Controls.UnitsTab, Controls.UnitsOptions},
+    {Controls.TutorialsTab, Controls.TutorialsOptions},
     {Controls.HiddenTab, Controls.HiddenOptions}
   };
   for i, tab in ipairs(m_tabs) do
@@ -305,6 +306,10 @@ function Initialize()
   PopulateCheckBox(Controls.AutoExpandUnitActionsCheckbox, "CQUI_AutoExpandUnitActions");
   PopulateCheckBox(Controls.AlwaysOpenTechTreesCheckbox, "CQUI_AlwaysOpenTechTrees");
   PopulateCheckBox(Controls.SmartWorkIconCheckbox, "CQUI_SmartWorkIcon", Locale.Lookup("LOC_CQUI_CITYVIEW_SMARTWORKICON_TOOLTIP"));
+  PopulateCheckBox(Controls.ImprovementTutorialCheckbox, "CQUI_ImprovementTutorial");
+  PopulateCheckBox(Controls.TechTutorialCheckbox, "CQUI_TechTutorial");
+  PopulateCheckBox(Controls.ProductionTutorialCheckbox, "CQUI_ProductionTutorial");
+  PopulateCheckBox(Controls.CityTutorialCheckbox, "CQUI_CityTutorial");
 
   PopulateSlider(Controls.ProductionItemHeightSlider, Controls.ProductionItemHeightText, "CQUI_ProductionItemHeight", ProductionItemHeightConverter);
   PopulateSlider(Controls.MinimapSizeSlider, Controls.MinimapSizeText, "CQUI_MinimapSize", MinimapSizeConverter);

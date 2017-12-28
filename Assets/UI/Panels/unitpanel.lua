@@ -83,6 +83,17 @@ local pSpyInfo = GameInfo.Units["UNIT_SPY"];
 local m_AttackHotkeyId      = Input.GetActionId("Attack");
 local m_DeleteHotkeyId      = Input.GetActionId("DeleteUnit");
 
+
+--CQUI Members
+local CQUI_ImprovementTutorial = true;
+local CQUI_AutoExpandUnitActions = false;
+
+function CQUI_OnSettingsUpdate()
+  CQUI_AutoExpandUnitActions = GameConfiguration.GetValue("CQUI_AutoExpandUnitActions");
+  CQUI_ImprovementTutorial = GameConfiguration.GetValue("CQUI_ImprovementTutorial");
+  OnRefresh();
+end
+
 -- ===========================================================================
 --  FUNCTIONS
 -- ===========================================================================
@@ -786,9 +797,8 @@ function View(data)
     Controls.RecommendedActionButton:ReprocessAnchoring();
     Controls.RecommendedActionIcon:ReprocessAnchoring();
 
-    bestBuildAction = nil;
     Controls.RecommendedActionFrame:SetHide( bestBuildAction == nil );
-    if ( bestBuildAction ~= nil ) then
+    if ( bestBuildAction ~= nil and CQUI_ImprovementTutorial) then
       Controls.RecommendedActionButton:SetHide(false);
       Controls.BuildActionsPanel:SetSizeY( buildStackHeight + 20 + BUILD_PANEL_ART_PADDING_Y);
       Controls.BuildActionsStack:SetOffsetY(26);
@@ -2085,7 +2095,7 @@ function Refresh(player, unitId)
     if(unit ~= nil) then
       ReadUnitData( unit, numUnits );
       --CQUI auto-expando
-      if(GameConfiguration.GetValue("CQUI_AutoExpandUnitActions")) then
+      if(CQUI_AutoExpandUnitActions) then
         local isHidden:boolean = Controls.SecondaryActionsStack:IsHidden();
         if isHidden then
           Controls.SecondaryActionsStack:SetHide(false);
@@ -3718,6 +3728,9 @@ function Initialize()
   LuaEvents.UnitFlagManager_PointerEntered.Add(   OnUnitFlagPointerEntered );
   LuaEvents.UnitFlagManager_PointerExited.Add(    OnUnitFlagPointerExited );
   LuaEvents.PlayerChange_Close.Add(         OnPlayerChangeClose );
+
+  --CQUI Events
+  LuaEvents.CQUI_SettingsUpdate.Add(CQUI_OnSettingsUpdate);
 
   -- Popup setup
   m_kPopupDialog = PopupDialog:new( "UnitPanelPopup" );

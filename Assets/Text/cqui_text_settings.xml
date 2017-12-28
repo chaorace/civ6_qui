@@ -159,6 +159,21 @@
     <Row Tag="LOC_CQUI_SETTINGS_REMINDER" Language="en_US">
       <Text>Remember: CQUI settings are attached to individual saves![NEWLINE]If you'd like to change a setting by default, please read the info[NEWLINE]in cqui_settings.sql file within the [MOD INSTALL DIRECTORY]/CQUI/Assets directory</Text>
     </Row>
+    <Row Tag="LOC_CQUI_TUTORIALS" Language="en_US">
+      <Text>Tutorials</Text>
+    </Row>
+    <Row Tag="LOC_CQUI_TUTORIALS_IMPROVEMENTS" Language="en_US">
+      <Text>Show improvement recommendations</Text>
+    </Row>
+    <Row Tag="LOC_CQUI_TUTORIALS_TECHS" Language="en_US">
+      <Text>Show tech recommendations</Text>
+    </Row>
+    <Row Tag="LOC_CQUI_TUTORIALS_PRODUCTION" Language="en_US">
+      <Text>Show production recommendations</Text>
+    </Row>
+    <Row Tag="LOC_CQUI_TUTORIALS_CITY" Language="en_US">
+      <Text>Show tutorial info in the city panel</Text>
+    </Row>
     <Row Tag="LOC_CQUI_UNITS" Language="en_US">
       <Text>Units</Text>
     </Row>

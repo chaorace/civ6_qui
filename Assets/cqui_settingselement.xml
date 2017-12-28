@@ -21,6 +21,7 @@
               <GridButton ID="BindingsTab" Style="ShellTabSmall" String="{LOC_CQUI_BINDINGS:upper}" Size="200,32"/>
               <GridButton ID="GossipTab" Style="ShellTabSmall" String="{LOC_CQUI_GOSSIP:upper}" Size="200,32"/>
               <GridButton ID="LensesTab" Style="ShellTabSmall" String="{LOC_CQUI_LENSES:upper}" Size="200,32"/>
+              <GridButton ID="TutorialsTab" Style="ShellTabSmall" String="{LOC_CQUI_TUTORIALS:upper}" Size="200,32"/>
               <GridButton ID="HiddenTab" Style="ShellTabSmall" String="{LOC_CQUI_GENERAL_HIDDEN:upper}" Size="200,32" Hidden="1"/>
             </Stack>
           </Grid>
@@ -384,6 +385,22 @@
           </Stack>
           <Stack Anchor="R,T" StackGrowth="Left" Padding="5">
             <GridButton ID="AutoapplyScoutLensCheckbox" Anchor="L,C" Offset="0,0" Size="300,24" Style="CheckBoxControl" String="LOC_CQUI_LENSES_AUTOAPPLYSCOUTLENS"/>
+          </Stack>
+        </Stack>
+      </Container>
+      <Container ID="TutorialsOptions" Size="parent,parent" Hidden="1">
+        <Stack Anchor="C,T" StackGrowth="Down" Padding="5" Offset="0,50">
+          <Stack Anchor="R,T" StackGrowth="Left" Padding="5">
+            <GridButton ID="ImprovementTutorialCheckbox" Anchor="L,C" Offset="0,0" Size="300,24" Style="CheckBoxControl" String="LOC_CQUI_TUTORIALS_IMPROVEMENTS"/>
+          </Stack>
+          <Stack Anchor="R,T" StackGrowth="Left" Padding="5">
+            <GridButton ID="TechTutorialCheckbox" Anchor="L,C" Offset="0,0" Size="300,24" Style="CheckBoxControl" String="LOC_CQUI_TUTORIALS_TECHS"/>
+          </Stack>
+          <Stack Anchor="R,T" StackGrowth="Left" Padding="5">
+            <GridButton ID="ProductionTutorialCheckbox" Anchor="L,C" Offset="0,0" Size="300,24" Style="CheckBoxControl" String="LOC_CQUI_TUTORIALS_PRODUCTION"/>
+          </Stack>
+          <Stack Anchor="R,T" StackGrowth="Left" Padding="5">
+            <GridButton ID="CityTutorialCheckbox" Anchor="L,C" Offset="0,0" Size="300,24" Style="CheckBoxControl" String="LOC_CQUI_TUTORIALS_CITY"/>
           </Stack>
         </Stack>
       </Container>
